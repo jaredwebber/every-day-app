@@ -5,7 +5,6 @@
 
  import type {Node} from 'react';
  import {
-     Button,
     Pressable,
     RefreshControl,
     Text, 
@@ -18,7 +17,11 @@
  //Import Custom Styles
  import Styles from '../style_sheet';
 
- import updateDailyActivity from '../../data/db-access'
+ //Functions to update/retrieve data
+ var dbAccess = require('../../data/local_async.js')
+
+ //Import Custom Components
+ import Button from '../tools/button'
 
  
 var ActivityName = "pushups";//get from selection/db
@@ -46,13 +49,13 @@ function getMonth(){
 function getDay(){
     var curr = new Date();
     CurrentDate[0] = curr.getDate();
-    if(curr === 1 || curr === 21){
+    if(CurrentDate[0] === 1 || CurrentDate[0] === 21){
         CurrentDate[1] = "st";
-    }else if(curr === 2 || curr === 22){
+    }else if(CurrentDate[0] === 2 || CurrentDate[0] === 22){
         CurrentDate[1] = "nd";
-    }else if(curr === 3 || curr === 23){
+    }else if(CurrentDate[0] === 3 || CurrentDate[0] === 23){
         CurrentDate[1] = "rd";
-    }else if(curr > 3 || curr < 21 || curr >23){
+    }else if(CurrentDate[0] > 3 || CurrentDate[0] < 21 || CurrentDate[0] >23){
         CurrentDate[1] = "th";
     }
 }
@@ -94,16 +97,11 @@ const NumericInput = () => {
                 onChangeText={inputValue => updateInputValue(inputValue)}
             />
 
-            <Pressable 
-                onPress={updateDailyActivity}
-                style={Styles.buttonContainer}
-                >
-                <Text 
-                    style={Styles.buttonText}
-                    >
-                    log {ActivityName}
-                </Text>
-            </Pressable>
+            <Button 
+                text={"log "+ActivityName} 
+                onPress={()=> dbAccess.logActivityPublic("ActivityID",inputValue)}
+            />
+
 
        </View>
    );
