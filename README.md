@@ -9,12 +9,9 @@ Startup (ios):  `npx run-ios`
 
 ### Priorities:
 - Numeric Input Component
-- Persistent Storage:
-  - Table for metadata about the app: what activities, goals, how often etc,
-  - Tables for logging activity
-    - New table for each day, new record for each activity logged that day
-    - Record PK is UTC time?
-    - Have an 'activity' code for each unique task/activity
+- Select Activity Component
+  - Subcomponent to display stats about the selected activity
+- Persistent Storage (notes in data/README)
 - Reminders/Notifications
 
 

@@ -10,6 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.16",
+    "install": "^0.13.0",
+    "npm": "^8.3.2",
     "react": "17.0.2",
     "react-native": "0.67.1"
   },

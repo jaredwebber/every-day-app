@@ -1,5 +1,5 @@
 //Local Storage
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Template JSON objects
 const newActivityTemplate = {
