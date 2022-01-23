@@ -11,7 +11,7 @@
  import Styles from '../style_sheet';
 
  //Import Custom Components
- import Button from '../tools/button'
+ import {Button, SplitButton} from '../tools/button'
  import {SmallSpacer, MedSpacer, LargeSpacer} from '../tools/spacers';
 
  
@@ -21,22 +21,23 @@
         style = {
             Styles.headerContainer
         }>
-            
+          <View style={Styles.row}  >
+        
         <Text 
             style = {
-                Styles.bodyText
+                Styles.subSubTitleText
             }>  
-            selection of which activity to log/adjust
+            select activity
         </Text>
 
         <Button 
             text="+" 
             onPress={()=> console.log("select activity button")}
         />
-
+        </View>
     </View>
    );
- };
+ }
  
  export default SelectActivity;
  

@@ -3,21 +3,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Template JSON objects
 const newActivityTemplate = {
-    "ActivityID - One":{
-        "ActivityName": "One",
-        "GoalAmount": -1,
-        "CurrentStreak": -1,
-        "GrandTotal": -1,
-        "LogCount": -1,
-        "PresentDay": "day",
-        "TodayCount": -1,
-        "TodayLogs": -1
+    "000":{
+        "ActivityName": "pushups",
+        "GoalAmount": 100,
+        "CurrentStreak": 22,
+        "GrandTotal": 2300,
+        "LogCount": 110,
+        "PresentDay": 22,
+        "TodayCount": 100,
+        "TodayLogs": 5
+    }
+}
+
+const altTemplate = {
+    "ID":{
+        "ActivityName": "name",
+        "GoalAmount": 0,
+        "CurrentStreak": 0,
+        "GrandTotal": 0,
+        "LogCount": 0,
+        "PresentDay": 0,
+        "TodayCount": 0,
+        "TodayLogs": 0
     }
 }
 
 const logActivityTemplate = {
     "UTC": "Count"
 }
+
+const META_KEY = '@metadata';
 
 //Used in logActivity function
 const UPDATE = 'update';
@@ -27,8 +42,46 @@ const LOG = 'log';
 var metadataCodeCopy = null;
 
 
+// Direct Data Manipulation
+const storeData = async (key, value) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem(key, jsonValue)
+    } catch (e) {
+        console.error("Error storing data [key: "+key+", value: "+value+"]");
+    }
+}
+
+const getData = async (key) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(key)
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+        console.error("Error getting data [key: "+key+"]");
+    }
+}
+
+const pullMetadataAsync = async() => {
+    //set metadata global JSON with all metadata from async
+    await getData(META_KEY)
+    .then(data => {
+        console.log(data)
+        metadataCodeCopy = data;
+        })
+    .catch(err => console.log(err))
+}
+
+const pushMetadataAsync = async() => {
+    //set async metadata with global JSON values
+    await storeData(META_KEY, metadataCodeCopy)
+    .then(data => {
+        //console.log(data)
+      })
+    .catch(err => console.log(err))
+}
 
 
+// Interaction Functions
 function verifyPresentDay(){
     pullMetadataAsync();
 
@@ -48,15 +101,8 @@ function verifyPresentDay(){
 
 }
 
-function pullMetadataAsync(){
-    //set metadata global JSON with all metadata from async
-}
 
-function pushMetadataAsync(){
-    //set async metadata with global JSON values
-}
-
-function logActivity(ActivityID, Count, type){
+const logActivity = async(ActivityID, Count, type) =>{
     console.log("update daily input: "+ActivityID + ", "+Count)
 
     //update metadata in accordance with date
@@ -79,30 +125,58 @@ function logActivity(ActivityID, Count, type){
     pushMetadataAsync();
 }
 
-function newActivity(toAdd){
-    //create & store new metadata object with new ActivityID
+//This function should receive a complete Metadata JSON object
+const newActivity = async(toAdd) =>{
+    await pullMetadataAsync();
+
+
+        //create & store new metadata object with new ActivityID
+
+
+    await pushMetadataAsync();
 }
 
-function exportData(){
+const exportData = async() =>{
     //find way to make all async storage data presentable & exportable
     //make possible to auto-export data? on a daily/weekly/whatever schedule? - upload to icloud or something as csv?
 }
 
+const testDataFunction = async(ActivityID, Count) => {
+    console.log(metadataCodeCopy)
+
+    metadataCodeCopy = newActivityTemplate;
+
+    await pushMetadataAsync();
+
+    metadataCodeCopy = altTemplate;
+
+    await pullMetadataAsync();
+    console.log(metadataCodeCopy)
+}
+
+const CLEAR_METADATA_DEBUG = async()=>{
+    await AsyncStorage.removeItem(META_KEY)
+    .then(data => {
+        console.log("CLEARING STORAGE")
+        })
+    .catch(err => console.log(err))
+}
 
 //Functions accessible to external files
-module.exports.logActivityPublic = function(ActivityID, Count){
-    logActivity(ActivityID,Count, LOG);
+module.exports.logActivityPublic = async(ActivityID, Count) =>{
+    //logActivity(ActivityID,Count, LOG);
+    //testDataFunction();
+    CLEAR_METADATA_DEBUG();
 }
 
-module.exports.newActivityPublic = function(toAdd){
-    newActivity(toAdd);
+module.exports.newActivityPublic = async(toAdd) => {
+    await newActivity(toAdd);
 }
 
-module.exports.exportDataPublic = function(){
-    exportData();
+module.exports.exportDataPublic = async() => {
+    await exportData();
 }
 
-module.exports.updateTodayTotalPublic = function(ActivityID, updatedTotal){
-    logActivity(ActivityID, updateTodayTotal, UPDATE);
+module.exports.updateTodayTotalPublic = async(ActivityID, updatedTotal) =>{
+    await logActivity(ActivityID, updateTodayTotal, UPDATE);
 }
-

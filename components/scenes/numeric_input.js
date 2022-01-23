@@ -21,7 +21,7 @@
  var dbAccess = require('../../data/local_async.js')
 
  //Import Custom Components
- import Button from '../tools/button'
+ import {Button} from '../tools/button'
 
  
 var ActivityName = "pushups";//get from selection/db

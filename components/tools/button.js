@@ -2,7 +2,7 @@
  * @flow strict-local
  * @format
  */
- import React, {Component} from 'react';
+ import React, {Component, useState} from 'react';
 
  import {
     Pressable,
@@ -13,7 +13,49 @@
 import Styles from '../style_sheet';
 
 
-const Button = ({text, onPress}) =>{
+const SplitButton = ({leftText, leftPress, rightText, rightPress}) =>{
+
+    return(
+
+        <View style={Styles.containerCenter}>
+            <View style={Styles.row}>
+                <Pressable 
+                    onPress={()=>{
+                        leftPress; 
+                        console.log("left");
+                        }
+                    }
+
+                    style={Styles.leftButton}
+                    >
+                    <Text 
+                        style={Styles.buttonText}
+                        >
+                        {leftText}
+                    </Text>
+                </Pressable>
+
+                <Pressable 
+                    onPress={()=>{
+                        rightPress; 
+                        console.log("right");
+                    }}
+                    style={Styles.rightButton}    
+                >
+                    <Text 
+                        style={Styles.buttonText}
+                        >
+                        {rightText}
+                    </Text>
+                </Pressable>
+
+            </View>
+        </View>
+    );     
+}
+
+const Button = ({text, onPress}) =>{   
+
     return(
         <Pressable 
             onPress={onPress}
@@ -26,7 +68,10 @@ const Button = ({text, onPress}) =>{
             </Text>
         </Pressable>
     );
+}
+
+
+export {
+    Button,
+    SplitButton
 };
-
-export default Button;
-

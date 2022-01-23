@@ -2,6 +2,8 @@
 - get app working on local storage with plan below
 - once working reliably, can add cloud (firebase?) db support & OAuth signin?
 
+https://react-native-async-storage.github.io/async-storage/docs/usage
+
 ### Storage Organization:
 - [HARDCODED] Storage key for metadata json object (need enclosing around objects?)
     {

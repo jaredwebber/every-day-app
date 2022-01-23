@@ -16,6 +16,7 @@ Startup (ios):  `npx run-ios`
 
 
 ### Eventually:
+- Make components & aesthetics scale with screen size
 - Add option to edit previous logs 
 - 'Select an activity to log, or add a new activity' options
   - if # of activities = 0, then only show new activity option?

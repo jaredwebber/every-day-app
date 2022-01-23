@@ -41,6 +41,11 @@ const Styles = StyleSheet.create({
 
     },
 
+    row:{
+        alignItems:'center',
+        flexDirection: 'row',
+    },
+
     //Design
     borderHeader:{
         borderWidth: 3,
@@ -89,6 +94,42 @@ const Styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         backgroundColor: '#3279a8',
+    },
+
+    leftButton:{
+        marginTop: 5,
+        marginBottom:5,
+        marginLeft:5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 4,
+        paddingHorizontal: 16,
+        borderTopLeftRadius: 4,
+        borderBottomLeftRadius: 4,
+        elevation: 3,
+        backgroundColor: '#3279a8',
+    },
+
+    rightButton:{
+        marginTop: 5,
+        marginBottom:5,
+        marginRight:5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 4,
+        paddingHorizontal: 16,
+        borderTopRightRadius: 4,
+        borderBottomRightRadius: 4,
+        elevation: 3,
+        backgroundColor: '#3279a8',
+    },
+
+    selectedButton:{
+        backgroundColor:'red'
+    },
+
+    unselectedButton:{
+        backgroundColor:'blue'
     },
 
     buttonText:{
