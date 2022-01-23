@@ -27,6 +27,8 @@ const HardcodedView = () => {
         style={Styles.pageContainer}
     >
         <BackgroundImage />
+
+        <MedSpacer />
         
         <Header />
 

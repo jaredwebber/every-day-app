@@ -16,6 +16,7 @@ Startup (ios):  `npx run-ios`
 
 
 ### Eventually:
+- Account for local time in NumericInput date display
 - Make components & aesthetics scale with screen size
 - Add option to edit previous logs 
 - 'Select an activity to log, or add a new activity' options
