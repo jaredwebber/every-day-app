@@ -8,10 +8,8 @@ Built Using [React Native](https://reactnative.dev)
 Startup (ios):  `npx run-ios`
 
 ### Priorities:
-- Numeric Input Component
+- Navigation between New Component, View Stats, Log Activity pages
 - Select Activity Component
-  - Subcomponent to display stats about the selected activity
-- Persistent Storage (notes in data/README)
 - Reminders/Notifications
 
 
