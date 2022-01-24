@@ -10,6 +10,13 @@ const META_KEY = '@metadata';
 const UPDATE = 'update';
 const LOG = 'log';
 
+//param constants: Activity Frequency
+const DAY = 'D';
+const WEEK = 'W';
+const DAY_DIFF = 86400; //seconds in a day
+const WEEK_DIFF = 604800;//seconds in a week
+
+
 //local copy of metadata from async to be used between modifications
 var metadataCodeCopy = null;
 
@@ -17,21 +24,24 @@ var metadataCodeCopy = null;
 var currActivityLog = null;
 
 //JSON objects
-function metadataObject(name, goal){
+function metadataObject(name, goal, frequency, unit){
     var date = new Date();
     this.ActivityID = date.getTime().toString();
     this.ActivityName = name;
     this.GoalAmount = goal;
     this.CurrentStreak = 0;
     this.GrandTotal = 0;
-    this.LogCount = 0;
+    this.TotalLogCount = 0;
     this.TodayCount = 0;
-    this.PresentDay = date.getDate();
+    this.LastGoalInit = date.getTime().toString();
     this.TodayLogs = 0;
+    this.LongestStreak = 0;
+    this.GoalFrequency = frequency;
+    this.Unit = unit;
 }
 
-function activityLogObject(id, count){
-    this.id = id;
+function activityLogObject(count){
+    this.utc = new Date().getTime().toString();
     this.count = count;
 }
 
@@ -94,24 +104,35 @@ const pullActivityLogAsync = async(ActivityID) => {
 }
 
 // Interaction Functions
-const verifyPresentDay = async() =>{
+const verifyInGoalSpan = async() =>{
     await pullMetadataAsync();
 
     var curr = new Date();
-    var needsPush = false; //if day is updated, then must push to storage
-    day = curr.getDate();
+    var needsPush = false; //if span is not within bounds, then must push to storage
+    currUTC = curr.getDate().getTime();
 
     if(metadataCodeCopy !== null){
         for(var i in metadataCodeCopy){
-            if(metadataCodeCopy[i].PresentDay !== day){
+            var diff = 0;
+            if(metadataCodeCopy[i].GoalFrequency === DAY){
+                diff = DAY_DIFF;
+            }else if(metadataCodeCopy[i].GoalFrequency === WEEK){
+                diff = WEEK_DIFF;
+            }
+
+            if(metadataCodeCopy[i].LastGoalInit - currUTC > diff){
                 needsPush = true;
-                metadataCodeCopy[i].PresentDay = day;
+                metadataCodeCopy[i].LastGoalInit = currUTC;
                 metadataCodeCopy[i].TodayLogs = 0;
                     if(metadataCodeCopy[i].TodayCount >= metadataCodeCopy[i].GoalAmount){
                         metadataCodeCopy[i].CurrentStreak  = (metadataCodeCopy[i].CurrentStreak+1);
+                        if(metadataCodeCopy[i].LongestStreak < metadataCodeCopy[i].CurrentStreak){
+                            metadataCodeCopy[i].LongestStreak = metadataCodeCopy[i].CurrentStreak;
+                        }
                     }else{
                         metadataCodeCopy[i].CurrentStreak = 0;
                     }
+                metadataCodeCopy[i].TodayCount = 0;
             }
     }
     }else{
@@ -125,7 +146,7 @@ const logActivity = async(ActivityID, Count, type) =>{
     console.log("update daily input: "+ActivityID + ", "+Count)
 
     //update metadata in accordance with date
-    verifyPresentDay();
+    verifyInGoalSpan();
 
     var activityFound = false;
 
@@ -148,13 +169,10 @@ const logActivity = async(ActivityID, Count, type) =>{
                     metadataCodeCopy[i].GrandTotal+=Count;
                     metadataCodeCopy[i].LogCount++;
 
-                    //create new ActivityLog object
-                    var currUTC = new Date().getTime().toString();
-                    var actObj = '{'+ currUTC +", "+Count+'}'
-
                     await pullActivityLogAsync(ActivityID);
 
-                    currActivityLog.push(actObj);
+                    //add new Log object
+                    currActivityLog.push(new activityLogObject(Count));
 
                     await pushActivityLogAsync(ActivityID);
 
@@ -182,14 +200,14 @@ const logActivity = async(ActivityID, Count, type) =>{
     
 }
 
-const newActivity = async(ActivityName, GoalAmount) =>{
+const newActivity = async(ActivityName, GoalAmount, GoalFrequency, Unit) =>{
     await pullMetadataAsync();
 
     if(metadataCodeCopy === null){
         metadataCodeCopy = new Array();
     }
 
-    var newMeta = new metadataObject(ActivityName, parseInt(GoalAmount));
+    var newMeta = new metadataObject(ActivityName, parseInt(GoalAmount), GoalFrequency, Unit);
     metadataCodeCopy.push(newMeta);
     console.log(newMeta.ActivityID);
 
@@ -204,50 +222,49 @@ const exportData = async() =>{
     //make possible to auto-export data? on a daily/weekly/whatever schedule? - upload to icloud or something as csv?
 }
 
-const dumpData = async() =>{
+//Functions accessible to external files
+module.exports.logActivityPublic = async(ActivityID, Count) =>{
+    await logActivity(ActivityID,Count, LOG);
+}
+
+module.exports.newActivityPublic = async(ActivityName, GoalAmount, GoalFrequency, Unit) => {
+    await newActivity(ActivityName, GoalAmount, GoalFrequency, Unit);
+}
+
+module.exports.exportDataPublic = async() => {
+    await exportData();
+}
+
+module.exports.updateTodayTotalPublic = async(ActivityID, updatedTotal) =>{
+    await logActivity(ActivityID, updateTodayTotal, UPDATE);
+}
+
+module.exports.getStatisticsPublic = async() =>{
+    await pullMetadataAsync();
+    return metadataCodeCopy;
+}
+
+module.exports.DUMP_DATA_DEBUG = async() =>{
     console.log("DUMPING DATA")
     var keys = await AsyncStorage.getAllKeys();
     console.log("keys: "+ keys);
 
+    var dump = '';
+
     for(i in keys){
         await getData(keys[i])
         .then(data => {
+            dump+=keys[i] + ": " + JSON.stringify(data) + ", ";
             console.log(keys[i]+": ");
             console.log(data);
             })
         .catch(err => console.log(err))
     }
+
+    return dump;
 }
 
-const testDataFunction = async(ActivityID, Count) => {
-
-    //Test all functions working properly
-        // newActivity() seems to work as expected
-        // verifyPresentDay
-
-    //TODO:
-        // verifyPresentDay
-        // logActivity
-
-
-    //await pullMetadataAsync();
-
-    //await newActivity("name", 12);
-    //await newActivity("nameTwo", 120)
-
-    //console.log(await AsyncStorage.getAllKeys())
-
-
-    //await newActivity("pushups", 100);
-
-    //await logActivity("1642963175219", Count, LOG);
-
-    //await dumpData();
-    
-    await CLEAR_STORAGE_DEBUG();
-}
-
-const CLEAR_STORAGE_DEBUG = async()=>{
+module.exports.CLEAR_DATA_DEBUG = async() => {
     var keys = await AsyncStorage.getAllKeys();
     console.log("keys: "+ keys);
 
@@ -262,44 +279,4 @@ const CLEAR_STORAGE_DEBUG = async()=>{
     for(i in keys){
         console.log("data at "+keys[i]+": "+ await getData(keys[i]))
     }
-}
-
-module.exports.DUMP_DATA_DEBUG = async() =>{
-    await dumpData();
-}
-
-//Functions accessible to external files
-module.exports.logActivityPublic = async(ActivityID, Count) =>{
-    await logActivity(ActivityID,Count, LOG);
-    //console.log("\n\nNEW PRESS:")
-    //testDataFunction("id",Count);
-}
-
-module.exports.newActivityPublic = async(ActivityName, GoalAmount) => {
-    await newActivity(ActivityName, GoalAmount);
-    //await CLEAR_STORAGE_DEBUG();
-}
-
-module.exports.exportDataPublic = async() => {
-    await exportData();
-}
-
-module.exports.updateTodayTotalPublic = async(ActivityID, updatedTotal) =>{
-    await logActivity(ActivityID, updateTodayTotal, UPDATE);
-}
-
-module.exports.getStatisticsPublic = async() =>{
-    var keys = await AsyncStorage.getAllKeys();
-    var dump = new Array();
-
-    //make cleaner & include activity keys?
-    for(i in keys){
-        await getData(keys[i])
-        .then(data => {
-            dump.push(data)
-            })
-        .catch(err => console.log(err))
-    }
-
-    return dump;
 }

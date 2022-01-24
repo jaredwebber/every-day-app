@@ -22,9 +22,13 @@
 
  //Import Custom Components
  import {Button} from '../tools/button'
+ import { LargeSpacer } from '../tools/spacers';
+import SelectActivity from '../tools/select_activity';
+import Header from '../tools/header';
 
  
 var ActivityName = "pushups";//get from selection/db
+var ActivityUnit = "pushups"//^
 var CurrentDate = [];//updated by getDate() function
 
 function getMonth(){
@@ -66,11 +70,31 @@ const NumericInput = () => {
     return (
 
         <View style = {Styles.containerCenter}>
+
+
+        <LargeSpacer />
+        <LargeSpacer />
+
+        <Header />
+
+        <SelectActivity />
+
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
+
+
             <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'flex-start'
-          }}>
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'flex-start'
+                }}>
             <Text
                 style = {[
                     Styles.padItem, 
@@ -92,7 +116,7 @@ const NumericInput = () => {
                     Styles.textInput
                 ]}
                 keyboardType='numeric'
-                placeholder='enter number here'
+                placeholder={'number of '+ActivityUnit}
                 returnKeyType='done'
                 onChangeText={inputValue => updateInputValue(inputValue)}
             />

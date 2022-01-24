@@ -1,14 +1,14 @@
 # every-day-app
 
-Habit tracker mobile app, take variable input not solely a checkmark for the day.
-Though likely could accomodate Android as react-native is designed to be multi-platform, the current build is only functional on ios devices. 
+Habit tracker mobile app, take variable input not solely a checkmark for the day.  
+Though likely could accomodate Android as react-native is designed to be multi-platform, the current build is tested on ios. 
 
 Built Using [React Native](https://reactnative.dev) 
 
 Startup (ios):  `npx run-ios`
 
 ### Priorities:
-- Navigation between New Component, View Stats, Log Activity pages
+- find onLoad listener to populate selection options
 - Select Activity Component
 - Reminders/Notifications
 
@@ -17,12 +17,12 @@ Startup (ios):  `npx run-ios`
 - Account for local time in NumericInput date display
 - Make components & aesthetics scale with screen size
 - Add option to edit previous logs 
+  - and edit name, unit, goal, etc of metadata
 - 'Select an activity to log, or add a new activity' options
   - if # of activities = 0, then only show new activity option?
     https://stackoverflow.com/questions/67571592/react-native-dropdown-picker-how-to-get-selected-index-from-items
 - make seperate pages?
 - Fix dark/light modes
-- get rid of react-native startup screen
 - cloud db(?) and each every day task being tracked is associated with a key which can be saved and re-accessed?
 - any kind of every day task
   - taking a picture
