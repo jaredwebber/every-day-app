@@ -21,7 +21,6 @@ Startup (ios):  `npx run-ios`
 - 'Select an activity to log, or add a new activity' options
   - if # of activities = 0, then only show new activity option?
     https://stackoverflow.com/questions/67571592/react-native-dropdown-picker-how-to-get-selected-index-from-items
-- make seperate pages?
 - Fix dark/light modes
 - cloud db(?) and each every day task being tracked is associated with a key which can be saved and re-accessed?
 - any kind of every day task
