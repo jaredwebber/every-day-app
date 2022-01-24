@@ -10,18 +10,20 @@ Startup (ios):  `npx run-ios`
 ### Priorities:
 - find onLoad listener to populate selection options
 - Select Activity Component
+  - See if possible to pass k-v pair array into Selection and populate options?
+  - OR JUST INDEPENDANT PICKERS FOR NOW - Look at picker alternatives?
 - Reminders/Notifications
 
 
 ### Eventually:
+- Input validation on buttons
+  - make sure fields are filled
+  - dont allow 2 activities with the same name.trim()
 - Account for local time in NumericInput date display
 - Make components & aesthetics scale with screen size
 - Add option to edit previous logs 
   - and edit name, unit, goal, etc of metadata
-- 'Select an activity to log, or add a new activity' options
-  - if # of activities = 0, then only show new activity option?
-    https://stackoverflow.com/questions/67571592/react-native-dropdown-picker-how-to-get-selected-index-from-items
-- make seperate pages?
+- if # of activities = 0, have 'create a recurring activity to begin' message 
 - Fix dark/light modes
 - cloud db(?) and each every day task being tracked is associated with a key which can be saved and re-accessed?
 - any kind of every day task

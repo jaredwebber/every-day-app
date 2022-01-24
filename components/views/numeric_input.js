@@ -64,6 +64,10 @@ function getDay(){
     }
 }
 
+function displayAddedMsg(name, count){
+    this._MyComponent.setNativeProps({placeholder:"logged"+count+" "+name});
+}
+
 const NumericInput = () => {
     const [inputValue, updateInputValue] = useState('');
     getDay();
@@ -119,12 +123,23 @@ const NumericInput = () => {
                 placeholder={'number of '+ActivityUnit}
                 returnKeyType='done'
                 onChangeText={inputValue => updateInputValue(inputValue)}
+                ref={input => { this.logInput = input }}
             />
 
             <Button 
                 text={"log "+ActivityName} 
-                onPress={()=> dbAccess.logActivityPublic("ActivityID",inputValue)}
+                onPress={()=> {
+                    dbAccess.logActivityPublic("ActivityID",inputValue)}
+                    logInput.clear();
+                    displayAddedMsg(activityName, inputValue);
+                }
             />
+
+                <TextInput 
+                editable={false} 
+                ref={component=> this._MyComponent=component}
+                multiline = {true}
+                />  
 
 
        </View>

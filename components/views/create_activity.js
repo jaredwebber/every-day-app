@@ -35,9 +35,13 @@ function setFrequencyVal(frequency){
     frequencyVal = 'W';
 }
 
+function displayAddedMsg(name){
+    this._MyComponent.setNativeProps({placeholder:"added"+name});
+}
+
 
 const CreateActivity = () => {
-    const [activityName, updateName] = useState('noName');
+    const [activityName, updateName] = useState('nullname');
     const [goalAmount, updateGoal] = useState(-1);
     const [unit, updateUnit] = useState('');
     const [frequency, updateFrequency] = useState('daily');
@@ -89,6 +93,7 @@ const CreateActivity = () => {
                 autoCapitalize='none'
                 returnKeyType='done'
                 onChangeText={activityName => updateName(activityName)}
+                ref={input => { this.nameInput = input }}
             />
 
                 <TextInput 
@@ -100,6 +105,7 @@ const CreateActivity = () => {
                 autoCapitalize='none'
                 returnKeyType='done'
                 onChangeText={unit => updateUnit(unit)}
+                ref={input => { this.unitInput = input }}
             />          
 
             <TextInput 
@@ -110,14 +116,27 @@ const CreateActivity = () => {
                 placeholder={'enter '+frequency+' goal amount'}
                 returnKeyType='done'
                 onChangeText={goalAmount => updateGoal(goalAmount)}
+                ref={input => { this.goalInput = input }}
             />
 
                 <LargeSpacer />
 
             <Button 
                 text="create activity"
-                onPress={()=> dbAccess.newActivityPublic(activityName,goalAmount, frequencyVal, unit)}
+                onPress={()=> {
+                    dbAccess.newActivityPublic(activityName,goalAmount, frequencyVal, unit);
+                    this.goalInput.clear();
+                    this.unitInput.clear();
+                    this.nameInput.clear();
+                    displayAddedMsg(activityName);
+                }}
             />
+
+                <TextInput 
+                editable={false} 
+                ref={component=> this._MyComponent=component}
+                multiline = {true}
+                />          
 
 
        </View>

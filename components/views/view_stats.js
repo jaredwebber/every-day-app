@@ -62,6 +62,8 @@ const ViewStats = () => {
                 view your stats
             </Text>
 
+            
+
             <SelectActivity />
 
             <LargeSpacer />

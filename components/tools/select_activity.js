@@ -16,7 +16,7 @@
  import {SmallSpacer, MedSpacer, LargeSpacer} from './spacers';
 
 
- const SelectActivity = (onChangeFunc) => {
+ const SelectActivity = () => {
     const [selectedActivity, setSelected] = useState();
    return (
     <View 
