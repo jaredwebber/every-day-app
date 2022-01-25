@@ -8,17 +8,17 @@ Built Using [React Native](https://reactnative.dev)
 Startup (ios):  `npx run-ios`
 
 ### Priorities:
-- find onLoad listener to populate selection options
-- Select Activity Component
-  - See if possible to pass k-v pair array into Selection and populate options?
-  - OR JUST INDEPENDANT PICKERS FOR NOW - Look at picker alternatives?
+- Stat display page
+- Input validation on buttons
+  - make sure fields are filled with expected type
+  - dont allow 2 activities with the same name.trim()
 - Reminders/Notifications
 
 
 ### Eventually:
-- Input validation on buttons
-  - make sure fields are filled
-  - dont allow 2 activities with the same name.trim()
+- TD: 
+  - Avoid repeated code for activity selection
+  - Find cleaner code options instead of using globals?
 - Account for local time in NumericInput date display
 - Make components & aesthetics scale with screen size
 - Add option to edit previous logs 

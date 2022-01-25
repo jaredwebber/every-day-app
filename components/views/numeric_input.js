@@ -3,7 +3,7 @@
  * @format
  */
 
- import type {Node} from 'react';
+ import {Node, useDebugValue} from 'react';
  import {
     Pressable,
     RefreshControl,
@@ -12,7 +12,7 @@
     View
 } from 'react-native';
 
- import React, {useState} from 'react';
+ import React, {useState, useEffect} from 'react';
 
  //Import Custom Styles
  import Styles from '../style_sheet';
@@ -26,9 +26,11 @@
 import SelectActivity from '../tools/select_activity';
 import Header from '../tools/header';
 
- 
-var ActivityName = "pushups";//get from selection/db
-var ActivityUnit = "pushups"//^
+import DropDownPicker from 'react-native-dropdown-picker';
+
+
+var GLOBAL = require('../../index')
+
 var CurrentDate = [];//updated by getDate() function
 
 function getMonth(){
@@ -68,9 +70,43 @@ function displayAddedMsg(name, count){
     this._MyComponent.setNativeProps({placeholder:"logged"+count+" "+name});
 }
 
+function getActivityName(id){
+    if(id === undefined || global.metadata === null) return 'activity'
+    for(i in global.selectionOptions){
+        if(global.selectionOptions[i].value === id){
+            return global.selectionOptions[i].label;
+        }
+    }
+}
+
+function getActivityUnit(id){
+    if(id === undefined || global.metadata === null) return 'activity'
+    for(i in global.metadata){
+        if(global.metadata[i].ActivityID === id){
+            return global.metadata[i].Unit;
+        }
+    }
+}
+
 const NumericInput = () => {
-    const [inputValue, updateInputValue] = useState('');
     getDay();
+
+    const [activityUnit, updateUnit] = useState('-');
+    const [activityName, updateName] = useState("-");
+
+
+    const [inputValue, updateInputValue] = useState('');
+
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState(global.selectionOptions);
+
+    useEffect(() => {
+        GLOBAL.refreshMetadata();
+        setItems(global.selectionOptions);
+    }, [global.selectionOptions])
+
     return (
 
         <View style = {Styles.containerCenter}>
@@ -81,14 +117,31 @@ const NumericInput = () => {
 
         <Header />
 
-        <SelectActivity />
+        <LargeSpacer />
+        <LargeSpacer />
+        <LargeSpacer />
 
-        <LargeSpacer />
-        <LargeSpacer />
-        <LargeSpacer />
-        <LargeSpacer />
-        <LargeSpacer />
-        <LargeSpacer />
+        <View 
+        style = {
+            Styles.containerCenter
+        }>
+       
+        <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        onChangeValue={()=>{
+            global.currentSelection=value; 
+            updateName(getActivityName(value));
+            updateUnit(getActivityUnit(value));
+        }}
+        />
+
+        </View>
+
         <LargeSpacer />
         <LargeSpacer />
         <LargeSpacer />
@@ -104,7 +157,7 @@ const NumericInput = () => {
                     Styles.padItem, 
                     Styles.subTitleText
                 ]}>
-                log {ActivityName} for {getMonth()} {CurrentDate[0]}
+                log {activityName} for {getMonth()} {CurrentDate[0]}
                 
                 
             </Text>
@@ -120,19 +173,19 @@ const NumericInput = () => {
                     Styles.textInput
                 ]}
                 keyboardType='numeric'
-                placeholder={'number of '+ActivityUnit}
+                placeholder={'number of '+activityUnit}
                 returnKeyType='done'
                 onChangeText={inputValue => updateInputValue(inputValue)}
                 ref={input => { this.logInput = input }}
             />
 
             <Button 
-                text={"log "+ActivityName} 
+                text={"log "+activityName} 
                 onPress={()=> {
-                    dbAccess.logActivityPublic("ActivityID",inputValue)}
+                    dbAccess.logActivityPublic("ActivityID",inputValue);
                     logInput.clear();
                     displayAddedMsg(activityName, inputValue);
-                }
+                }}
             />
 
                 <TextInput 

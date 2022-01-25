@@ -13,7 +13,7 @@
     ScrollView
 } from 'react-native';
 
- import React, {useState} from 'react';
+ import React, {useState, useEffect} from 'react';
 
  //Import Custom Styles
  import Styles from '../style_sheet';
@@ -26,11 +26,16 @@
 import { LargeSpacer } from '../tools/spacers';
 import Header from '../tools/header';
 
+import ViewStats from '../views/view_stats';
+
+var GLOBAL = require('../../App')
+
+
  var curr = null;
 
  const refresh = async() =>{
      curr = await dbAccess.DUMP_DATA_DEBUG();
-     this._MyComponent.setNativeProps({text:curr});
+     this.DebugDisplay.setNativeProps({text:curr});
  }
 
 
@@ -84,7 +89,7 @@ const Settings = () => {
             <ScrollView>
                 <TextInput 
                 editable={false} 
-                ref={component=> this._MyComponent=component}
+                ref={component=> this.DebugDisplay=component}
                 multiline = {true}
                 /> 
             </ScrollView>

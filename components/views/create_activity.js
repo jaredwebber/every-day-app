@@ -12,7 +12,7 @@
     View
 } from 'react-native';
 
- import React, {useState} from 'react';
+ import React, {useState, useEffect} from 'react';
 
  //Import Custom Styles
  import Styles from '../style_sheet';
@@ -22,9 +22,11 @@
 
  //Import Custom Components
  import {Button} from '../tools/button'
- import { LargeSpacer, MedSpacer } from '../tools/spacers';
+ import { LargeSpacer, MedSpacer, SmallSpacer } from '../tools/spacers';
 import Header from '../tools/header';
 import { Picker } from '@react-native-picker/picker';
+
+var GLOBAL = require('../../index')
 
 
 var frequencyVal = 'D';
@@ -36,7 +38,7 @@ function setFrequencyVal(frequency){
 }
 
 function displayAddedMsg(name){
-    this._MyComponent.setNativeProps({placeholder:"added"+name});
+    this.ConfirmMessageCreate.setNativeProps({placeholder:"added "+name});
 }
 
 
@@ -45,6 +47,13 @@ const CreateActivity = () => {
     const [goalAmount, updateGoal] = useState(-1);
     const [unit, updateUnit] = useState('');
     const [frequency, updateFrequency] = useState('daily');
+
+    useEffect(() => {
+        // write your code here, it's like componentWillMount
+        GLOBAL.refreshMetadata();
+        console.log("\n\n\nin view or something\n\n\n")
+    }, [])
+    
 
 
     return (
@@ -134,7 +143,7 @@ const CreateActivity = () => {
 
                 <TextInput 
                 editable={false} 
-                ref={component=> this._MyComponent=component}
+                ref={component=> this.ConfirmMessageCreate=component}
                 multiline = {true}
                 />          
 

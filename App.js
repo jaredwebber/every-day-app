@@ -19,11 +19,15 @@ import Settings from './components/views/settings';
 
 const dbAccess = require('./data/local_async.js')
 
+var GLOBAL = require('./index')
+
+
 const Tab = createBottomTabNavigator();
 
 /*
  * https://reactnavigation.org/docs/tab-based-navigation
  */
+
 
 //App Begin
 const App = () => {
@@ -34,22 +38,23 @@ const App = () => {
         screenOptions={{headerShown:false}}
       >
         <Tab.Screen 
-          name='View Stats' 
-          component={ViewStats} 
+          name='New Activity' 
+          onPress={GLOBAL.refreshMetadata()}
+          component={CreateActivity} 
         />
         <Tab.Screen 
-
+          name='View Stats' 
+          component={ViewStats} 
+          onPress={GLOBAL.refreshMetadata()}
+        />
+        <Tab.Screen 
+          onPress={GLOBAL.refreshMetadata()}
           name='Log Activity' 
           component={NumericInput} 
         />
         <Tab.Screen 
-          name='New Activity' 
-          
-          component={CreateActivity} 
-        />
-        <Tab.Screen 
           name='Settings' 
-          
+          onPress={GLOBAL.refreshMetadata()}
           component={Settings} 
         />
       </Tab.Navigator>
