@@ -8,30 +8,34 @@ Built Using [React Native](https://reactnative.dev)
 Startup (ios):  `npx run-ios`
 
 ### Priorities:
-- Stat display page
-- Input validation on buttons
-  - make sure fields are filled with expected type
-  - dont allow 2 activities with the same name.trim()
-- Reminders/Notifications
+- Update Aesthetics
+- Clean up wording of pages
+- Add to TestFlight
 
 
-### Eventually:
-- TD: 
-  - Avoid repeated code for activity selection
-  - Find cleaner code options instead of using globals?
-- Account for local time in NumericInput date display
+### Todo List:
+#### Features
+- Add Reminders/Notifications
 - Make components & aesthetics scale with screen size
-- Add option to edit previous logs 
-  - and edit name, unit, goal, etc of metadata
-- if # of activities = 0, have 'create a recurring activity to begin' message 
-- Fix dark/light modes
-- cloud db(?) and each every day task being tracked is associated with a key which can be saved and re-accessed?
-- any kind of every day task
+- Add option to edit previous logs
+- Allow dark/light modes to work the same
+- Allow editing current period/session stats
+  - and edit name, unit, goal, etc of activities
+- if # of activities = 0, have 'create an activity to begin' message on Stats & logging page
+
+#### TD
+- Avoid repeated code for activity selection
+- Find cleaner code options instead of using globals
+- Dont allow 2 activities with the same name
+- Account for local time in NumericInput date display
+
+#### Longterm Possibilities
+- Cloud database, every task tracked which can be accessed/updated on different devices using guid?
+- Add more task types:
   - taking a picture
   - writing a note
   - checkbox 
-- can have a character requirement in order to be complete or numeric >= or just completion for note and photo
-- view progress on calendar with red/green/yellow days (yellow being attempted but not completed) as well as a streak indicator
+- View progress on calendar with red/green/yellow days well as a streak indicator
 
 
 ### App Init Steps

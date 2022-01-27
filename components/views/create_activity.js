@@ -25,6 +25,7 @@
  import { LargeSpacer, MedSpacer, SmallSpacer } from '../tools/spacers';
 import Header from '../tools/header';
 import { Picker } from '@react-native-picker/picker';
+import { validatePathConfig } from '@react-navigation/native';
 
 var GLOBAL = require('../../index')
 
@@ -42,6 +43,15 @@ function displayAddedMsg(name){
 }
 
 
+function validate(name, unit, goal){
+    var valid = true;
+    if(name.trim().length === 0) valid = false;
+    if(unit.trim().length === 0) valid = false;
+    if(isNaN(goal) || goal.trim().length === 0) valid = false;
+    return valid;
+}
+
+
 const CreateActivity = () => {
     const [activityName, updateName] = useState('nullname');
     const [goalAmount, updateGoal] = useState(-1);
@@ -51,7 +61,7 @@ const CreateActivity = () => {
     useEffect(() => {
         // write your code here, it's like componentWillMount
         GLOBAL.refreshMetadata();
-        console.log("\n\n\nin view or something\n\n\n")
+        //console.log("\n\n\nin view or something\n\n\n")
     }, [])
     
 
@@ -101,7 +111,7 @@ const CreateActivity = () => {
                 placeholder='enter activity name'
                 autoCapitalize='none'
                 returnKeyType='done'
-                onChangeText={activityName => updateName(activityName)}
+                onChangeText={activityName => updateName(activityName.trim())}
                 ref={input => { this.nameInput = input }}
             />
 
@@ -133,11 +143,13 @@ const CreateActivity = () => {
             <Button 
                 text="create activity"
                 onPress={()=> {
-                    dbAccess.newActivityPublic(activityName,goalAmount, frequencyVal, unit);
-                    this.goalInput.clear();
-                    this.unitInput.clear();
-                    this.nameInput.clear();
-                    displayAddedMsg(activityName);
+                    if(validate(activityName, unit, goalAmount)){
+                        dbAccess.newActivityPublic(activityName,goalAmount, frequencyVal, unit);
+                        this.goalInput.clear();
+                        this.unitInput.clear();
+                        this.nameInput.clear();
+                        displayAddedMsg(activityName);
+                    }
                 }}
             />
 

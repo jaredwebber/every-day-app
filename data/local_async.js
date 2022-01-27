@@ -30,6 +30,8 @@ function metadataObject(name, goal, frequency, unit){
     this.ActivityName = name;
     this.GoalAmount = goal;
     this.CurrentStreak = 0;
+    this.HighestPeriod = 0;
+    this.TotalGoalsMet = 0;
     this.GrandTotal = 0;
     this.TotalLogCount = 0;
     this.TodayCount = 0;
@@ -68,8 +70,8 @@ const pullMetadataAsync = async() => {
     //set metadata global JSON with all metadata from async
     await getData(META_KEY)
     .then(data => {
-        console.log("Pulling metadata: ");
-        console.log(data);
+        //console.log("Pulling metadata: ");
+        //console.log(data);
         metadataCodeCopy = data;
         })
     .catch(err => console.log(err))
@@ -97,7 +99,7 @@ const pullActivityLogAsync = async(ActivityID) => {
     //set metadata global JSON with all metadata from async
     await getData(ActivityID)
     .then(data => {
-        console.log("Pulling activity log ("+ActivityID+"): " + data);
+        //console.log("Pulling activity log ("+ActivityID+"): " + data);
         currActivityLog = data;
         })
     .catch(err => console.error(err))
@@ -107,9 +109,8 @@ const pullActivityLogAsync = async(ActivityID) => {
 const verifyInGoalSpan = async() =>{
     await pullMetadataAsync();
 
-    var curr = new Date();
     var needsPush = false; //if span is not within bounds, then must push to storage
-    currUTC = curr.getDate().getTime();
+    currUTC = new Date().getTime().toString();
 
     if(metadataCodeCopy !== null){
         for(var i in metadataCodeCopy){
@@ -121,16 +122,23 @@ const verifyInGoalSpan = async() =>{
             }
 
             if(metadataCodeCopy[i].LastGoalInit - currUTC > diff){
+                console.warn("changing data");
                 needsPush = true;
                 metadataCodeCopy[i].LastGoalInit = currUTC;
                 metadataCodeCopy[i].TodayLogs = 0;
+
                     if(metadataCodeCopy[i].TodayCount >= metadataCodeCopy[i].GoalAmount){
+                        metadataCodeCopy[i].TotalGoalsMet++;
                         metadataCodeCopy[i].CurrentStreak  = (metadataCodeCopy[i].CurrentStreak+1);
                         if(metadataCodeCopy[i].LongestStreak < metadataCodeCopy[i].CurrentStreak){
                             metadataCodeCopy[i].LongestStreak = metadataCodeCopy[i].CurrentStreak;
                         }
                     }else{
                         metadataCodeCopy[i].CurrentStreak = 0;
+                    }
+
+                    if(metadataCodeCopy[i].TodayCount > metadataCodeCopy[i].HighestPeriod){
+                        metadataCodeCopy[i].HighestPeriod  = (metadataCodeCopy[i].TodayCount);
                     }
                 metadataCodeCopy[i].TodayCount = 0;
             }
@@ -143,7 +151,7 @@ const verifyInGoalSpan = async() =>{
 }
 
 const logActivity = async(ActivityID, Count, type) =>{
-    console.log("update daily input: "+ActivityID + ", "+Count)
+    console.warn("update daily input: "+ActivityID + ", "+Count)
 
     //update metadata in accordance with date
     verifyInGoalSpan();
@@ -157,17 +165,19 @@ const logActivity = async(ActivityID, Count, type) =>{
 
     //update metadataCodeCopy values
     if(type === LOG){
-        console.log("log")
+        //console.log("log")
         if(metadataCodeCopy !== null){
             for(var i in metadataCodeCopy){
                 if(parseInt(metadataCodeCopy[i].ActivityID) === parseInt(ActivityID)){
                     activityFound = true;
 
                     //update metadata with values
-                    metadataCodeCopy[i].TodayCount+=Count;
-                    metadataCodeCopy[i].TodayLogs++;
-                    metadataCodeCopy[i].GrandTotal+=Count;
-                    metadataCodeCopy[i].LogCount++;
+                    metadataCodeCopy[i].TodayCount = parseInt(metadataCodeCopy[i].TodayCount) + parseInt(Count);
+                    metadataCodeCopy[i].TodayLogs = parseInt(metadataCodeCopy[i].TodayLogs) + 1;
+                    metadataCodeCopy[i].GrandTotal = parseInt(metadataCodeCopy[i].GrandTotal) + parseInt(Count);
+                    metadataCodeCopy[i].TotalLogCount = parseInt(metadataCodeCopy[i].TotalLogCount) + 1;
+
+                    await pushMetadataAsync();
 
                     await pullActivityLogAsync(ActivityID);
 
@@ -193,10 +203,17 @@ const logActivity = async(ActivityID, Count, type) =>{
         console.error("unexpected logActivity 'type' param");
     }
 
+    console.error("huh");
 
     if(!activityFound) console.error("ActivityID: "+ActivityID + " not found");
     
-    pushMetadataAsync();
+    //console.warn("Local Storage:")
+    //console.log(metadataCodeCopy)
+
+    //
+    //await pullMetadataAsync();
+    //console.warn("Async Pull: ")
+    //console.log(metadataCodeCopy)
     
 }
 
@@ -209,7 +226,7 @@ const newActivity = async(ActivityName, GoalAmount, GoalFrequency, Unit) =>{
 
     var newMeta = new metadataObject(ActivityName, parseInt(GoalAmount), GoalFrequency, Unit);
     metadataCodeCopy.push(newMeta);
-    console.log(newMeta.ActivityID);
+    //console.log(newMeta.ActivityID);
 
     currActivityLog = new Array();
 
@@ -245,9 +262,9 @@ module.exports.getStatisticsPublic = async() =>{
 }
 
 module.exports.DUMP_DATA_DEBUG = async() =>{
-    console.log("DUMPING DATA")
+    //console.log("DUMPING DATA")
     var keys = await AsyncStorage.getAllKeys();
-    console.log("keys: "+ keys);
+    //console.log("keys: "+ keys);
 
     var dump = '';
 
@@ -255,8 +272,8 @@ module.exports.DUMP_DATA_DEBUG = async() =>{
         await getData(keys[i])
         .then(data => {
             dump+=keys[i] + ": " + JSON.stringify(data) + ", ";
-            console.log(keys[i]+": ");
-            console.log(data);
+            //console.log(keys[i]+": ");
+            //console.log(data);
             })
         .catch(err => console.log(err))
     }
@@ -266,17 +283,17 @@ module.exports.DUMP_DATA_DEBUG = async() =>{
 
 module.exports.CLEAR_DATA_DEBUG = async() => {
     var keys = await AsyncStorage.getAllKeys();
-    console.log("keys: "+ keys);
+    //console.log("keys: "+ keys);
 
     for(i in keys){
         await AsyncStorage.removeItem(keys[i])
         .then(data => {
-            console.log("CLEARING KEY: "+keys[i])
+            //console.log("CLEARING KEY: "+keys[i])
             })
         .catch(err => console.error(err))
     }
 
     for(i in keys){
-        console.log("data at "+keys[i]+": "+ await getData(keys[i]))
+        //console.log("data at "+keys[i]+": "+ await getData(keys[i]))
     }
 }

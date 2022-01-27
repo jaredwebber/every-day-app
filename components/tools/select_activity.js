@@ -48,7 +48,7 @@
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      onChangeValue={()=>{global.currentSelection=value; console.log(global.currentSelection)}}
+      onChangeValue={()=>{global.currentSelection=value;}}
     />
 
     </View>

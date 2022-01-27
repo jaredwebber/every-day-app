@@ -27,6 +27,7 @@ import SelectActivity from '../tools/select_activity';
 import Header from '../tools/header';
 
 import DropDownPicker from 'react-native-dropdown-picker';
+import { validatePathConfig } from '@react-navigation/native';
 
 
 var GLOBAL = require('../../index')
@@ -66,8 +67,8 @@ function getDay(){
     }
 }
 
-function displayAddedMsg(name, count){
-    this._MyComponent.setNativeProps({placeholder:"logged"+count+" "+name});
+function displayAddedMsg(unit, count){
+    this._MyComponent.setNativeProps({placeholder:"logged "+count+" "+unit});
 }
 
 function getActivityName(id){
@@ -88,6 +89,10 @@ function getActivityUnit(id){
     }
 }
 
+function validate(val){
+    return !isNaN(val) && val.trim().length !== 0; 
+}
+
 const NumericInput = () => {
     getDay();
 
@@ -95,7 +100,7 @@ const NumericInput = () => {
     const [activityName, updateName] = useState("-");
 
 
-    const [inputValue, updateInputValue] = useState('');
+    const [inputValue, updateInputValue] = useState(null);
 
 
     const [open, setOpen] = useState(false);
@@ -182,9 +187,13 @@ const NumericInput = () => {
             <Button 
                 text={"log "+activityName} 
                 onPress={()=> {
-                    dbAccess.logActivityPublic("ActivityID",inputValue);
-                    logInput.clear();
-                    displayAddedMsg(activityName, inputValue);
+                    if(validate(inputValue)){
+                        dbAccess.logActivityPublic(global.currentSelection, inputValue);
+                        logInput.clear();
+                        displayAddedMsg(activityName, inputValue);
+                    }else{
+                        //do anything?? - popup/message
+                    }
                 }}
             />
 

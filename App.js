@@ -36,12 +36,8 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{headerShown:false}}
+        //change order of Tab.Screens if values not loading
       >
-        <Tab.Screen 
-          name='New Activity' 
-          onPress={GLOBAL.refreshMetadata()}
-          component={CreateActivity} 
-        />
         <Tab.Screen 
           name='View Stats' 
           component={ViewStats} 
@@ -51,6 +47,11 @@ const App = () => {
           onPress={GLOBAL.refreshMetadata()}
           name='Log Activity' 
           component={NumericInput} 
+        />
+        <Tab.Screen 
+          name='New Activity' 
+          onPress={GLOBAL.refreshMetadata()}
+          component={CreateActivity} 
         />
         <Tab.Screen 
           name='Settings' 

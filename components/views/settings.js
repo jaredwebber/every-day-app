@@ -10,7 +10,8 @@
     Text, 
     TextInput,  
     View,
-    ScrollView
+    ScrollView,
+    Linking
 } from 'react-native';
 
  import React, {useState, useEffect} from 'react';
@@ -36,8 +37,13 @@ var GLOBAL = require('../../App')
  const refresh = async() =>{
      curr = await dbAccess.DUMP_DATA_DEBUG();
      this.DebugDisplay.setNativeProps({text:curr});
+     return curr;
  }
 
+
+ function sendEmail(){
+    
+ }
 
 const Settings = () => {
     const [output, updateOutput] = useState("null");
@@ -85,6 +91,11 @@ const Settings = () => {
                 onPress={()=>{dbAccess.CLEAR_DATA_DEBUG(); refresh();}}
                 text={"clear all data"}
             />
+
+            < Button 
+                onPress={()=>{Linking.openURL('mailto:jaredwebberdev@gmail.ca?body='+ JSON.stringify(global.metadata)+'&subject=DataDump'); console.log(global.metadata)}}
+                text={"export all data"}
+            />  
 
             <ScrollView>
                 <TextInput 

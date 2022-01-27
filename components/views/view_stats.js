@@ -55,11 +55,45 @@ function getActivityUnit(id){
     }
 }
 
+function displayStats(id){
+    var frequency = 'daily';
+    var formattedString = "";
+
+    for(i in global.metadata){
+        if(global.metadata[i].ActivityID === id){
+            if(global.metadata[i].GoalFrequency === 'W') frequency = 'weekly';
+
+            formattedString = 
+
+                frequency +" stats:"+
+                "\ncompleted " + global.metadata[i].TodayCount + " of "+ global.metadata[i].GoalAmount + " "+
+                metadata[i].Unit + " in " + metadata[i].TodayLogs +" logs\n"+
+                "current streak: "+ global.metadata[i].CurrentSteak+
+
+
+                "\n\nall time stats: \n" +               
+                "you've reached your " + frequency + " goal of " +
+                global.metadata[i].GoalAmount + " " + global.metadata[i].Unit +"s "+
+                global.metadata[i].TotalGoalsMet+" times." +
+                "\nlongest streak: "+ global.metadata[i].LongestStreak + " in "+
+                global.metadata[i].TotalLogs + " times logged"+
+                "\nhighest goal period " + metadata[i].HighestPeriod
+
+
+    
+
+            return formattedString;
+        }
+    }
+    return formattedString;
+}
+
+
 const ViewStats = () => {
 
     const [output, updateOutput] = useState("null");
 
-    const [selectedActivity, setSelected] = useState("null");
+    const [selectedActivityStats, setSelected] = useState("null");
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -101,15 +135,23 @@ const ViewStats = () => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            onChangeValue={()=>{global.currentSelection=value; setSelected(value)}}
+            onChangeValue={()=>{global.currentSelection=value; setSelected(displayStats(value))}}
             />
 
             </View>
             
 
             <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
+            <LargeSpacer />
 
-            <Text>{selectedActivity}</Text>
+
+            <Text>{selectedActivityStats}</Text>
 
             <ScrollView>
                 <TextInput 
