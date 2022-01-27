@@ -38,16 +38,19 @@ function setFrequencyVal(frequency){
     frequencyVal = 'W';
 }
 
-function displayAddedMsg(name){
-    this.ConfirmMessageCreate.setNativeProps({placeholder:"added "+name});
+function displayAddedMsg(msg){
+    this.ConfirmMessageCreate.setNativeProps({placeholder:msg});
 }
 
 
 function validate(name, unit, goal){
     var valid = true;
-    if(name.trim().length === 0) valid = false;
-    if(unit.trim().length === 0) valid = false;
-    if(isNaN(goal) || goal.trim().length === 0) valid = false;
+    try{
+        if(name.trim().length === 0) valid = false;
+        if(unit.trim().length === 0) valid = false;
+        if(isNaN(goal) || goal.trim().length === 0) valid = false;
+    }
+    catch{return false;}
     return valid;
 }
 
@@ -107,6 +110,7 @@ const CreateActivity = () => {
                 style = {[
                     Styles.textInput
                 ]}
+                placeholderTextColor={"#404040"}
                 keyboardType='ascii-capable'
                 placeholder='enter activity name'
                 autoCapitalize='none'
@@ -119,6 +123,7 @@ const CreateActivity = () => {
                 style = {[
                     Styles.textInput
                 ]}
+                placeholderTextColor={"#404040"}
                 keyboardType='ascii-capable'
                 placeholder='enter measurement unit' // (minutes, reps, ml, etc) - add in 'i' popup?
                 autoCapitalize='none'
@@ -131,6 +136,7 @@ const CreateActivity = () => {
                 style = {[
                     Styles.textInput
                 ]}
+                placeholderTextColor={"#404040"}
                 keyboardType='numeric'
                 placeholder={'enter '+frequency+' goal amount'}
                 returnKeyType='done'
@@ -148,7 +154,12 @@ const CreateActivity = () => {
                         this.goalInput.clear();
                         this.unitInput.clear();
                         this.nameInput.clear();
-                        displayAddedMsg(activityName);
+                        updateGoal(null);
+                        updateName(null);
+                        updateUnit(null);
+                        displayAddedMsg("added "+activityName);
+                    }else{
+                        displayAddedMsg("make sure all fields are filled")
                     }
                 }}
             />

@@ -94,7 +94,12 @@ const Settings = () => {
 
             < Button 
                 onPress={()=>{Linking.openURL('mailto:jaredwebberdev@gmail.ca?body='+ JSON.stringify(global.metadata)+'&subject=DataDump'); console.log(global.metadata)}}
-                text={"export all data"}
+                text={"export metadata"}
+            />  
+
+            < Button 
+                onPress={console.log("allow import of json")}
+                text={"import data (not yet)"}
             />  
 
             <ScrollView>

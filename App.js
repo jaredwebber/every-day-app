@@ -39,22 +39,22 @@ const App = () => {
         //change order of Tab.Screens if values not loading
       >
         <Tab.Screen 
-          name='View Stats' 
+          name='view stats' 
           component={ViewStats} 
           onPress={GLOBAL.refreshMetadata()}
         />
         <Tab.Screen 
           onPress={GLOBAL.refreshMetadata()}
-          name='Log Activity' 
+          name='log activity' 
           component={NumericInput} 
         />
         <Tab.Screen 
-          name='New Activity' 
+          name='new activity' 
           onPress={GLOBAL.refreshMetadata()}
           component={CreateActivity} 
         />
         <Tab.Screen 
-          name='Settings' 
+          name='settings' 
           onPress={GLOBAL.refreshMetadata()}
           component={Settings} 
         />

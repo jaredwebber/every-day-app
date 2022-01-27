@@ -122,7 +122,6 @@ const verifyInGoalSpan = async() =>{
             }
 
             if(metadataCodeCopy[i].LastGoalInit - currUTC > diff){
-                console.warn("changing data");
                 needsPush = true;
                 metadataCodeCopy[i].LastGoalInit = currUTC;
                 metadataCodeCopy[i].TodayLogs = 0;
@@ -151,7 +150,7 @@ const verifyInGoalSpan = async() =>{
 }
 
 const logActivity = async(ActivityID, Count, type) =>{
-    console.warn("update daily input: "+ActivityID + ", "+Count)
+    //console.warn("update daily input: "+ActivityID + ", "+Count)
 
     //update metadata in accordance with date
     verifyInGoalSpan();
@@ -203,18 +202,7 @@ const logActivity = async(ActivityID, Count, type) =>{
         console.error("unexpected logActivity 'type' param");
     }
 
-    console.error("huh");
-
-    if(!activityFound) console.error("ActivityID: "+ActivityID + " not found");
-    
-    //console.warn("Local Storage:")
-    //console.log(metadataCodeCopy)
-
-    //
-    //await pullMetadataAsync();
-    //console.warn("Async Pull: ")
-    //console.log(metadataCodeCopy)
-    
+    if(!activityFound) console.error("ActivityID: "+ActivityID + " not found");    
 }
 
 const newActivity = async(ActivityName, GoalAmount, GoalFrequency, Unit) =>{

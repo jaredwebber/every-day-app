@@ -22,7 +22,7 @@
 
  //Import Custom Components
  import {Button} from '../tools/button'
- import { LargeSpacer } from '../tools/spacers';
+ import { LargeSpacer, SmallSpacer } from '../tools/spacers';
 import SelectActivity from '../tools/select_activity';
 import Header from '../tools/header';
 
@@ -67,8 +67,8 @@ function getDay(){
     }
 }
 
-function displayAddedMsg(unit, count){
-    this._MyComponent.setNativeProps({placeholder:"logged "+count+" "+unit});
+function displayAddedMsg(msg){
+    this._MyComponent.setNativeProps({placeholder:msg});
 }
 
 function getActivityName(id){
@@ -90,14 +90,17 @@ function getActivityUnit(id){
 }
 
 function validate(val){
-    return !isNaN(val) && val.trim().length !== 0; 
+    try{
+        return !isNaN(val) && val.trim().length !== 0 && global.currentSelection != null; 
+    }
+    catch{return false;}
 }
 
 const NumericInput = () => {
     getDay();
 
-    const [activityUnit, updateUnit] = useState('-');
-    const [activityName, updateName] = useState("-");
+    const [activityUnit, updateUnit] = useState('activity');
+    const [activityName, updateName] = useState('activity');
 
 
     const [inputValue, updateInputValue] = useState(null);
@@ -128,10 +131,11 @@ const NumericInput = () => {
 
         <View 
         style = {
-            Styles.containerCenter
+            Styles.dropdownContainer
         }>
        
         <DropDownPicker
+        zIndex={999}
         open={open}
         value={value}
         items={items}
@@ -140,8 +144,10 @@ const NumericInput = () => {
         setItems={setItems}
         onChangeValue={()=>{
             global.currentSelection=value; 
-            updateName(getActivityName(value));
-            updateUnit(getActivityUnit(value));
+            if(value!==null && value !== "null"){
+                updateName(getActivityName(value));
+                updateUnit(getActivityName(value));
+            }
         }}
         />
 
@@ -153,6 +159,8 @@ const NumericInput = () => {
 
 
             <View
+                zIndex={-1}
+
                 style={{
                     flexDirection: 'row',
                     alignItems: 'flex-start'
@@ -177,6 +185,7 @@ const NumericInput = () => {
                 style = {[
                     Styles.textInput
                 ]}
+                placeholderTextColor={"#404040"}
                 keyboardType='numeric'
                 placeholder={'number of '+activityUnit}
                 returnKeyType='done'
@@ -184,15 +193,19 @@ const NumericInput = () => {
                 ref={input => { this.logInput = input }}
             />
 
+            <LargeSpacer />
+
+
             <Button 
                 text={"log "+activityName} 
                 onPress={()=> {
                     if(validate(inputValue)){
                         dbAccess.logActivityPublic(global.currentSelection, inputValue);
                         logInput.clear();
-                        displayAddedMsg(activityName, inputValue);
+                        updateInputValue("");
+                        displayAddedMsg("logged "+ inputValue +" "+ activityUnit);
                     }else{
-                        //do anything?? - popup/message
+                        displayAddedMsg("make sure all fields are filled");
                     }
                 }}
             />

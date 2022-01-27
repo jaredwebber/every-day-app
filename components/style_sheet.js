@@ -79,10 +79,17 @@ const Styles = StyleSheet.create({
 
     //Interaction
     textInput:{
-        padding:10,
+        padding:6,
         fontSize:25,
         fontWeight: '300',
 
+        borderBottomWidth:1,
+        borderBottomRightRadius:9,
+        borderBottomLeftRadius: 9,
+        borderColor: "#404040",
+        borderStyle:'solid',
+        color:"black",
+        margin:1,
     },
 
     buttonContainer:{
@@ -135,6 +142,10 @@ const Styles = StyleSheet.create({
     buttonText:{
         fontSize:20,
         fontWeight:'500'
+    },
+
+    dropdownContainer:{
+        width: 2*windowWidth/3,
     },
 
     backgroundImage:{

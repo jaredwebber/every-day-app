@@ -71,9 +71,10 @@ function displayStats(id){
                 "current streak: "+ global.metadata[i].CurrentSteak+
 
 
-                "\n\nall time stats: \n" +               
-                "you've reached your " + frequency + " goal of " +
-                global.metadata[i].GoalAmount + " " + global.metadata[i].Unit +"s "+
+                "\n\nall time stats: \n" +    
+                "you've completed "+ global.metadata[i].GrandTotal +" "+global.metadata[i].Unit+
+                "\nyou've reached your " + frequency + " goal of " +
+                global.metadata[i].GoalAmount + " " + global.metadata[i].Unit +" "+
                 global.metadata[i].TotalGoalsMet+" times." +
                 "\nlongest streak: "+ global.metadata[i].LongestStreak + " in "+
                 global.metadata[i].TotalLogs + " times logged"+
@@ -93,7 +94,7 @@ const ViewStats = () => {
 
     const [output, updateOutput] = useState("null");
 
-    const [selectedActivityStats, setSelected] = useState("null");
+    const [selectedActivityStats, setSelected] = useState("");
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -122,10 +123,13 @@ const ViewStats = () => {
                 view your stats
             </Text>
 
+            <LargeSpacer />
+
             
             <View 
+            zIndex={999}
             style = {
-                Styles.containerCenter
+                Styles.dropdownContainer
             }>
        
             <DropDownPicker
@@ -142,23 +146,18 @@ const ViewStats = () => {
             
 
             <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
 
 
-            <Text>{selectedActivityStats}</Text>
+            <Text
+            zIndex={-1}
+            >{selectedActivityStats}</Text>
 
             <ScrollView>
                 <TextInput 
                 editable={false} 
                 ref={component=> this.TestDisplay=component}
                 multiline = {true}
-                placeholder='results display below'
+                placeholder=''
                 /> 
             </ScrollView>
       </View>
