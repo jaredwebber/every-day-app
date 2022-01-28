@@ -205,8 +205,11 @@ const NumericInput = () => {
                     Styles.textInput
                 ]}
                 placeholderTextColor={"#404040"}
-                keyboardType='numeric'
+                //keyboardType='numeric'
+                keyboardType='default'//to be switched to numeric once debug update is changed
                 placeholder={'number of '+activityUnit}
+                autoCorrect={false}
+                autoCapitalize='none'
                 returnKeyType='done'
                 onChangeText={inputValue => updateInputValue(inputValue)}
                 ref={input => { this.logInput = input }}
@@ -225,7 +228,7 @@ const NumericInput = () => {
                             updateInputValue("");
                             displayAddedMsg("logged "+ inputValue +" "+ activityUnit);
                         }else{
-                            displayAddedMsg("make sure all fields are filled");
+                            displayAddedMsg("make sure all fields are filled & number is entered");
                         }
                     }else{
                         logInput.clear();

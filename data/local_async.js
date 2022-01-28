@@ -268,7 +268,7 @@ module.exports.DEBUGupdate = async(update)=>{
             }
         }
     }else{
-        console.error("Invalid update array length")
+        console.error("Invalid update array length: "+update.length)
     }
     //parse array of order - finish order and make sure everything is included
     //ActivityID,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
