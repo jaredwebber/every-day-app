@@ -135,10 +135,6 @@ const verifyInGoalSpan = async() =>{
                     }else{
                         metadataCodeCopy[i].CurrentStreak = 0;
                     }
-
-                    if(metadataCodeCopy[i].TodayCount > metadataCodeCopy[i].HighestPeriod){
-                        metadataCodeCopy[i].HighestPeriod  = (metadataCodeCopy[i].TodayCount);
-                    }
                 metadataCodeCopy[i].TodayCount = 0;
             }
     }
@@ -175,6 +171,10 @@ const logActivity = async(ActivityID, Count, type) =>{
                     metadataCodeCopy[i].TodayLogs = parseInt(metadataCodeCopy[i].TodayLogs) + 1;
                     metadataCodeCopy[i].GrandTotal = parseInt(metadataCodeCopy[i].GrandTotal) + parseInt(Count);
                     metadataCodeCopy[i].TotalLogCount = parseInt(metadataCodeCopy[i].TotalLogCount) + 1;
+
+                    if(metadataCodeCopy[i].TodayCount > metadataCodeCopy[i].HighestPeriod){
+                        metadataCodeCopy[i].HighestPeriod  = (metadataCodeCopy[i].TodayCount);
+                    }
 
                     await pushMetadataAsync();
 
@@ -242,6 +242,42 @@ module.exports.exportDataPublic = async() => {
 
 module.exports.updateTodayTotalPublic = async(ActivityID, updatedTotal) =>{
     await logActivity(ActivityID, updateTodayTotal, UPDATE);
+}
+
+module.exports.DEBUGupdate = async(update)=>{
+    await pullMetadataAsync();
+    if(update.length === 10){
+        for(i in metadataCodeCopy){
+            if(parseInt(metadataCodeCopy[i].ActivityID) === parseInt(update[0])){
+                try{
+                    if(update[1] !== "-") metadataCodeCopy[i].ActivityName = update[1];
+                    if(update[2] !== "-") metadataCodeCopy[i].GoalAmount = parseInt(update[2]);
+                    if(update[3] !== "-") metadataCodeCopy[i].CurrentStreak = parseInt(update[3]);
+                    if(update[4] !== "-") metadataCodeCopy[i].HighestPeriod = parseInt(update[4]);
+                    if(update[5] !== "-") metadataCodeCopy[i].TotalGoalsMet = parseInt(update[5]);
+                    if(update[6] !== "-") metadataCodeCopy[i].GrandTotal = parseInt(update[6]);
+                    if(update[7] !== "-") metadataCodeCopy[i].TotalLogCount = parseInt(update[7]);
+                    if(update[8] !== "-") metadataCodeCopy[i].LongestStreak = parseInt(update[8]);
+                    if(update[9] !== "-") metadataCodeCopy[i].Unit = update[9];
+                }catch(e){
+                    console.warn("Unable to update with values:");
+                    console.warn(update);
+                }
+
+                break;
+            }
+        }
+    }else{
+        console.error("Invalid update array length")
+    }
+    //parse array of order - finish order and make sure everything is included
+    //ActivityID,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
+
+    //any null column is not updated
+
+    //set all metadataCodeCopy vals
+
+    await pushMetadataAsync();
 }
 
 module.exports.getStatisticsPublic = async() =>{

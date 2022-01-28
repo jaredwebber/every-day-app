@@ -91,9 +91,28 @@ function getActivityUnit(id){
 
 function validate(val){
     try{
-        return !isNaN(val) && val.trim().length !== 0 && global.currentSelection != null; 
+        return !isNaN(val) && val.trim().length !== 0 && global.currentSelection != null && parseInt(val)>0; 
     }
     catch{return false;}
+}
+
+function debugUpdateActivity(val){
+    try{
+        if(val.substring(0,5) === "debug"){
+            var updateArr = new Array();
+
+            updateArr.push(global.currentSelection);
+            //debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
+            var items = val.split(",");
+            for(var i = 1; i< items.length;i++){
+                updateArr.push(items[i].trim());
+            }
+
+            dbAccess.DEBUGupdate(updateArr);
+            return true;
+        }
+    }catch{}
+    return false;
 }
 
 const NumericInput = () => {
@@ -199,13 +218,18 @@ const NumericInput = () => {
             <Button 
                 text={"log "+activityName} 
                 onPress={()=> {
-                    if(validate(inputValue)){
-                        dbAccess.logActivityPublic(global.currentSelection, inputValue);
-                        logInput.clear();
-                        updateInputValue("");
-                        displayAddedMsg("logged "+ inputValue +" "+ activityUnit);
+                    if(!debugUpdateActivity(inputValue)){
+                        if(validate(inputValue)){
+                            dbAccess.logActivityPublic(global.currentSelection, inputValue);
+                            logInput.clear();
+                            updateInputValue("");
+                            displayAddedMsg("logged "+ inputValue +" "+ activityUnit);
+                        }else{
+                            displayAddedMsg("make sure all fields are filled");
+                        }
                     }else{
-                        displayAddedMsg("make sure all fields are filled");
+                        logInput.clear();
+                        displayAddedMsg("debug: attempted to update activity");
                     }
                 }}
             />

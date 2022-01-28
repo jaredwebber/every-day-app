@@ -29,26 +29,23 @@ import { validatePathConfig } from '@react-navigation/native';
 
 var GLOBAL = require('../../index')
 
-
-var frequencyVal = 'D';
-function setFrequencyVal(frequency){
-    if(frequency === 'daily'){
-        frequencyVal = 'D';
+function getFrequency(string){
+    if(string === 'daily'){
+        return 'D';
     }
-    frequencyVal = 'W';
+    return 'W';
 }
 
 function displayAddedMsg(msg){
     this.ConfirmMessageCreate.setNativeProps({placeholder:msg});
 }
 
-
 function validate(name, unit, goal){
     var valid = true;
     try{
         if(name.trim().length === 0) valid = false;
         if(unit.trim().length === 0) valid = false;
-        if(isNaN(goal) || goal.trim().length === 0) valid = false;
+        if(isNaN(goal) || goal.trim().length === 0 || parseInt(goal)<=0) valid = false;
     }
     catch{return false;}
     return valid;
@@ -59,7 +56,9 @@ const CreateActivity = () => {
     const [activityName, updateName] = useState('nullname');
     const [goalAmount, updateGoal] = useState(-1);
     const [unit, updateUnit] = useState('');
-    const [frequency, updateFrequency] = useState('daily');
+    const [frequency, updateFrequency] = useState('D');
+    const [frequencyString, updateFrequencyString] = useState('daily');
+
 
     useEffect(() => {
         // write your code here, it's like componentWillMount
@@ -79,13 +78,11 @@ const CreateActivity = () => {
              <Header />
 
              <Picker 
-                selectedValue={frequency}
-                onValueChange={(itemValue, itemIndex) => {updateFrequency(itemValue); setFrequencyVal(frequency)}}
+                selectedValue={frequencyString}
+                onValueChange={(itemValue, itemIndex) => {updateFrequencyString(itemValue); updateFrequency(getFrequency(itemValue))}}
                 style={{height: 30, width: 200}} 
                 prompt='pick a frequency'
             >
-
-        
                 <Picker.Item label={"Daily"} value={"daily"}  key={'D'}/>
                 <Picker.Item label={"Weekly"} value={"weekly"} key={'W'}/>
 
@@ -138,7 +135,7 @@ const CreateActivity = () => {
                 ]}
                 placeholderTextColor={"#404040"}
                 keyboardType='numeric'
-                placeholder={'enter '+frequency+' goal amount'}
+                placeholder={'enter '+frequencyString+' goal amount'}
                 returnKeyType='done'
                 onChangeText={goalAmount => updateGoal(goalAmount)}
                 ref={input => { this.goalInput = input }}
@@ -150,7 +147,7 @@ const CreateActivity = () => {
                 text="create activity"
                 onPress={()=> {
                     if(validate(activityName, unit, goalAmount)){
-                        dbAccess.newActivityPublic(activityName,goalAmount, frequencyVal, unit);
+                        dbAccess.newActivityPublic(activityName,goalAmount, frequency, unit);
                         this.goalInput.clear();
                         this.unitInput.clear();
                         this.nameInput.clear();

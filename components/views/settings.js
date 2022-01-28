@@ -31,6 +31,12 @@ import ViewStats from '../views/view_stats';
 
 var GLOBAL = require('../../App')
 
+const debugUpdateSteps = "go to log activity tab & select activity to update\n"+
+        "use the format:\n\ndebug,Name,Goal,currentStreak,highestPeriod,totalGoalsMet,Total,totalLogs,longestStreak, unit\n\n"+
+        "to insert the updated values you wish to store in that activity, any fields you dont want to change use a -"+
+        "\nExample: once ive gone to the log tab, and selected the activity I want to update: id could type:\n"+
+        "\ndebug,newName,-,30,180,30,3200,150,-,-"+
+        "\n\nwhich would change the name of the activity to newName, the currStreak to 30, etc";
 
  var curr = null;
 
@@ -40,9 +46,8 @@ var GLOBAL = require('../../App')
      return curr;
  }
 
-
- function sendEmail(){
-    
+ const showDebugEditSteps = async() =>{
+    this.DebugDisplay.setNativeProps({text:debugUpdateSteps});
  }
 
 const Settings = () => {
@@ -60,18 +65,11 @@ const Settings = () => {
             <Text
                 style = {[
                     Styles.padItem, 
-                    Styles.subTitleText
+                    Styles.subSubTitleText
                 ]}>
-                User Settings
-                [tbd]
+                User Settings[tbd]
                 
             </Text>
-
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-
 
             <Text
                 style = {[
@@ -98,8 +96,8 @@ const Settings = () => {
             />  
 
             < Button 
-                onPress={console.log("allow import of json")}
-                text={"import data (not yet)"}
+                onPress={()=>{showDebugEditSteps()}}
+                text={"update activity log/history"}
             />  
 
             <ScrollView>

@@ -8,15 +8,13 @@ Built Using [React Native](https://reactnative.dev)
 Startup (ios):  `npx run-ios`
 
 ### Priorities:
-- Update Aesthetics
-- Clean up wording of pages
 - Add to TestFlight
 
 
 ### Todo List:
 #### Features
 - Add Reminders/Notifications
-- Make components & aesthetics scale with screen size
+- Fix aesthetics overall
 - Add option to edit previous logs
 - Allow dark/light modes to work the same
 - Allow editing current period/session stats
@@ -25,6 +23,7 @@ Startup (ios):  `npx run-ios`
 
 #### TD
 - Avoid repeated code for activity selection
+  - Fix having to tap on dropdowns multiple times to refresh
 - Find cleaner code options instead of using globals
 - Dont allow 2 activities with the same name
 - Account for local time in NumericInput date display

@@ -57,31 +57,31 @@ function getActivityUnit(id){
 
 function displayStats(id){
     var frequency = 'daily';
-    var formattedString = "";
+    var formattedString = new Array();;
 
     for(i in global.metadata){
         if(global.metadata[i].ActivityID === id){
             if(global.metadata[i].GoalFrequency === 'W') frequency = 'weekly';
 
-            formattedString = 
+            formattedString.push(frequency +" stats:");
 
-                frequency +" stats:"+
-                "\ncompleted " + global.metadata[i].TodayCount + " of "+ global.metadata[i].GoalAmount + " "+
-                metadata[i].Unit + " in " + metadata[i].TodayLogs +" logs\n"+
-                "current streak: "+ global.metadata[i].CurrentSteak+
+            formattedString.push(
+                global.metadata[i].TodayCount + " of "+ global.metadata[i].GoalAmount + " "+
+                metadata[i].Unit + "s completed\n"+
+                "current streak: "+ global.metadata[i].CurrentStreak
+            );
 
+            formattedString.push("\n\nall time stats:");
 
-                "\n\nall time stats: \n" +    
-                "you've completed "+ global.metadata[i].GrandTotal +" "+global.metadata[i].Unit+
-                "\nyou've reached your " + frequency + " goal of " +
-                global.metadata[i].GoalAmount + " " + global.metadata[i].Unit +" "+
-                global.metadata[i].TotalGoalsMet+" times." +
-                "\nlongest streak: "+ global.metadata[i].LongestStreak + " in "+
-                global.metadata[i].TotalLogs + " times logged"+
+            formattedString.push(
+                "total of "+global.metadata[i].GrandTotal +" "+global.metadata[i].Unit+"s in "+
+                global.metadata[i].TotalLogCount + " logs"+
+                "\n" + frequency + " goal of " +
+                global.metadata[i].GoalAmount + " " + global.metadata[i].Unit +"s achieved "+
+                global.metadata[i].TotalGoalsMet+" times" +
+                "\nlongest "+frequency+" streak "+ global.metadata[i].LongestStreak +
                 "\nhighest goal period " + metadata[i].HighestPeriod
-
-
-    
+            );
 
             return formattedString;
         }
@@ -99,6 +99,13 @@ const ViewStats = () => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState(global.selectionOptions);
+
+    const [periodTitle, setPeriodTitle] = useState("");
+    const [periodData, setPeriodData] = useState("");
+
+    const [allTimeTitle, setAllTimeTitle] = useState("");
+    const [allTimeData, setAllTimeData] = useState("");
+
 
     useEffect(() => {
         GLOBAL.refreshMetadata();
@@ -139,7 +146,14 @@ const ViewStats = () => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            onChangeValue={()=>{global.currentSelection=value; setSelected(displayStats(value))}}
+            onChangeValue={()=>{
+                global.currentSelection=value; 
+                var arr = displayStats(value)
+                setPeriodTitle(arr[0]);
+                setPeriodData(arr[1]);
+                setAllTimeTitle(arr[2]);
+                setAllTimeData(arr[3]);
+            }}
             />
 
             </View>
@@ -147,19 +161,27 @@ const ViewStats = () => {
 
             <LargeSpacer />
 
+            <View style={Styles.containerCenter}>
+                <Text
+                zIndex={-1}
+                style={Styles.subTitleText}
+                >{periodTitle}</Text>
 
-            <Text
-            zIndex={-1}
-            >{selectedActivityStats}</Text>
+                <Text
+                zIndex={-1}
+                style={Styles.subTitleText}
+                >{periodData}</Text>
 
-            <ScrollView>
-                <TextInput 
-                editable={false} 
-                ref={component=> this.TestDisplay=component}
-                multiline = {true}
-                placeholder=''
-                /> 
-            </ScrollView>
+                <Text
+                zIndex={-1}
+                style={Styles.subTitleText}
+                >{allTimeTitle}</Text>
+
+                <Text
+                style={Styles.subSubTitleText}
+                zIndex={-1}
+                >{allTimeData}</Text>
+            </View>
       </View>
     );
 };
