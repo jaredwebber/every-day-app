@@ -1,6 +1,6 @@
 //Local Storage
-//import AsyncStorage from '@react-native-async-storage/async-storage';
-//import { act } from 'react-test-renderer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { act } from 'react-test-renderer';
 
 
 //AsyncStorage key for metadata
@@ -351,7 +351,3 @@ module.exports.CLEAR_DATA_DEBUG = async() => {
         //console.log("data at "+keys[i]+": "+ await getData(keys[i]))
     }
 }
-
-//Testing
-
-console.log(areDifferentWeeks(new Date(2022,0,28).toLocaleDateString(), new Date(2022,1,3).toLocaleDateString()))
