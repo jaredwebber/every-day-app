@@ -1,6 +1,6 @@
 //Local Storage
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { act } from 'react-test-renderer';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
+//import { act } from 'react-test-renderer';
 
 
 //AsyncStorage key for metadata
@@ -35,7 +35,7 @@ function metadataObject(name, goal, frequency, unit){
     this.GrandTotal = 0;
     this.TotalLogCount = 0;
     this.TodayCount = 0;
-    this.LastGoalInit = date.getTime().toString();
+    this.LastGoalInit = date.toLocaleDateString()
     this.TodayLogs = 0;
     this.LongestStreak = 0;
     this.GoalFrequency = frequency;
@@ -105,25 +105,55 @@ const pullActivityLogAsync = async(ActivityID) => {
     .catch(err => console.error(err))
 }
 
+function daysInMonth (month, year) {
+    return new Date(year, month, 0).getDate();
+}
+
+function areDifferentWeeks(dateStringOne, dateStringTwo){
+    var result = true;
+    console.log("one: "+dateStringOne)
+    console.log("two: "+dateStringTwo)
+    var stringOne = dateStringOne.split('-');
+    var stringTwo = dateStringTwo.split('-');
+
+    console.log(stringOne[1])
+    console.log(stringTwo[1])
+    if(parseInt(stringOne[1]) === parseInt(stringTwo[1])){//if same month
+        if(parseInt(stringTwo[2]) - parseInt(stringOne[2]) <7){
+            result = false;
+        }
+    }else{
+        var daysInFirstMonth = daysInMonth(parseInt(stringOne[1]), new Date().getFullYear()) - parseInt(stringOne[2]);
+        console.log(parseInt(daysInFirstMonth))
+        if(parseInt(daysInFirstMonth) + parseInt(stringTwo[2]) < 7){
+            result = false;
+        }
+    }
+    return result;
+}
+
+
 // Interaction Functions
 const verifyInGoalSpan = async() =>{
     await pullMetadataAsync();
 
     var needsPush = false; //if span is not within bounds, then must push to storage
-    currUTC = new Date().getTime().toString();
+    currDateString = new Date().toLocaleDateString();
 
     if(metadataCodeCopy !== null){
         for(var i in metadataCodeCopy){
-            var diff = 0;
             if(metadataCodeCopy[i].GoalFrequency === DAY){
-                diff = DAY_DIFF;
+                if(metadataCodeCopy[i].LastGoalInit !== currDateString.split("-")[2]){
+                    needsPush = true;
+                }
             }else if(metadataCodeCopy[i].GoalFrequency === WEEK){
-                diff = WEEK_DIFF;
+                if(areDifferentWeeks(metadataCodeCopy[i].LastGoalInit, currDateString)){
+                    needsPush = true;
+                }
             }
 
-            if(metadataCodeCopy[i].LastGoalInit - currUTC > diff){
-                needsPush = true;
-                metadataCodeCopy[i].LastGoalInit = currUTC;
+            if(needsPush){
+                metadataCodeCopy[i].LastGoalInit = currDateString;
                 metadataCodeCopy[i].TodayLogs = 0;
 
                     if(metadataCodeCopy[i].TodayCount >= metadataCodeCopy[i].GoalAmount){
@@ -321,3 +351,7 @@ module.exports.CLEAR_DATA_DEBUG = async() => {
         //console.log("data at "+keys[i]+": "+ await getData(keys[i]))
     }
 }
+
+//Testing
+
+console.log(areDifferentWeeks(new Date(2022,0,28).toLocaleDateString(), new Date(2022,1,3).toLocaleDateString()))
