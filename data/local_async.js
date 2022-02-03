@@ -13,9 +13,6 @@ const LOG = 'log';
 //param constants: Activity Frequency
 const DAY = 'D';
 const WEEK = 'W';
-const DAY_DIFF = 86400; //seconds in a day
-const WEEK_DIFF = 604800;//seconds in a week
-
 
 //local copy of metadata from async to be used between modifications
 var metadataCodeCopy = null;
@@ -70,8 +67,6 @@ const pullMetadataAsync = async() => {
     //set metadata global JSON with all metadata from async
     await getData(META_KEY)
     .then(data => {
-        //console.log("Pulling metadata: ");
-        //console.log(data);
         metadataCodeCopy = data;
         })
     .catch(err => console.log(err))
@@ -81,7 +76,7 @@ const pushMetadataAsync = async() => {
     //set async metadata with global JSON values
     await storeData(META_KEY, metadataCodeCopy)
     .then(data => {
-        //console.log(data)
+        console.log("completed push")
       })
     .catch(err => console.log(err))
 }
@@ -90,7 +85,7 @@ const pushActivityLogAsync = async(ActivityID) =>{
     //push updated json array to activityID
     await storeData(ActivityID, currActivityLog)
     .then(data => {
-        //console.log(data)
+        return true;
         })
     .catch(err => console.log(err))
 }
@@ -99,7 +94,6 @@ const pullActivityLogAsync = async(ActivityID) => {
     //set metadata global JSON with all metadata from async
     await getData(ActivityID)
     .then(data => {
-        //console.log("Pulling activity log ("+ActivityID+"): " + data);
         currActivityLog = data;
         })
     .catch(err => console.error(err))
@@ -111,20 +105,15 @@ function daysInMonth (month, year) {
 
 function areDifferentWeeks(dateStringOne, dateStringTwo){
     var result = true;
-    console.log("one: "+dateStringOne)
-    console.log("two: "+dateStringTwo)
     var stringOne = dateStringOne.split('-');
     var stringTwo = dateStringTwo.split('-');
 
-    console.log(stringOne[1])
-    console.log(stringTwo[1])
     if(parseInt(stringOne[1]) === parseInt(stringTwo[1])){//if same month
         if(parseInt(stringTwo[2]) - parseInt(stringOne[2]) <7){
             result = false;
         }
     }else{
         var daysInFirstMonth = daysInMonth(parseInt(stringOne[1]), new Date().getFullYear()) - parseInt(stringOne[2]);
-        console.log(parseInt(daysInFirstMonth))
         if(parseInt(daysInFirstMonth) + parseInt(stringTwo[2]) < 7){
             result = false;
         }
@@ -139,11 +128,12 @@ const verifyInGoalSpan = async() =>{
 
     var needsPush = false; //if span is not within bounds, then must push to storage
     currDateString = new Date().toLocaleDateString();
+    console.log(currDateString)
 
     if(metadataCodeCopy !== null){
         for(var i in metadataCodeCopy){
             if(metadataCodeCopy[i].GoalFrequency === DAY){
-                if(metadataCodeCopy[i].LastGoalInit !== currDateString.split("-")[2]){
+                if(metadataCodeCopy[i].LastGoalInit !== currDateString){
                     needsPush = true;
                 }
             }else if(metadataCodeCopy[i].GoalFrequency === WEEK){
@@ -166,18 +156,16 @@ const verifyInGoalSpan = async() =>{
                         metadataCodeCopy[i].CurrentStreak = 0;
                     }
                 metadataCodeCopy[i].TodayCount = 0;
+
+                await pushMetadataAsync();
             }
     }
     }else{
         console.error("code metadata is null (verifyPresentDay)")
     }
-
-    if(needsPush) await pushMetadataAsync();
 }
 
 const logActivity = async(ActivityID, Count, type) =>{
-    //console.warn("update daily input: "+ActivityID + ", "+Count)
-
     //update metadata in accordance with date
     verifyInGoalSpan();
 
@@ -190,7 +178,6 @@ const logActivity = async(ActivityID, Count, type) =>{
 
     //update metadataCodeCopy values
     if(type === LOG){
-        //console.log("log")
         if(metadataCodeCopy !== null){
             for(var i in metadataCodeCopy){
                 if(parseInt(metadataCodeCopy[i].ActivityID) === parseInt(ActivityID)){
@@ -209,10 +196,8 @@ const logActivity = async(ActivityID, Count, type) =>{
                     await pushMetadataAsync();
 
                     await pullActivityLogAsync(ActivityID);
-
                     //add new Log object
                     currActivityLog.push(new activityLogObject(Count));
-
                     await pushActivityLogAsync(ActivityID);
 
                     break;
@@ -223,8 +208,6 @@ const logActivity = async(ActivityID, Count, type) =>{
             console.error("metadata code null (logActivity)")
         }
     }else if(type === UPDATE){
-        console.log("update")
-
         console.log("Update not implemented")
         //find activityID
         //TodayCount=Count
@@ -244,7 +227,6 @@ const newActivity = async(ActivityName, GoalAmount, GoalFrequency, Unit) =>{
 
     var newMeta = new metadataObject(ActivityName, parseInt(GoalAmount), GoalFrequency, Unit);
     metadataCodeCopy.push(newMeta);
-    //console.log(newMeta.ActivityID);
 
     currActivityLog = new Array();
 
