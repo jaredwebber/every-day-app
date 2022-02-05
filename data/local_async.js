@@ -14,6 +14,8 @@ const LOG = 'log';
 const DAY = 'D';
 const WEEK = 'W';
 
+var GLOBAL = require('../index')
+
 //local copy of metadata from async to be used between modifications
 var metadataCodeCopy = null;
 
@@ -127,14 +129,19 @@ const verifyInGoalSpan = async() =>{
     await pullMetadataAsync();
 
     var needsPush = false; //if span is not within bounds, then must push to storage
-    currDateString = new Date().toLocaleDateString();
-    console.log(currDateString)
+    currDateString = new Date().toLocaleDateString().trim();
+
+    //console.log(currDateString)
 
     if(metadataCodeCopy !== null){
         for(var i in metadataCodeCopy){
             if(metadataCodeCopy[i].GoalFrequency === DAY){
-                if(metadataCodeCopy[i].LastGoalInit !== currDateString){
+                //console.warn("meta: "+metadataCodeCopy[i].LastGoalInit);
+                //console.warn("curr: "+currDateString);
+
+                if(metadataCodeCopy[i].LastGoalInit.trim() !== currDateString){
                     needsPush = true;
+                    //console.warn("not equal dates")
                 }
             }else if(metadataCodeCopy[i].GoalFrequency === WEEK){
                 if(areDifferentWeeks(metadataCodeCopy[i].LastGoalInit, currDateString)){
@@ -143,6 +150,8 @@ const verifyInGoalSpan = async() =>{
             }
 
             if(needsPush){
+                //console.warn("needsPush: before")
+                //console.warn(metadataCodeCopy)
                 metadataCodeCopy[i].LastGoalInit = currDateString;
                 metadataCodeCopy[i].TodayLogs = 0;
 
@@ -157,17 +166,25 @@ const verifyInGoalSpan = async() =>{
                     }
                 metadataCodeCopy[i].TodayCount = 0;
 
+                console.warn("after")
+                console.warn(metadataCodeCopy)
                 await pushMetadataAsync();
+
+                //TO REMOVE?
+                await pullMetadataAsync();
+                //console.warn("pulled:")
+                //console.warn(metadataCodeCopy)
             }
     }
     }else{
-        console.error("code metadata is null (verifyPresentDay)")
+        console.warn("code metadata is null (verifyPresentDay)")
+        global.currentSelection = null;
     }
 }
 
 const logActivity = async(ActivityID, Count, type) =>{
     //update metadata in accordance with date
-    verifyInGoalSpan();
+    await verifyInGoalSpan();
 
     var activityFound = false;
 
@@ -205,7 +222,7 @@ const logActivity = async(ActivityID, Count, type) =>{
             }
 
         }else{
-            console.error("metadata code null (logActivity)")
+            console.warn("metadata code null (logActivity)")
         }
     }else if(type === UPDATE){
         console.log("Update not implemented")
@@ -215,7 +232,7 @@ const logActivity = async(ActivityID, Count, type) =>{
         console.error("unexpected logActivity 'type' param");
     }
 
-    if(!activityFound) console.error("ActivityID: "+ActivityID + " not found");    
+    if(!activityFound) console.warn("ActivityID: "+ActivityID + " not found");    
 }
 
 const newActivity = async(ActivityName, GoalAmount, GoalFrequency, Unit) =>{
@@ -257,8 +274,9 @@ module.exports.updateTodayTotalPublic = async(ActivityID, updatedTotal) =>{
 }
 
 module.exports.DEBUGupdate = async(update)=>{
-    await pullMetadataAsync();
     if(update.length === 10){
+        await pullMetadataAsync();
+
         for(i in metadataCodeCopy){
             if(parseInt(metadataCodeCopy[i].ActivityID) === parseInt(update[0])){
                 try{
@@ -271,6 +289,7 @@ module.exports.DEBUGupdate = async(update)=>{
                     if(update[7] !== "-") metadataCodeCopy[i].TotalLogCount = parseInt(update[7]);
                     if(update[8] !== "-") metadataCodeCopy[i].LongestStreak = parseInt(update[8]);
                     if(update[9] !== "-") metadataCodeCopy[i].Unit = update[9];
+                    await pushMetadataAsync();
                 }catch(e){
                     console.warn("Unable to update with values:");
                     console.warn(update);
@@ -280,16 +299,8 @@ module.exports.DEBUGupdate = async(update)=>{
             }
         }
     }else{
-        console.error("Invalid update array length: "+update.length)
+        console.warn("Invalid update array length: "+update.length)
     }
-    //parse array of order - finish order and make sure everything is included
-    //ActivityID,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
-
-    //any null column is not updated
-
-    //set all metadataCodeCopy vals
-
-    await pushMetadataAsync();
 }
 
 module.exports.getStatisticsPublic = async() =>{
@@ -318,6 +329,8 @@ module.exports.DUMP_DATA_DEBUG = async() =>{
 }
 
 module.exports.CLEAR_DATA_DEBUG = async() => {
+    GLOBAL.refreshMetadata();
+    global.currentSelection=null;
     var keys = await AsyncStorage.getAllKeys();
     //console.log("keys: "+ keys);
 
@@ -327,9 +340,5 @@ module.exports.CLEAR_DATA_DEBUG = async() => {
             //console.log("CLEARING KEY: "+keys[i])
             })
         .catch(err => console.error(err))
-    }
-
-    for(i in keys){
-        //console.log("data at "+keys[i]+": "+ await getData(keys[i]))
     }
 }

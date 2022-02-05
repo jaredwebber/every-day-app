@@ -17,6 +17,7 @@ global.currentSelection = null;
 module.exports.refreshMetadata = async() =>{
     var metadata = await dbAccess.getStatisticsPublic();
     global.metadata = metadata;
+    if(metadata == null || metadata == undefined) global.currentSelection = null;
     parseActivityOptions(metadata);
 }
 

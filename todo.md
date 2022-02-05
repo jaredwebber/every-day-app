@@ -1,4 +1,9 @@
 ### Todo List:
+#### Priorities:
+Both should be fixed in 1.2 (3)?
+- Fix logging: when new day rolls over, the first log of the day is added to previous days total
+- Remove the ability to (attempt to) log deleted activities
+
 #### Tasks
 - Add Reminders/Notifications
 - Fix aesthetics overall

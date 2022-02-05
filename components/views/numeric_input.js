@@ -91,15 +91,27 @@ function getActivityUnit(id){
 
 function validate(val){
     try{
-        return !isNaN(val) && val.trim().length !== 0 && global.currentSelection != null && parseInt(val)>0; 
+        return  !isNaN(val) && 
+                val.trim().length !== 0 && 
+                global.currentSelection != null && 
+                global.currentSelection != undefined && 
+                parseInt(val)>0; 
     }
     catch{return false;}
 }
 
-function debugUpdateActivity(val){
+function debugUpdate(val){
+    if(val.substring(0,5) === "debug"){
+        debugUpdateActivity(val);
+        return true;
+    }
+    return false;
+}
+
+const debugUpdateActivity = async(val) => {
     try{
-        if(val.substring(0,5) === "debug"){
             var updateArr = new Array();
+            console.warn("what")
 
             updateArr.push(global.currentSelection);
             //debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
@@ -107,12 +119,9 @@ function debugUpdateActivity(val){
             for(var i = 1; i< items.length;i++){
                 updateArr.push(items[i].trim());
             }
-
-            dbAccess.DEBUGupdate(updateArr);
-            return true;
-        }
+            console.warn(updateArr)
+            await dbAccess.DEBUGupdate(updateArr);
     }catch{}
-    return false;
 }
 
 const NumericInput = () => {
@@ -221,7 +230,7 @@ const NumericInput = () => {
             <Button 
                 text={"log "+activityName} 
                 onPress={()=> {
-                    if(!debugUpdateActivity(inputValue)){
+                    if(!debugUpdate(inputValue)){
                         if(validate(inputValue)){
                             dbAccess.logActivityPublic(global.currentSelection, inputValue);
                             logInput.clear();
