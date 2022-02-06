@@ -91,7 +91,7 @@ const Settings = () => {
             />
 
             < Button 
-                onPress={()=>{Linking.openURL('mailto:jaredwebberdev@gmail.ca?body='+ JSON.stringify(global.metadata)+'&subject=DataDump'); console.log(global.metadata)}}
+                onPress={()=>{Linking.openURL('mailto:jaredwebberdev@gmail.com?body='+ JSON.stringify(global.metadata)+'&subject=DataDump'); console.log(global.metadata)}}
                 text={"export metadata"}
             />  
 
