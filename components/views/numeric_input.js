@@ -101,7 +101,7 @@ function validate(val){
 }
 
 function debugUpdate(val){
-    if(val.substring(0,5) === "debug"){
+    if(val && val.substring(0,5) === "debug"){
         debugUpdateActivity(val);
         return true;
     }
