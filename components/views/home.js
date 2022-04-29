@@ -27,9 +27,9 @@ const Home = () => {
 
 
         <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
-            <LargeSpacer />
+          <LargeSpacer />
+          <LargeSpacer />
+          <LargeSpacer />
 
         <Button
 

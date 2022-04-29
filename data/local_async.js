@@ -2,7 +2,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act } from 'react-test-renderer';
 
-
 //AsyncStorage key for metadata
 const META_KEY = '@metadata';
 
