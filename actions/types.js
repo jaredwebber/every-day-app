@@ -1,2 +1,4 @@
-export const ADD_ACTIVITY = 'ADD_ACTIVITY'
-export const ADD_LOG = 'ADD_LOG'
+export const ADD_ACTIVITY = 'ADD_ACTIVITY';
+export const GET_ACTIVITY_METADATA = 'GET_ACTIVITY_METADATA';
+export const GET_ACTIVITY_OPTIONS = 'GET_ACTIVITY_OPTIONS';
+export const ADD_LOG = 'ADD_LOG';

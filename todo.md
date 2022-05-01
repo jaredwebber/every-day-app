@@ -1,16 +1,15 @@
 ### Todo List:
 #### Priorities:
 **Verify Fixes:**
-- Fix logging: when new day rolls over, the first log of the day is added to previous days total
 - Remove the ability to (attempt to) log deleted activities
 **TODO:**
+- Use Redux stores instead of globals
 - Avoid repeated code for activity selection
-  - Fix having to tap on dropdowns multiple times to refresh
-- Find cleaner code options instead of using globals
-  - stores?
-- if # of activities = 0, have 'create an activity to begin' message on Stats & logging page
+  - Fix having to tap on dropdowns multiple times to refresh (Should be resolved by redux)
+- If # of activities = 0, have 'create an activity to begin' message on Stats & logging page
 - Fix aesthetics overall (icons, graphics, scaling)
 - Clean up README with steps to install, build & run app w/screenshot(s)
+- Bump version in config & testflight
 
 #### Tasks
 - Add Reminders/Notifications
