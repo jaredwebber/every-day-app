@@ -70,16 +70,16 @@ const pullMetadataAsync = async () => {
 		.then(data => {
 			metadataCodeCopy = data;
 		})
-		.catch(err => console.log(err));
+		.catch(err => console.warn(err));
 };
 
 const pushMetadataAsync = async () => {
 	//set async metadata with GLOBAL JSON values
 	await storeData(META_KEY, metadataCodeCopy)
 		.then(() => {
-			console.log('completed push');
+			console.warn('completed push');
 		})
-		.catch(err => console.log(err));
+		.catch(err => console.warn(err));
 };
 
 const pushActivityLogAsync = async ActivityID => {
@@ -88,7 +88,7 @@ const pushActivityLogAsync = async ActivityID => {
 		.then(() => {
 			return true;
 		})
-		.catch(err => console.log(err));
+		.catch(err => console.warn(err));
 };
 
 const pullActivityLogAsync = async ActivityID => {
@@ -132,8 +132,6 @@ const verifyInGoalSpan = async () => {
 	var needsPush = false; //if span is not within bounds, then must push to storage
 	var currDateString = new Date().toLocaleDateString().trim();
 
-	//console.log(currDateString)
-
 	if (metadataCodeCopy !== null) {
 		for (var i in metadataCodeCopy) {
 			if (metadataCodeCopy[i].GoalFrequency === DAY) {
@@ -153,8 +151,6 @@ const verifyInGoalSpan = async () => {
 			}
 
 			if (needsPush) {
-				//console.warn("needsPush: before")
-				//console.warn(metadataCodeCopy)
 				metadataCodeCopy[i].LastGoalInit = currDateString;
 				metadataCodeCopy[i].TodayLogs = 0;
 
@@ -180,8 +176,6 @@ const verifyInGoalSpan = async () => {
 
 				//TO REMOVE?
 				await pullMetadataAsync();
-				//console.warn("pulled:")
-				//console.warn(metadataCodeCopy)
 			}
 		}
 	} else {
@@ -190,7 +184,7 @@ const verifyInGoalSpan = async () => {
 	}
 };
 
-const logActivity = async (ActivityID, Count, type) => {
+const updateActivityLog = async (ActivityID, Count, type) => {
 	//update metadata in accordance with date
 	await verifyInGoalSpan();
 
@@ -238,7 +232,7 @@ const logActivity = async (ActivityID, Count, type) => {
 			console.warn('metadata code null (logActivity)');
 		}
 	} else if (type === UPDATE) {
-		console.log('Update not implemented');
+		console.error('Update not implemented');
 		//find activityID
 		//TodayCount=Count
 	} else {
@@ -248,7 +242,12 @@ const logActivity = async (ActivityID, Count, type) => {
 	if (!activityFound) console.warn('ActivityID: ' + ActivityID + ' not found');
 };
 
-const newActivity = async (ActivityName, GoalAmount, GoalFrequency, Unit) => {
+//Functions accessible to external files
+export const logActivity = async (ActivityID, Count) => {
+	await updateActivityLog(ActivityID, Count, LOG);
+};
+
+export const addNewActivity = async (ActivityName, GoalAmount, GoalFrequency, Unit) => {
 	await pullMetadataAsync();
 
 	if (metadataCodeCopy === null) {
@@ -269,31 +268,15 @@ const newActivity = async (ActivityName, GoalAmount, GoalFrequency, Unit) => {
 	await pushMetadataAsync();
 };
 
-const exportData = async () => {
+//TODO: Implementation
+export const updateTodayTotalPublic = async (ActivityID, updatedTotal) => {
+	await updateActivityLog(ActivityID, updatedTotal, UPDATE);
+};
+
+//TODO: Implementation
+export const exportData = async () => {
 	//find way to make all async storage data presentable & exportable
 	//make possible to auto-export data? on a daily/weekly/whatever schedule? - upload to cloud as csv?
-};
-
-//Functions accessible to external files
-export const logActivityPublic = async (ActivityID, Count) => {
-	await logActivity(ActivityID, Count, LOG);
-};
-
-export const newActivityPublic = async (
-	ActivityName,
-	GoalAmount,
-	GoalFrequency,
-	Unit,
-) => {
-	await newActivity(ActivityName, GoalAmount, GoalFrequency, Unit);
-};
-
-export const exportDataPublic = async () => {
-	await exportData();
-};
-
-export const updateTodayTotalPublic = async (ActivityID, updatedTotal) => {
-	await logActivity(ActivityID, updatedTotal, UPDATE);
 };
 
 export const DEBUGupdate = async update => {
@@ -333,15 +316,8 @@ export const DEBUGupdate = async update => {
 	}
 };
 
-export const getStatisticsPublic = async () => {
-	await pullMetadataAsync();
-	return metadataCodeCopy;
-};
-
 export const DUMP_DATA_DEBUG = async () => {
-	//console.log("DUMPING DATA")
 	var keys = await AsyncStorage.getAllKeys();
-	//console.log("keys: "+ keys);
 
 	var dump = '';
 
@@ -349,10 +325,8 @@ export const DUMP_DATA_DEBUG = async () => {
 		await getData(keys[i])
 			.then(data => {
 				dump += keys[i] + ': ' + JSON.stringify(data) + ', ';
-				//console.log(keys[i]+": ");
-				//console.log(data);
 			})
-			.catch(err => console.log(err));
+			.catch(err => console.warn(err));
 	}
 
 	return dump;
@@ -362,13 +336,16 @@ export const CLEAR_DATA_DEBUG = async () => {
 	refreshMetadata();
 	updateCurrentSelection(null);
 	var keys = await AsyncStorage.getAllKeys();
-	//console.log("keys: "+ keys);
 
 	for (var i in keys) {
 		await AsyncStorage.removeItem(keys[i])
-			.then(() => {
-				//console.log("CLEARING KEY: "+keys[i])
-			})
+			.then(() => {})
 			.catch(err => console.error(err));
 	}
+};
+
+// Will be made redundant once redux stores implemented
+export const getStatisticsPublic = async () => {
+	await pullMetadataAsync();
+	return metadataCodeCopy;
 };

@@ -1,12 +1,7 @@
-import {createStore, combineReducers} from 'redux';
-import activityReducer from './activityReducer';
-
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import selectedActivityReducer from './reducers/selectedActivityReducer';
 const rootReducer = combineReducers({
-	activites: activityReducer,
+	selectedActivityReducer
 });
-
-const configureStore = () => {
-	return createStore(rootReducer);
-};
-
-export default configureStore;
+export const store = createStore(rootReducer, applyMiddleware(thunk));

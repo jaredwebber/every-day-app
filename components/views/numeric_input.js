@@ -11,7 +11,7 @@ import React, {useState, useEffect} from 'react';
 import Styles from '../style_sheet';
 
 //Functions to update/retrieve data
-import {logActivityPublic, DEBUGupdate} from '../../data/local_async.js';
+import {logActivity, DEBUGupdate} from '../../data/local_async.js';
 //Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
@@ -19,7 +19,13 @@ import Header from '../tools/header';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import {selectionOptions, metadata, currentSelection, refreshMetadata, updateCurrentSelection} from '../../index';
+import {
+	selectionOptions,
+	metadata,
+	currentSelection,
+	refreshMetadata,
+	updateCurrentSelection,
+} from '../../index';
 
 var CurrentDate = []; //updated by getDate() function
 
@@ -94,7 +100,6 @@ function debugUpdate(val) {
 const debugUpdateActivity = async val => {
 	try {
 		var updateArr = new Array();
-		console.warn('what');
 
 		updateArr.push(currentSelection);
 		//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
@@ -104,7 +109,7 @@ const debugUpdateActivity = async val => {
 		}
 		console.warn(updateArr);
 		await DEBUGupdate(updateArr);
-	} catch (error){
+	} catch (error) {
 		console.warn(error);
 	}
 };
@@ -196,8 +201,8 @@ const NumericInput = () => {
 				onPress={() => {
 					if (!debugUpdate(inputValue)) {
 						if (validate(inputValue)) {
-							logActivityPublic(currentSelection, inputValue);
-							//logInput.clear();
+							logActivity(currentSelection, inputValue);
+							this.logInput.clear();
 							updateInputValue('');
 							displayAddedMsg('logged ' + inputValue + ' ' + activityUnit);
 						} else {
@@ -206,7 +211,7 @@ const NumericInput = () => {
 							);
 						}
 					} else {
-						//logInput.clear();
+						this.logInput.clear();
 						displayAddedMsg('debug: attempted to update activity');
 					}
 				}}

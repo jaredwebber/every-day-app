@@ -10,26 +10,15 @@ import React from 'react';
 import Styles from '../style_sheet';
 
 const SmallSpacer = () => {
-  return (
-  <View style={Styles.smallSpacer} /> 
-  );
+	return <View style={Styles.smallSpacer} />;
 };
 
 const MedSpacer = () => {
-  return (
-    <View style={Styles.medSpacer} /> 
-  );
+	return <View style={Styles.medSpacer} />;
 };
 
 const LargeSpacer = () => {
-  return (
-    <View style={Styles.largeSpacer} /> 
-  );
+	return <View style={Styles.largeSpacer} />;
 };
- 
-export {
-   SmallSpacer, 
-   MedSpacer, 
-   LargeSpacer
-} ;
- 
+
+export {SmallSpacer, MedSpacer, LargeSpacer};

@@ -3,17 +3,19 @@
  * @format
  */
 
-import {
-	Text,
-	View,
-} from 'react-native';
+import {Text, View} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
 
-import { selectionOptions, metadata, refreshMetadata, updateCurrentSelection } from '../../index';
+import {
+	selectionOptions,
+	metadata,
+	refreshMetadata,
+	updateCurrentSelection,
+} from '../../index';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 

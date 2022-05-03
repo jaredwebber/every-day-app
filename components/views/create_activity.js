@@ -11,7 +11,7 @@ import React, {useState, useEffect} from 'react';
 import Styles from '../style_sheet';
 
 //Functions to update/retrieve data
-import newActivityPublic from '../../data/local_async.js';
+import { addNewActivity } from '../../data/local_async.js';
 
 //Import Custom Components
 import {Button} from '../tools/button';
@@ -128,7 +128,7 @@ const CreateActivity = () => {
 				text="create activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
-						newActivityPublic(
+						addNewActivity(
 							activityName,
 							goalAmount,
 							frequency,

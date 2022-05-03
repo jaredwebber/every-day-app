@@ -11,7 +11,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 //Import Custom Styles
 import Styles from '../style_sheet';
 
-import {selectionOptions, refreshMetadata, updateCurrentSelection} from '../../index';
+import {
+	selectionOptions,
+	refreshMetadata,
+	updateCurrentSelection,
+} from '../../index';
 
 const SelectActivity = () => {
 	const [open, setOpen] = useState(false);

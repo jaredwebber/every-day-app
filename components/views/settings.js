@@ -10,7 +10,7 @@ import React from 'react';
 //Import Custom Styles
 import Styles from '../style_sheet';
 
-import { CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG } from '../../data/local_async.js';
+import {CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG} from '../../data/local_async.js';
 
 //Import Custom Components
 import {Button} from '../tools/button';
@@ -77,7 +77,6 @@ const Settings = () => {
 							JSON.stringify(metadata) +
 							'&subject=DataDump',
 					);
-					console.log(metadata);
 				}}
 				text={'export metadata'}
 			/>
