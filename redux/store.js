@@ -1,7 +1,8 @@
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import selectedActivityReducer from './reducers/selectedActivityReducer';
-const rootReducer = combineReducers({
-	selectedActivityReducer
+import {configureStore} from '@reduxjs/toolkit';
+import activitySlice from './slices/activitySlice';
+
+export const store = configureStore({
+	reducer: {
+		activities: activitySlice,
+	},
 });
-export const store = createStore(rootReducer, applyMiddleware(thunk));

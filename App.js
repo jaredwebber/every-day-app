@@ -6,7 +6,9 @@
 //React Components & Imports
 import React from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
 import RootNavigator from './components/scenes/root_navigator';
+import store from './redux/store';
 
 /*
  * https://reactnavigation.org/docs/tab-based-navigation
@@ -15,9 +17,11 @@ import RootNavigator from './components/scenes/root_navigator';
 //App Begin
 const App = () => {
 	return (
-		<GestureHandlerRootView style={{flex: 1}}>
-			<RootNavigator />
-		</GestureHandlerRootView>
+		<Provider store={store}>
+			<GestureHandlerRootView style={{flex: 1}}>
+				<RootNavigator />
+			</GestureHandlerRootView>
+		</Provider>
 	);
 };
 

@@ -1,3 +1,4 @@
+import {SELECT_ACTIVITY} from '../actions/types';
 
 const initialState = {
 	ActivityID: -1,
@@ -16,9 +17,18 @@ const initialState = {
 	Unit: '',
 };
 
-// eslint-disable-next-line no-unused-vars
 const selectedActivityReducer = (state = initialState, action) => {
-	return state;
+	switch (action.type) {
+	case SELECT_ACTIVITY: {
+		// update state to parameter activityMetadata.ActivityId = parameter
+		return {
+			...state,
+			action,
+		};
+	}
+	default:
+		return state;
+	}
 };
 
 export default selectedActivityReducer;
