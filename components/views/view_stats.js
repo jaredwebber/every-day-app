@@ -6,6 +6,7 @@
 import {Text, View} from 'react-native';
 
 import React, {useState, useEffect} from 'react';
+import { useGlobalState } from '../../state/activityState';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
@@ -22,6 +23,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 //Import Custom Components
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
+//import SelectActivity from '../tools/select_activity';
 
 function displayStats(id) {
 	var frequency = 'daily';
@@ -93,6 +95,11 @@ const ViewStats = () => {
 		setItems(selectionOptions);
 	}, [selectionOptions]);
 
+
+	const state = useGlobalState();
+
+	console.log(state.getSelectedActivity());
+
 	return (
 		<View style={Styles.containerCenter}>
 			<LargeSpacer />
@@ -103,6 +110,8 @@ const ViewStats = () => {
 			<LargeSpacer />
 
 			<Text style={[Styles.subTitleText]}>view your stats</Text>
+
+			{/* <SelectActivity /> */}
 
 			<LargeSpacer />
 
@@ -121,6 +130,7 @@ const ViewStats = () => {
 						setPeriodData(arr[1]);
 						setAllTimeTitle(arr[2]);
 						setAllTimeData(arr[3]);
+						state.selectActivity(value);
 					}}
 				/>
 			</View>
