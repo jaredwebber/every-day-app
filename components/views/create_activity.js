@@ -5,21 +5,20 @@
 
 import {Text, TextInput, View} from 'react-native';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
 
 //Functions to update/retrieve data
-import { addNewActivity } from '../../data/local_async.js';
+import {addNewActivity, getStatisticsPublic} from '../../data/local_async.js';
 
 //Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer, MedSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {Picker} from '@react-native-picker/picker';
-
-import { refreshMetadata } from '../../index';
+import {useGlobalState} from '../../state/activityState';
 
 function getFrequency(string) {
 	if (string === 'daily') {
@@ -52,9 +51,7 @@ const CreateActivity = () => {
 	const [frequency, updateFrequency] = useState('D');
 	const [frequencyString, updateFrequencyString] = useState('daily');
 
-	useEffect(() => {
-		refreshMetadata();
-	}, []);
+	const state = useGlobalState();
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -65,7 +62,7 @@ const CreateActivity = () => {
 
 			<Picker
 				selectedValue={frequencyString}
-				onValueChange={(itemValue) => {
+				onValueChange={itemValue => {
 					updateFrequencyString(itemValue);
 					updateFrequency(getFrequency(itemValue));
 				}}
@@ -128,12 +125,8 @@ const CreateActivity = () => {
 				text="create activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
-						addNewActivity(
-							activityName,
-							goalAmount,
-							frequency,
-							unit,
-						);
+						addNewActivity(activityName, goalAmount, frequency, unit);
+						state.updateActivities(getStatisticsPublic());
 						this.goalInput.clear();
 						this.unitInput.clear();
 						this.nameInput.clear();

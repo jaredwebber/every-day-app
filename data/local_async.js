@@ -1,6 +1,5 @@
 //Local Storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {refreshMetadata, updateCurrentSelection} from '../index';
 
 //AsyncStorage key for metadata
 const META_KEY = '@metadata';
@@ -180,7 +179,7 @@ const verifyInGoalSpan = async () => {
 		}
 	} else {
 		console.warn('code metadata is null (verifyPresentDay)');
-		updateCurrentSelection(null);
+		// updateCurrentSelection(null);
 	}
 };
 
@@ -189,14 +188,15 @@ const updateActivityLog = async (ActivityID, Count, type) => {
 	await verifyInGoalSpan();
 
 	var activityFound = false;
+	var error = false;
 
 	if (ActivityID === undefined || Count === undefined) {
 		console.error('Invalid params LogActivity');
-		return;
+		error = true;
 	}
 
 	//update metadataCodeCopy values
-	if (type === LOG) {
+	if (!error && type === LOG) {
 		if (metadataCodeCopy !== null) {
 			for (var i in metadataCodeCopy) {
 				if (parseInt(metadataCodeCopy[i].ActivityID) === parseInt(ActivityID)) {
@@ -224,30 +224,38 @@ const updateActivityLog = async (ActivityID, Count, type) => {
 					//add new Log object
 					currActivityLog.push(new activityLogObject(Count));
 					await pushActivityLogAsync(ActivityID);
-
-					break;
+					return metadataCodeCopy;
 				}
 			}
 		} else {
 			console.warn('metadata code null (logActivity)');
+			error = true;
 		}
-	} else if (type === UPDATE) {
+	} else if (!error && type === UPDATE) {
 		console.error('Update not implemented');
 		//find activityID
 		//TodayCount=Count
+		error = true;
 	} else {
 		console.error('unexpected logActivity \'type\' param');
+		error = true;
 	}
 
 	if (!activityFound) console.warn('ActivityID: ' + ActivityID + ' not found');
+	return !error;
 };
 
 //Functions accessible to external files
-export const logActivity = async (ActivityID, Count) => {
-	await updateActivityLog(ActivityID, Count, LOG);
+export const logActivityAsync = async (ActivityID, Count) => {
+	return await updateActivityLog(ActivityID, Count, LOG);
 };
 
-export const addNewActivity = async (ActivityName, GoalAmount, GoalFrequency, Unit) => {
+export const addNewActivity = async (
+	ActivityName,
+	GoalAmount,
+	GoalFrequency,
+	Unit,
+) => {
 	await pullMetadataAsync();
 
 	if (metadataCodeCopy === null) {
@@ -333,8 +341,7 @@ export const DUMP_DATA_DEBUG = async () => {
 };
 
 export const CLEAR_DATA_DEBUG = async () => {
-	refreshMetadata();
-	updateCurrentSelection(null);
+	// updateCurrentSelection(null);
 	var keys = await AsyncStorage.getAllKeys();
 
 	for (var i in keys) {

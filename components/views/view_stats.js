@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * @flow strict-local
  * @format
@@ -5,27 +6,19 @@
 
 import {Text, View} from 'react-native';
 
-import React, {useState, useEffect} from 'react';
-import { useGlobalState } from '../../state/activityState';
+// eslint-disable-next-line no-unused-vars
+import React, {useState} from 'react';
+import {useGlobalState} from '../../state/activityState';
+import SelectActivity from '../tools/select_activity';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
 
-import {
-	selectionOptions,
-	metadata,
-	refreshMetadata,
-	updateCurrentSelection,
-} from '../../index';
-
-import DropDownPicker from 'react-native-dropdown-picker';
-
 //Import Custom Components
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
-//import SelectActivity from '../tools/select_activity';
 
-function displayStats(id) {
+function displayStats(id, metadata) {
 	var frequency = 'daily';
 	var formattedString = new Array();
 
@@ -80,25 +73,13 @@ function displayStats(id) {
 }
 
 const ViewStats = () => {
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(null);
-	const [items, setItems] = useState(selectionOptions);
-
 	const [periodTitle, setPeriodTitle] = useState('');
 	const [periodData, setPeriodData] = useState('');
 
 	const [allTimeTitle, setAllTimeTitle] = useState('');
 	const [allTimeData, setAllTimeData] = useState('');
 
-	useEffect(() => {
-		refreshMetadata();
-		setItems(selectionOptions);
-	}, [selectionOptions]);
-
-
 	const state = useGlobalState();
-
-	console.log(state.getSelectedActivity());
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -111,27 +92,18 @@ const ViewStats = () => {
 
 			<Text style={[Styles.subTitleText]}>view your stats</Text>
 
-			{/* <SelectActivity /> */}
-
 			<LargeSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
-				<DropDownPicker
-					open={open}
-					value={value}
-					items={items}
-					setOpen={setOpen}
-					setValue={setValue}
-					setItems={setItems}
-					onChangeValue={() => {
-						updateCurrentSelection(value);
-						var arr = displayStats(value);
+				<SelectActivity
+					/*onChange={value => {
+						var arr = displayStats(value, state.getActivities());
 						setPeriodTitle(arr[0]);
 						setPeriodData(arr[1]);
 						setAllTimeTitle(arr[2]);
 						setAllTimeData(arr[3]);
-						state.selectActivity(value);
-					}}
+					}}*/
+					onChange={val => console.log(val)}
 				/>
 			</View>
 

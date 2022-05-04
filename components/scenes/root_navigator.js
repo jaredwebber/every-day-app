@@ -10,8 +10,6 @@ import ViewStats from '../views/view_stats';
 import CreateActivity from '../views/create_activity';
 import Settings from '../views/settings';
 
-import {refreshMetadata} from '../..';
-
 const Tab = createBottomTabNavigator();
 
 const screenOptions = (route, color) => {
@@ -45,26 +43,10 @@ const RootNavigator = () => {
 						backgroundColor: '#1E1B26',
 					},
 				})}>
-				<Tab.Screen
-					name="view stats"
-					component={ViewStats}
-					onPress={refreshMetadata()}
-				/>
-				<Tab.Screen
-					onPress={refreshMetadata()}
-					name="log activity"
-					component={NumericInput}
-				/>
-				<Tab.Screen
-					name="new activity"
-					onPress={refreshMetadata()}
-					component={CreateActivity}
-				/>
-				<Tab.Screen
-					name="settings"
-					onPress={refreshMetadata()}
-					component={Settings}
-				/>
+				<Tab.Screen name="view stats" component={ViewStats} />
+				<Tab.Screen name="log activity" component={NumericInput} />
+				<Tab.Screen name="new activity" component={CreateActivity} />
+				<Tab.Screen name="settings" component={Settings} />
 			</Tab.Navigator>
 		</NavigationContainer>
 	);

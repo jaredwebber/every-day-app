@@ -17,7 +17,7 @@ import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 
-import {metadata} from '../../index';
+import {useGlobalState} from '../../state/activityState';
 
 const debugUpdateSteps =
 	'go to log activity tab & select activity to update\n' +
@@ -40,6 +40,8 @@ const showDebugEditSteps = async () => {
 };
 
 const Settings = () => {
+	const state = useGlobalState();
+
 	return (
 		<View style={Styles.containerCenter}>
 			<LargeSpacer />
@@ -65,6 +67,7 @@ const Settings = () => {
 			<Button
 				onPress={() => {
 					CLEAR_DATA_DEBUG();
+					state.selectActivity(-1);
 					refresh();
 				}}
 				text={'clear all data'}
@@ -74,7 +77,7 @@ const Settings = () => {
 				onPress={() => {
 					Linking.openURL(
 						'mailto:jaredwebberdev@gmail.com?body=' +
-							JSON.stringify(metadata) +
+							JSON.stringify(state.getActivities()) +
 							'&subject=DataDump',
 					);
 				}}

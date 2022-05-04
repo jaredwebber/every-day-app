@@ -5,27 +5,20 @@
 
 import {Text, TextInput, View} from 'react-native';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
 
 //Functions to update/retrieve data
-import {logActivity, DEBUGupdate} from '../../data/local_async.js';
+import {DEBUGupdate} from '../../data/local_async.js';
 //Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
+import {useGlobalState} from '../../state/activityState';
 
-import DropDownPicker from 'react-native-dropdown-picker';
-
-import {
-	selectionOptions,
-	metadata,
-	currentSelection,
-	refreshMetadata,
-	updateCurrentSelection,
-} from '../../index';
+import SelectActivity from '../tools/select_activity';
 
 var CurrentDate = []; //updated by getDate() function
 
@@ -66,7 +59,7 @@ function displayAddedMsg(msg) {
 	this._MyComponent.setNativeProps({placeholder: msg});
 }
 
-function getActivityName(id) {
+function getActivityName(id, selectionOptions, metadata) {
 	if (id === undefined || metadata === null) return 'activity';
 	for (var i in selectionOptions) {
 		if (selectionOptions[i].value === id) {
@@ -75,33 +68,19 @@ function getActivityName(id) {
 	}
 }
 
-function validate(val) {
-	try {
-		return (
-			!isNaN(val) &&
-			val.trim().length !== 0 &&
-			currentSelection != null &&
-			currentSelection != undefined &&
-			parseInt(val) > 0
-		);
-	} catch {
-		return false;
-	}
-}
-
-function debugUpdate(val) {
+function debugUpdate(id, val) {
 	if (val && val.substring(0, 5) === 'debug') {
-		debugUpdateActivity(val);
+		debugUpdateActivity(id, val);
 		return true;
 	}
 	return false;
 }
 
-const debugUpdateActivity = async val => {
+const debugUpdateActivity = async (id, val) => {
 	try {
 		var updateArr = new Array();
 
-		updateArr.push(currentSelection);
+		updateArr.push(id);
 		//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
 		var items = val.split(',');
 		for (var i = 1; i < items.length; i++) {
@@ -122,14 +101,20 @@ const NumericInput = () => {
 
 	const [inputValue, updateInputValue] = useState(null);
 
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(null);
-	const [items, setItems] = useState(selectionOptions);
+	const state = useGlobalState();
 
-	useEffect(() => {
-		refreshMetadata();
-		setItems(selectionOptions);
-	}, [selectionOptions]);
+	function validate(val) {
+		try {
+			return (
+				!isNaN(val) &&
+				val.trim().length !== 0 &&
+				state.getSelectedActivity() != -1 &&
+				parseInt(val) > 0
+			);
+		} catch {
+			return false;
+		}
+	}
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -143,19 +128,17 @@ const NumericInput = () => {
 			<LargeSpacer />
 
 			<View style={Styles.dropdownContainer}>
-				<DropDownPicker
-					zIndex={999}
-					open={open}
-					value={value}
-					items={items}
-					setOpen={setOpen}
-					setValue={setValue}
-					setItems={setItems}
-					onChangeValue={() => {
-						updateCurrentSelection(value);
-						if (value !== null && value !== 'null') {
-							updateName(getActivityName(value));
-							updateUnit(getActivityName(value));
+				<SelectActivity
+					onChange={id => {
+						if (id !== null && id !== 'null') {
+							updateName(
+								getActivityName(
+									id,
+									state.getActivityOptions(),
+									state.getActivities(),
+								),
+							);
+							updateUnit(getActivityName(id));
 						}
 					}}
 				/>
@@ -199,9 +182,9 @@ const NumericInput = () => {
 			<Button
 				text={'log ' + activityName}
 				onPress={() => {
-					if (!debugUpdate(inputValue)) {
+					if (!debugUpdate(state.getSelectedActivity(), inputValue)) {
 						if (validate(inputValue)) {
-							logActivity(currentSelection, inputValue);
+							state.logActivity(inputValue);
 							this.logInput.clear();
 							updateInputValue('');
 							displayAddedMsg('logged ' + inputValue + ' ' + activityUnit);

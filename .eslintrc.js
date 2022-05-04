@@ -33,6 +33,7 @@ module.exports = {
 		'semi': [
 			'error',
 			'always'
-		]
+		],
+		'max-len': 'off'
 	}
 };

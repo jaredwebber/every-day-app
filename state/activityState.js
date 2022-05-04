@@ -1,41 +1,23 @@
 import {createState, useState} from '@hookstate/core';
+import {logActivityAsync} from '../data/local_async';
+
+function kvPair(label, value) {
+	this.label = label;
+	this.value = value;
+}
+
+function parseActivityOptions(metadata) {
+	var build = new Array();
+	for (var i in metadata) {
+		build.push(new kvPair(metadata[i].ActivityName, metadata[i].ActivityID));
+	}
+	return build;
+}
 
 const state = createState({
-	activities: [
-		{
-			ActivityID: '1651530166658',
-			ActivityName: '99',
-			GoalAmount: 99,
-			CurrentStreak: 1,
-			HighestPeriod: 8783,
-			TotalGoalsMet: 1,
-			GrandTotal: 8885,
-			TotalLogCount: 5,
-			TodayCount: 8783,
-			LastGoalInit: '5/3/2022',
-			TodayLogs: 2,
-			LongestStreak: 1,
-			GoalFrequency: 'D',
-			Unit: '99',
-		},
-		{
-			ActivityID: '1651544782489',
-			ActivityName: 'g',
-			GoalAmount: 3,
-			CurrentStreak: 1,
-			HighestPeriod: 71,
-			TotalGoalsMet: 1,
-			GrandTotal: 85,
-			TotalLogCount: 4,
-			TodayCount: 14,
-			LastGoalInit: '5/3/2022',
-			TodayLogs: 2,
-			LongestStreak: 1,
-			GoalFrequency: 'D',
-			Unit: 'd',
-		},
-	],
-	selectedActivity: -1,//make this an entire object?
+	activities: [],
+	selectedActivity: -1, //make this an entire object?,
+	activityOptions: [], //redundant? can just filter activities[]
 });
 
 export const useGlobalState = () => {
@@ -43,17 +25,34 @@ export const useGlobalState = () => {
 	return {
 		getActivities: () => currState.value.activities,
 		getSelectedActivity: () => currState.value.selectedActivity,
+		getActivityOptions: () => currState.value.activityOptions,
 		selectActivity: activity => {
 			currState.selectedActivity.set(activity);
 		},
 		updateActivities: activities => {
 			currState.activities.set(activities);
+
+			if (activities == null || activities == undefined) {
+				currState.activityOptions.set(null);
+			} else {
+				currState.activityOptions.set(parseActivityOptions(activities));
+			}
 		},
-		// eslint-disable-next-line no-unused-vars
-		logActivity: (activity, count) => {
-			// call async to store
-			// update store async
-			currState.activities.set(activity);
+		logActivity: count => {
+			const preLog = currState.activities;
+			//will need to modify this once selectedActivity contains object not int
+			logActivityAsync(currState.value.selectedActivity, count).then(
+				updatedActivities => {
+					if (updatedActivities) {
+						currState.activities.set(updatedActivities);
+					} else {
+						console.warn(
+							'Error logging activity - reverting to pre-log values',
+						);
+						currState.activities.set(preLog);
+					}
+				},
+			);
 		},
 	};
 };
