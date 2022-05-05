@@ -1,4 +1,3 @@
-//Local Storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //AsyncStorage key for metadata
@@ -42,7 +41,6 @@ function activityLogObject(count) {
 	this.count = count;
 }
 
-// Direct Data Manipulation
 const storeData = async (key, value) => {
 	try {
 		const jsonValue = JSON.stringify(value);
@@ -134,12 +132,8 @@ const verifyInGoalSpan = async () => {
 	if (metadataCodeCopy !== null) {
 		for (var i in metadataCodeCopy) {
 			if (metadataCodeCopy[i].GoalFrequency === DAY) {
-				//console.warn("meta: "+metadataCodeCopy[i].LastGoalInit);
-				//console.warn("curr: "+currDateString);
-
 				if (metadataCodeCopy[i].LastGoalInit.trim() !== currDateString) {
 					needsPush = true;
-					//console.warn("not equal dates")
 				}
 			} else if (metadataCodeCopy[i].GoalFrequency === WEEK) {
 				if (
@@ -172,14 +166,10 @@ const verifyInGoalSpan = async () => {
 				console.warn('after');
 				console.warn(metadataCodeCopy);
 				await pushMetadataAsync();
-
-				//TO REMOVE?
-				await pullMetadataAsync();
 			}
 		}
 	} else {
 		console.warn('code metadata is null (verifyPresentDay)');
-		// updateCurrentSelection(null);
 	}
 };
 

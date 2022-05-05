@@ -1,85 +1,29 @@
-/* eslint-disable no-unused-vars */
 /**
  * @flow strict-local
  * @format
  */
 
 import {Text, View} from 'react-native';
-
-// eslint-disable-next-line no-unused-vars
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useGlobalStore} from '../../store/activityStore';
 import SelectActivity from '../tools/select_activity';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
-
-//Import Custom Components
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 
-function displayStats(id, metadata) {
-	var frequency = 'daily';
-	var formattedString = new Array();
-
-	for (var i in metadata) {
-		if (metadata[i].ActivityID === id) {
-			if (metadata[i].GoalFrequency === 'W') frequency = 'weekly';
-
-			formattedString.push(frequency + ' stats:');
-
-			formattedString.push(
-				metadata[i].TodayCount +
-					' of ' +
-					metadata[i].GoalAmount +
-					' ' +
-					metadata[i].Unit +
-					's completed\n' +
-					'current streak: ' +
-					metadata[i].CurrentStreak,
-			);
-
-			formattedString.push('\n\nall time stats:');
-
-			formattedString.push(
-				'total of ' +
-					metadata[i].GrandTotal +
-					' ' +
-					metadata[i].Unit +
-					's in ' +
-					metadata[i].TotalLogCount +
-					' logs' +
-					'\n' +
-					frequency +
-					' goal of ' +
-					metadata[i].GoalAmount +
-					' ' +
-					metadata[i].Unit +
-					's achieved ' +
-					metadata[i].TotalGoalsMet +
-					' times' +
-					'\nlongest ' +
-					frequency +
-					' streak ' +
-					metadata[i].LongestStreak +
-					'\nhighest goal period ' +
-					metadata[i].HighestPeriod,
-			);
-
-			return formattedString;
-		}
-	}
-	return formattedString;
-}
-
 const ViewStats = () => {
-	const [periodTitle, setPeriodTitle] = useState('');
-	const [periodData, setPeriodData] = useState('');
-
-	const [allTimeTitle, setAllTimeTitle] = useState('');
-	const [allTimeData, setAllTimeData] = useState('');
-
 	const store = useGlobalStore();
+
+	const [activity, setActivity] = useState(store.getSelectedActivity());
+
+	useEffect(() => {
+		console.log('select_activity.js');
+		console.log(activity);
+		setActivity(store.getSelectedActivity());
+	}, [
+		store.getSelectedActivity().TodayCount,
+		store.getSelectedActivity.ActivityID,
+	]);
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -95,36 +39,56 @@ const ViewStats = () => {
 			<LargeSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
-				<SelectActivity
-					onChange={value => {
-						var arr = displayStats(value, store.getActivities());
-						setPeriodTitle(arr[0]);
-						setPeriodData(arr[1]);
-						setAllTimeTitle(arr[2]);
-						setAllTimeData(arr[3]);
-					}}
-				/>
+				<SelectActivity />
 			</View>
 
 			<LargeSpacer />
+			{activity.ActivityID !== -1 ? (
+				<View style={Styles.containerCenter}>
+					<Text zIndex={-1} style={Styles.subTitleText}>
+						{(activity.GoalFrequency === 'W' ? 'weekly' : 'daily') + ' stats: '}
+					</Text>
 
-			<View style={Styles.containerCenter}>
-				<Text zIndex={-1} style={Styles.subTitleText}>
-					{periodTitle}
-				</Text>
+					<Text zIndex={-1} style={Styles.subTitleText}>
+						{activity.TodayCount +
+							' of ' +
+							activity.GoalAmount +
+							' ' +
+							activity.Unit +
+							's completed\n' +
+							'current streak: ' +
+							activity.CurrentStreak}
+					</Text>
 
-				<Text zIndex={-1} style={Styles.subTitleText}>
-					{periodData}
-				</Text>
+					<Text zIndex={-1} style={Styles.subTitleText}>
+						{'\n\nall time stats:'}
+					</Text>
 
-				<Text zIndex={-1} style={Styles.subTitleText}>
-					{allTimeTitle}
-				</Text>
-
-				<Text style={Styles.subSubTitleText} zIndex={-1}>
-					{allTimeData}
-				</Text>
-			</View>
+					<Text style={Styles.subSubTitleText} zIndex={-1}>
+						{'total of ' +
+							activity.GrandTotal +
+							' ' +
+							activity.Unit +
+							's in ' +
+							activity.TotalLogCount +
+							' logs\n' +
+							(activity.GoalFrequency == 'W' ? 'weekly' : 'daily') +
+							' goal of ' +
+							activity.GoalAmount +
+							' ' +
+							activity.Unit +
+							's achieved ' +
+							activity.TotalGoalsMet +
+							' times' +
+							'\nlongest ' +
+							(activity.GoalFrequency === 'W' ? 'weekly' : 'daily') +
+							' streak ' +
+							activity.LongestStreak +
+							'\nhighest goal period ' +
+							activity.HighestPeriod}
+					</Text>
+				</View>
+			) : null}
 		</View>
 	);
 };

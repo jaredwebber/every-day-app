@@ -4,45 +4,41 @@
  */
 
 import {View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useGlobalStore} from '../../store/activityStore';
-import PropTypes from 'prop-types';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
 
-const SelectActivity = ({onChange}) => {
-	const store = useGlobalStore();
+const SelectActivity = () => {
+	const globalStore = useGlobalStore();
 
 	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(store.getSelectedActivity());
-	const [items, setItems] = useState(store.getActivityOptions());
+	const [value, setValue] = useState(
+		globalStore.getSelectedActivity().ActivityID,
+	);
+	const [items, setItems] = useState(globalStore.getActivities());
 
 	useEffect(() => {
-		setValue(store.getSelectedActivity());
-	}, [store.getSelectedActivity]);
+		console.log('select_activity.js');
+		setValue(globalStore.getSelectedActivity().ActivityID);
+	}, [globalStore.getSelectedActivity().ActivityID]);
 
 	return (
 		<View style={Styles.containerCenter}>
 			<DropDownPicker
+				schema={{label: 'ActivityName', value: 'ActivityID'}}
 				open={open}
 				value={value}
-				items={items}
+				items={items !== undefined ? items : []}
 				setOpen={setOpen}
 				setValue={setValue}
 				setItems={setItems}
 				onChangeValue={() => {
-					store.selectActivity(value);
-					onChange(value);
+					globalStore.selectActivity(value);
 				}}
 			/>
 		</View>
 	);
-};
-
-SelectActivity.propTypes = {
-	onChange: PropTypes.func,
 };
 
 export default SelectActivity;

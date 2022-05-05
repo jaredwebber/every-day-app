@@ -4,20 +4,13 @@
  */
 
 import {Text, TextInput, View} from 'react-native';
-
 import React, {useState} from 'react';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
-
-//Functions to update/retrieve data
 import {DEBUGupdate} from '../../data/local_async.js';
-//Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {useGlobalStore} from '../../store/activityStore';
-
 import SelectActivity from '../tools/select_activity';
 
 var CurrentDate = []; //updated by getDate() function
@@ -87,35 +80,21 @@ const debugUpdateActivity = async (id, val) => {
 const NumericInput = () => {
 	getDay();
 
-	const [activityUnit, updateUnit] = useState('activity');
-	const [activityName, updateName] = useState('activity');
-
 	const [inputValue, updateInputValue] = useState(null);
 
 	const store = useGlobalStore();
+	const selectedActivity = store.getSelectedActivity();
 
 	function validate(val) {
 		try {
 			return (
 				!isNaN(val) &&
 				val.trim().length !== 0 &&
-				store.getSelectedActivity() != -1 &&
+				selectedActivity.ActivityID != -1 &&
 				parseInt(val) > 0
 			);
 		} catch {
 			return false;
-		}
-	}
-
-	// This would be made redundant if selectedAction in store was complete object
-	function getActivityName(id) {
-		var selectionOptions = store.getActivityOptions();
-		var metadata = store.getActivities();
-		if (id === undefined || metadata === null) return 'activity';
-		for (var i in selectionOptions) {
-			if (selectionOptions[i].value === id) {
-				return selectionOptions[i].label;
-			}
 		}
 	}
 
@@ -131,14 +110,7 @@ const NumericInput = () => {
 			<LargeSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
-				<SelectActivity
-					onChange={id => {
-						if (id !== null && id !== 'null') {
-							updateName(getActivityName(id));
-							updateUnit(getActivityName(id));
-						}
-					}}
-				/>
+				<SelectActivity	/>
 			</View>
 
 			<LargeSpacer />
@@ -152,7 +124,7 @@ const NumericInput = () => {
 					alignItems: 'flex-start',
 				}}>
 				<Text style={[Styles.padItem, Styles.subTitleText]}>
-					log {activityName} for {getMonth()} {CurrentDate[0]}
+					log {selectedActivity.ActivityID !== -1 ? selectedActivity.ActivityName : 'activity'} for {getMonth()} {CurrentDate[0]}
 				</Text>
 				<Text style={{lineHeight: 40, fontWeight: '600'}}>
 					{CurrentDate[1]}
@@ -164,7 +136,7 @@ const NumericInput = () => {
 				placeholderTextColor={'#404040'}
 				//keyboardType='numeric'
 				keyboardType="default" //to be switched to numeric once debug update is changed
-				placeholder={'number of ' + activityUnit}
+				placeholder={'number of ' + (selectedActivity.ActivityID !== -1 ? (selectedActivity.Unit + 's') : 'activity')}
 				autoCorrect={false}
 				autoCapitalize="none"
 				returnKeyType="done"
@@ -177,14 +149,14 @@ const NumericInput = () => {
 			<LargeSpacer />
 
 			<Button
-				text={'log ' + activityName}
+				text={'log ' + (selectedActivity.ActivityID !== -1 ? selectedActivity.ActivityName : 'activity')}
 				onPress={() => {
-					if (!debugUpdate(store.getSelectedActivity(), inputValue)) {
+					if (!debugUpdate(selectedActivity.ActivityID, inputValue)) {
 						if (validate(inputValue)) {
 							store.logActivity(inputValue);
 							this.logInput.clear();
 							updateInputValue('');
-							displayAddedMsg('logged ' + inputValue + ' ' + activityUnit);
+							displayAddedMsg('logged ' + inputValue + ' ' + selectedActivity.Unit);
 						} else {
 							displayAddedMsg(
 								'make sure all fields are filled & number is entered',

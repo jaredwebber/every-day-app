@@ -4,16 +4,9 @@
  */
 
 import {Text, TextInput, View} from 'react-native';
-
 import React, {useState} from 'react';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
-
-//Functions to update/retrieve data
 import {addNewActivity, getStatisticsPublic} from '../../data/local_async.js';
-
-//Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer, MedSpacer} from '../tools/spacers';
 import Header from '../tools/header';
@@ -125,6 +118,7 @@ const CreateActivity = () => {
 				text="create activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
+						// TODO: Clean up - move getStatisticsPublic to activityStore
 						addNewActivity(activityName, goalAmount, frequency, unit).then(() =>
 							getStatisticsPublic().then(response => {
 								store.updateActivities(response);

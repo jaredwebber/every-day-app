@@ -4,19 +4,12 @@
  */
 
 import {Text, TextInput, View, ScrollView, Linking} from 'react-native';
-
 import React from 'react';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
-
 import {CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG} from '../../data/local_async.js';
-
-//Import Custom Components
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
-
 import {useGlobalStore} from '../../store/activityStore';
 
 const debugUpdateSteps =

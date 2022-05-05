@@ -10,10 +10,12 @@ import {getStatisticsPublic} from './data/local_async';
 import {useGlobalStore} from './store/activityStore';
 
 const App = () => {
+	const initialLoad = false;
 	const store = useGlobalStore();
+
 	useEffect(() => {
 		getStatisticsPublic().then(response => store.updateActivities(response));
-	});
+	}, [initialLoad]);
 
 	return (
 		<GestureHandlerRootView style={{flex: 1}}>
