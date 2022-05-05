@@ -18,7 +18,7 @@ import {Button} from '../tools/button';
 import {LargeSpacer, MedSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {Picker} from '@react-native-picker/picker';
-import {useGlobalState} from '../../state/activityState';
+import {useGlobalStore} from '../../store/activityStore';
 
 function getFrequency(string) {
 	if (string === 'daily') {
@@ -51,7 +51,7 @@ const CreateActivity = () => {
 	const [frequency, updateFrequency] = useState('D');
 	const [frequencyString, updateFrequencyString] = useState('daily');
 
-	const state = useGlobalState();
+	const store = useGlobalStore();
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -125,8 +125,11 @@ const CreateActivity = () => {
 				text="create activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
-						addNewActivity(activityName, goalAmount, frequency, unit);
-						state.updateActivities(getStatisticsPublic());
+						addNewActivity(activityName, goalAmount, frequency, unit).then(() =>
+							getStatisticsPublic().then(response => {
+								store.updateActivities(response);
+							}),
+						);
 						this.goalInput.clear();
 						this.unitInput.clear();
 						this.nameInput.clear();

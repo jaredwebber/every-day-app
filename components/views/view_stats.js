@@ -8,7 +8,7 @@ import {Text, View} from 'react-native';
 
 // eslint-disable-next-line no-unused-vars
 import React, {useState} from 'react';
-import {useGlobalState} from '../../state/activityState';
+import {useGlobalStore} from '../../store/activityStore';
 import SelectActivity from '../tools/select_activity';
 
 //Import Custom Styles
@@ -79,7 +79,7 @@ const ViewStats = () => {
 	const [allTimeTitle, setAllTimeTitle] = useState('');
 	const [allTimeData, setAllTimeData] = useState('');
 
-	const state = useGlobalState();
+	const store = useGlobalStore();
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -96,14 +96,13 @@ const ViewStats = () => {
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
 				<SelectActivity
-					/*onChange={value => {
-						var arr = displayStats(value, state.getActivities());
+					onChange={value => {
+						var arr = displayStats(value, store.getActivities());
 						setPeriodTitle(arr[0]);
 						setPeriodData(arr[1]);
 						setAllTimeTitle(arr[2]);
 						setAllTimeData(arr[3]);
-					}}*/
-					onChange={val => console.log(val)}
+					}}
 				/>
 			</View>
 

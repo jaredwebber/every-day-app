@@ -4,20 +4,24 @@
  */
 
 import {View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {useGlobalState} from '../../state/activityState';
+import {useGlobalStore} from '../../store/activityStore';
 import PropTypes from 'prop-types';
 
 //Import Custom Styles
 import Styles from '../style_sheet';
 
 const SelectActivity = ({onChange}) => {
-	const state = useGlobalState();
+	const store = useGlobalStore();
 
 	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(state.getSelectedActivity());
-	const [items, setItems] = useState(state.getActivityOptions());
+	const [value, setValue] = useState(store.getSelectedActivity());
+	const [items, setItems] = useState(store.getActivityOptions());
+
+	useEffect(() => {
+		setValue(store.getSelectedActivity());
+	}, [store.getSelectedActivity]);
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -29,7 +33,7 @@ const SelectActivity = ({onChange}) => {
 				setValue={setValue}
 				setItems={setItems}
 				onChangeValue={() => {
-					state.selectActivity(value);
+					store.selectActivity(value);
 					onChange(value);
 				}}
 			/>

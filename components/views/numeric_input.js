@@ -16,7 +16,7 @@ import {DEBUGupdate} from '../../data/local_async.js';
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
-import {useGlobalState} from '../../state/activityState';
+import {useGlobalStore} from '../../store/activityStore';
 
 import SelectActivity from '../tools/select_activity';
 
@@ -59,15 +59,6 @@ function displayAddedMsg(msg) {
 	this._MyComponent.setNativeProps({placeholder: msg});
 }
 
-function getActivityName(id, selectionOptions, metadata) {
-	if (id === undefined || metadata === null) return 'activity';
-	for (var i in selectionOptions) {
-		if (selectionOptions[i].value === id) {
-			return selectionOptions[i].label;
-		}
-	}
-}
-
 function debugUpdate(id, val) {
 	if (val && val.substring(0, 5) === 'debug') {
 		debugUpdateActivity(id, val);
@@ -101,18 +92,30 @@ const NumericInput = () => {
 
 	const [inputValue, updateInputValue] = useState(null);
 
-	const state = useGlobalState();
+	const store = useGlobalStore();
 
 	function validate(val) {
 		try {
 			return (
 				!isNaN(val) &&
 				val.trim().length !== 0 &&
-				state.getSelectedActivity() != -1 &&
+				store.getSelectedActivity() != -1 &&
 				parseInt(val) > 0
 			);
 		} catch {
 			return false;
+		}
+	}
+
+	// This would be made redundant if selectedAction in store was complete object
+	function getActivityName(id) {
+		var selectionOptions = store.getActivityOptions();
+		var metadata = store.getActivities();
+		if (id === undefined || metadata === null) return 'activity';
+		for (var i in selectionOptions) {
+			if (selectionOptions[i].value === id) {
+				return selectionOptions[i].label;
+			}
 		}
 	}
 
@@ -127,17 +130,11 @@ const NumericInput = () => {
 			<LargeSpacer />
 			<LargeSpacer />
 
-			<View style={Styles.dropdownContainer}>
+			<View zIndex={999} style={Styles.dropdownContainer}>
 				<SelectActivity
 					onChange={id => {
 						if (id !== null && id !== 'null') {
-							updateName(
-								getActivityName(
-									id,
-									state.getActivityOptions(),
-									state.getActivities(),
-								),
-							);
+							updateName(getActivityName(id));
 							updateUnit(getActivityName(id));
 						}
 					}}
@@ -182,9 +179,9 @@ const NumericInput = () => {
 			<Button
 				text={'log ' + activityName}
 				onPress={() => {
-					if (!debugUpdate(state.getSelectedActivity(), inputValue)) {
+					if (!debugUpdate(store.getSelectedActivity(), inputValue)) {
 						if (validate(inputValue)) {
-							state.logActivity(inputValue);
+							store.logActivity(inputValue);
 							this.logInput.clear();
 							updateInputValue('');
 							displayAddedMsg('logged ' + inputValue + ' ' + activityUnit);

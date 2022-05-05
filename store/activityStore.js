@@ -20,36 +20,36 @@ const state = createState({
 	activityOptions: [], //redundant? can just filter activities[]
 });
 
-export const useGlobalState = () => {
-	const currState = useState(state);
+export const useGlobalStore = () => {
+	const store = useState(state);
 	return {
-		getActivities: () => currState.value.activities,
-		getSelectedActivity: () => currState.value.selectedActivity,
-		getActivityOptions: () => currState.value.activityOptions,
+		getActivities: () => store.value.activities,
+		getSelectedActivity: () => store.value.selectedActivity,
+		getActivityOptions: () => store.value.activityOptions,
 		selectActivity: activity => {
-			currState.selectedActivity.set(activity);
+			store.selectedActivity.set(activity);
 		},
 		updateActivities: activities => {
-			currState.activities.set(activities);
+			store.activities.set(activities);
 
 			if (activities == null || activities == undefined) {
-				currState.activityOptions.set(null);
+				store.activityOptions.set(null);
 			} else {
-				currState.activityOptions.set(parseActivityOptions(activities));
+				store.activityOptions.set(parseActivityOptions(activities));
 			}
 		},
 		logActivity: count => {
-			const preLog = currState.activities;
+			const preLog = store.activities;
 			//will need to modify this once selectedActivity contains object not int
-			logActivityAsync(currState.value.selectedActivity, count).then(
+			logActivityAsync(store.value.selectedActivity, count).then(
 				updatedActivities => {
 					if (updatedActivities) {
-						currState.activities.set(updatedActivities);
+						store.activities.set(updatedActivities);
 					} else {
 						console.warn(
 							'Error logging activity - reverting to pre-log values',
 						);
-						currState.activities.set(preLog);
+						store.activities.set(preLog);
 					}
 				},
 			);
