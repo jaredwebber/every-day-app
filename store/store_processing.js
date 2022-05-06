@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-import AndroidHorizontalScrollViewNativeComponent from 'react-native/Libraries/Components/ScrollView/AndroidHorizontalScrollViewNativeComponent';
 import {asyncLogActivity} from './async_storage';
 import {logJSON} from './json_templates';
 
@@ -58,33 +56,27 @@ export const processLogActivity = (activityID, count) => {
 	asyncLogActivity(activityID, new logJSON(count));
 };
 
-// TODO - Rework for stores
-export const processDEBUG_UPDATE = arr => {
-	/*
+export const processDEBUG_UPDATE = (activities, update) => {
 	if (update.length === 10) {
-		for (var i in metadataCodeCopy) {
-			if (parseInt(metadataCodeCopy[i].ActivityID) === parseInt(update[0])) {
+		for (var i in activities) {
+			if (parseInt(activities[i].ActivityID) === parseInt(update[0])) {
 				try {
-					if (update[1] !== '-') metadataCodeCopy[i].ActivityName = update[1];
-					if (update[2] !== '-')
-						metadataCodeCopy[i].GoalAmount = parseInt(update[2]);
+					if (update[1] !== '-') activities[i].ActivityName = update[1];
+					if (update[2] !== '-') activities[i].GoalAmount = parseInt(update[2]);
 					if (update[3] !== '-')
-						metadataCodeCopy[i].CurrentStreak = parseInt(update[3]);
+						activities[i].CurrentStreak = parseInt(update[3]);
 					if (update[4] !== '-')
-						metadataCodeCopy[i].HighestPeriod = parseInt(update[4]);
+						activities[i].HighestPeriod = parseInt(update[4]);
 					if (update[5] !== '-')
-						metadataCodeCopy[i].TotalGoalsMet = parseInt(update[5]);
-					if (update[6] !== '-')
-						metadataCodeCopy[i].GrandTotal = parseInt(update[6]);
+						activities[i].TotalGoalsMet = parseInt(update[5]);
+					if (update[6] !== '-') activities[i].GrandTotal = parseInt(update[6]);
 					if (update[7] !== '-')
-						metadataCodeCopy[i].TotalLogCount = parseInt(update[7]);
+						activities[i].TotalLogCount = parseInt(update[7]);
 					if (update[8] !== '-')
-						metadataCodeCopy[i].LongestStreak = parseInt(update[8]);
-					if (update[9] !== '-') metadataCodeCopy[i].Unit = update[9];
-					await pushMetadataAsync();
+						activities[i].LongestStreak = parseInt(update[8]);
+					if (update[9] !== '-') activities[i].Unit = update[9];
 				} catch (e) {
 					console.warn('Unable to update with values:');
-					console.warn(update);
 				}
 				break;
 			}
@@ -92,5 +84,6 @@ export const processDEBUG_UPDATE = arr => {
 	} else {
 		console.warn('Invalid update array length: ' + update.length);
 	}
-	*/
+
+	return activities;
 };

@@ -28,7 +28,7 @@ const SelectActivity = () => {
 				schema={{label: 'ActivityName', value: 'ActivityID'}}
 				open={open}
 				value={value}
-				items={(items !== undefined && items !== null) ? items : []}
+				items={items !== undefined && items !== null ? items : []}
 				setOpen={setOpen}
 				setValue={setValue}
 				setItems={setItems}

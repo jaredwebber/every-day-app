@@ -57,7 +57,6 @@ const CreateActivity = () => {
 			<LargeSpacer />
 
 			<View style={Styles.pickerContainer}>
-
 				<Picker
 					selectedValue={frequencyString}
 					onValueChange={itemValue => {

@@ -30,7 +30,6 @@ export const asyncLogActivity = async (activityID, log) => {
 	try {
 		var logs = JSON.parse(await AsyncStorage.getItem(activityID));
 		logs = logs != null ? logs : [];
-		//console.log(logs);
 		logs.push(log);
 		await AsyncStorage.setItem(activityID, JSON.stringify(logs));
 	} catch (error) {
@@ -52,7 +51,6 @@ export const asyncDeleteAllStorage = async () => {
 export const asyncGetAllData = async () => {
 	var logs = [];
 	var keys = await AsyncStorage.getAllKeys();
-	//console.log(keys);
 	try {
 		logs = await AsyncStorage.multiGet(keys);
 	} catch (error) {

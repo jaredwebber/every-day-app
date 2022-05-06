@@ -5,10 +5,14 @@ import {
 	asyncGetAllData,
 	asyncDeleteAllStorage,
 } from './async_storage';
-import {processLogActivity, processValidateCurrent} from './store_processing';
+import {
+	processLogActivity,
+	processValidateCurrent,
+	processDEBUG_UPDATE,
+} from './store_processing';
 import {activityJSON} from './json_templates';
 
-const store = createState({
+var store = createState({
 	activities: [],
 	selectedActivity: {
 		ActivityID: -1,
@@ -18,7 +22,7 @@ const store = createState({
 });
 
 const wrapState = currStore => ({
-	getActivities: () => currStore.value.activities,
+	getActivities: () => JSON.parse(JSON.stringify(currStore.value.activities)), //When obj empty, returned [undefined] without JSON copying
 	getSelectedActivity: () => currStore.value.selectedActivity,
 	selectActivity: activityID => {
 		setSelectedActivity(activityID);
@@ -37,9 +41,11 @@ const wrapState = currStore => ({
 		saveAsync();
 	},
 	logActivity: count => {
-		var current = JSON.parse(JSON.stringify(processValidateCurrent(currStore.value.selectedActivity)));
+		var current = JSON.parse(
+			JSON.stringify(processValidateCurrent(currStore.value.selectedActivity)),
+		);
 		var allActivites = JSON.parse(JSON.stringify(currStore.value.activities));
-		
+
 		current.TodayCount = current.TodayCount + parseInt(count);
 		current.TodayLogs = current.TodayLogs + 1;
 		current.GrandTotal = current.GrandTotal + parseInt(count);
@@ -49,15 +55,15 @@ const wrapState = currStore => ({
 			current.HighestPeriod = current.TodayCount;
 		}
 
-		for(var i in allActivites){
-			if(allActivites[i].ActivityID === current.ActivityID){
+		for (var i in allActivites) {
+			if (allActivites[i].ActivityID === current.ActivityID) {
 				allActivites[i] = current;
 			}
 		}
-		
+
 		currStore.selectedActivity.set(current);
 		currStore.activities.set(allActivites);
-		
+
 		processLogActivity(currStore.value.selectedActivity.ActivityID, count);
 		saveAsync();
 	},
@@ -78,19 +84,25 @@ const wrapState = currStore => ({
 	},
 	deleteStorage: () => {
 		currStore.selectedActivity.set({ActivityID: -1});
-		var arr = new Array(0);
+		var arr = new Array();
 		currStore.activities.set(arr);
 		currStore.selectedActivity.set({
 			ActivityID: -1,
 			ActivityName: 'Activity',
 			TodayCount: -1,
 		});
-		console.log('store:');
-		console.log(currStore.value.activities);
 		asyncDeleteAllStorage();
 	},
 	getAllData: () => {
 		return asyncGetAllData();
+	},
+	debugUpdate: array => {
+		store.activities.set(
+			processDEBUG_UPDATE(
+				JSON.parse(JSON.stringify(store.value.activities)),
+				array,
+			),
+		);
 	},
 });
 

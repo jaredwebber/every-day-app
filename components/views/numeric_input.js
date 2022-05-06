@@ -6,7 +6,6 @@
 import {Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import Styles from '../style_sheet';
-import {DEBUGupdate} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
@@ -52,31 +51,6 @@ function displayAddedMsg(msg) {
 	this._MyComponent.setNativeProps({placeholder: msg});
 }
 
-function debugUpdate(id, val) {
-	if (val && val.substring(0, 5) === 'debug') {
-		debugUpdateActivity(id, val);
-		return true;
-	}
-	return false;
-}
-
-const debugUpdateActivity = async (id, val) => {
-	try {
-		var updateArr = new Array();
-
-		updateArr.push(id);
-		//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
-		var items = val.split(',');
-		for (var i = 1; i < items.length; i++) {
-			updateArr.push(items[i].trim());
-		}
-		console.warn(updateArr);
-		await DEBUGupdate(updateArr);
-	} catch (error) {
-		console.warn(error);
-	}
-};
-
 const NumericInput = () => {
 	getDay();
 
@@ -98,6 +72,30 @@ const NumericInput = () => {
 		}
 	}
 
+	function debugUpdate(id, val) {
+		if (val && val.substring(0, 5) === 'debug') {
+			debugUpdateActivity(id, val);
+			return true;
+		}
+		return false;
+	}
+
+	const debugUpdateActivity = async (id, val) => {
+		try {
+			var updateArr = new Array();
+
+			updateArr.push(id);
+			//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
+			var items = val.split(',');
+			for (var i = 1; i < items.length; i++) {
+				updateArr.push(items[i].trim());
+			}
+			store.debugUpdate(updateArr);
+		} catch (error) {
+			console.warn(error);
+		}
+	};
+
 	return (
 		<View style={Styles.containerCenter}>
 			<LargeSpacer />
@@ -110,7 +108,7 @@ const NumericInput = () => {
 			<LargeSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
-				<SelectActivity	/>
+				<SelectActivity />
 			</View>
 
 			<LargeSpacer />
@@ -124,7 +122,11 @@ const NumericInput = () => {
 					alignItems: 'flex-start',
 				}}>
 				<Text style={[Styles.padItem, Styles.subTitleText]}>
-					log {selectedActivity.ActivityID !== -1 ? selectedActivity.ActivityName : 'activity'} for {getMonth()} {CurrentDate[0]}
+					log{' '}
+					{selectedActivity.ActivityID !== -1
+						? selectedActivity.ActivityName
+						: 'activity'}{' '}
+					for {getMonth()} {CurrentDate[0]}
 				</Text>
 				<Text style={{lineHeight: 40, fontWeight: '600'}}>
 					{CurrentDate[1]}
@@ -136,7 +138,12 @@ const NumericInput = () => {
 				placeholderTextColor={'#404040'}
 				//keyboardType='numeric'
 				keyboardType="default" //to be switched to numeric once debug update is changed
-				placeholder={'number of ' + (selectedActivity.ActivityID !== -1 ? (selectedActivity.Unit + 's') : 'activity')}
+				placeholder={
+					'number of ' +
+					(selectedActivity.ActivityID !== -1
+						? selectedActivity.Unit + 's'
+						: 'activity')
+				}
 				autoCorrect={false}
 				autoCapitalize="none"
 				returnKeyType="done"
@@ -149,14 +156,21 @@ const NumericInput = () => {
 			<LargeSpacer />
 
 			<Button
-				text={'log ' + (selectedActivity.ActivityID !== -1 ? selectedActivity.ActivityName : 'activity')}
+				text={
+					'log ' +
+					(selectedActivity.ActivityID !== -1
+						? selectedActivity.ActivityName
+						: 'activity')
+				}
 				onPress={() => {
 					if (!debugUpdate(selectedActivity.ActivityID, inputValue)) {
 						if (validate(inputValue)) {
 							store.logActivity(inputValue);
 							this.logInput.clear();
 							updateInputValue('');
-							displayAddedMsg('logged ' + inputValue + ' ' + selectedActivity.Unit);
+							displayAddedMsg(
+								'logged ' + inputValue + ' ' + selectedActivity.Unit,
+							);
 						} else {
 							displayAddedMsg(
 								'make sure all fields are filled & number is entered',

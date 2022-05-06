@@ -10,6 +10,7 @@ import SelectActivity from '../tools/select_activity';
 import Styles from '../style_sheet';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
+import ProgressBar from 'react-native-progress/Bar';
 
 const ViewStats = () => {
 	const store = useGlobalStore();
@@ -58,6 +59,18 @@ const ViewStats = () => {
 							'current streak: ' +
 							activity.CurrentStreak}
 					</Text>
+
+					<Text>{parseFloat(activity.TodayCount/activity.GoalAmount)*100+'%'}</Text>
+					<ProgressBar
+						progress={
+							activity.TodayCount > activity.GoalAmount
+								? 1
+								: activity.TodayCount / activity.GoalAmount
+						}
+						borderRadius={10}
+						width={200}
+						height={15}
+					/>
 
 					<Text zIndex={-1} style={Styles.subTitleText}>
 						{'\n\nall time stats:'}
