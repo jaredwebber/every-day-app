@@ -6,11 +6,11 @@
 import {Text, TextInput, View, ScrollView, Linking} from 'react-native';
 import React from 'react';
 import Styles from '../style_sheet';
-import {CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG} from '../../data/local_async.js';
+import {CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
-import {useGlobalStore} from '../../store/activityStore';
+import {useGlobalStore} from '../../store/activity_store';
 
 const debugUpdateSteps =
 	'go to log activity tab & select activity to update\n' +

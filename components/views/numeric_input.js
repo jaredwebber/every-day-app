@@ -6,11 +6,11 @@
 import {Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import Styles from '../style_sheet';
-import {DEBUGupdate} from '../../data/local_async.js';
+import {DEBUGupdate} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
-import {useGlobalStore} from '../../store/activityStore';
+import {useGlobalStore} from '../../store/activity_store';
 import SelectActivity from '../tools/select_activity';
 
 var CurrentDate = []; //updated by getDate() function

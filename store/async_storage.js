@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const META_KEY = '@metadata';
 
 //params constants: logActivity function
-const UPDATE = 'update';
 const LOG = 'log';
 
 //param constants: Activity Frequency
@@ -221,11 +220,6 @@ const updateActivityLog = async (ActivityID, Count, type) => {
 			console.warn('metadata code null (logActivity)');
 			error = true;
 		}
-	} else if (!error && type === UPDATE) {
-		console.error('Update not implemented');
-		//find activityID
-		//TodayCount=Count
-		error = true;
 	} else {
 		console.error('unexpected logActivity \'type\' param');
 		error = true;
@@ -266,21 +260,9 @@ export const addNewActivity = async (
 	await pushMetadataAsync();
 };
 
-//TODO: Implementation
-export const updateTodayTotalPublic = async (ActivityID, updatedTotal) => {
-	await updateActivityLog(ActivityID, updatedTotal, UPDATE);
-};
-
-//TODO: Implementation
-export const exportData = async () => {
-	//find way to make all async storage data presentable & exportable
-	//make possible to auto-export data? on a daily/weekly/whatever schedule? - upload to cloud as csv?
-};
-
 export const DEBUGupdate = async update => {
 	if (update.length === 10) {
 		await pullMetadataAsync();
-
 		for (var i in metadataCodeCopy) {
 			if (parseInt(metadataCodeCopy[i].ActivityID) === parseInt(update[0])) {
 				try {
@@ -305,7 +287,6 @@ export const DEBUGupdate = async update => {
 					console.warn('Unable to update with values:');
 					console.warn(update);
 				}
-
 				break;
 			}
 		}
@@ -316,9 +297,7 @@ export const DEBUGupdate = async update => {
 
 export const DUMP_DATA_DEBUG = async () => {
 	var keys = await AsyncStorage.getAllKeys();
-
 	var dump = '';
-
 	for (var i in keys) {
 		await getData(keys[i])
 			.then(data => {
@@ -326,12 +305,10 @@ export const DUMP_DATA_DEBUG = async () => {
 			})
 			.catch(err => console.warn(err));
 	}
-
 	return dump;
 };
 
 export const CLEAR_DATA_DEBUG = async () => {
-	// updateCurrentSelection(null);
 	var keys = await AsyncStorage.getAllKeys();
 
 	for (var i in keys) {
@@ -341,8 +318,58 @@ export const CLEAR_DATA_DEBUG = async () => {
 	}
 };
 
-// Will be made redundant once redux stores implemented
 export const getStatisticsPublic = async () => {
 	await pullMetadataAsync();
 	return metadataCodeCopy;
+};
+
+/* ASYNC FUNCTIONS */
+
+const METADATA_STORAGE_KEY = '@metadata';
+
+export const asyncGetActivityMetadata = async () => {
+	try {
+		const jsonValue = await AsyncStorage.getItem(METADATA_STORAGE_KEY);
+		return jsonValue != null ? JSON.parse(jsonValue) : null;
+	} catch (e) {
+		console.error('Error getting data [key: ' + METADATA_STORAGE_KEY + ']');
+	}
+};
+
+export const asyncPostActivityMetadata = async activities => {
+	await storeData(METADATA_STORAGE_KEY, activities)
+		.then(() => {
+			console.log('completed push');
+		})
+		.catch(err => console.warn(err));
+};
+
+export const asyncLogActivity = async (activityID, log) => {
+	await AsyncStorage.mergeItem(activityID, JSON.stringify(log)).then(
+		response => {
+			if (response === null)
+				AsyncStorage.setItem(activityID, new Array(JSON.stringify(log)));
+		},
+	);
+};
+
+export const asyncDeleteAllStorage = async () => {
+	var keys = await AsyncStorage.getAllKeys();
+
+	for (var i in keys) {
+		await AsyncStorage.removeItem(keys[i]).catch(err => console.error(err));
+	}
+};
+
+export const asyncGetAllData = async () => {
+	var logs = [];
+	var keys = await AsyncStorage.getAllKeys();
+
+	try {
+		logs = await AsyncStorage.multiGet(keys);
+	} catch (error) {
+		console.error(error);
+	}
+
+	return logs;
 };

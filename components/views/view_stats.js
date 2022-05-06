@@ -5,7 +5,7 @@
 
 import {Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useGlobalStore} from '../../store/activityStore';
+import {useGlobalStore} from '../../store/activity_store';
 import SelectActivity from '../tools/select_activity';
 import Styles from '../style_sheet';
 import {LargeSpacer} from '../tools/spacers';

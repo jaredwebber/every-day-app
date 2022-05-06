@@ -6,15 +6,14 @@
 import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import RootNavigator from './components/scenes/root_navigator';
-import {getStatisticsPublic} from './data/local_async';
-import {useGlobalStore} from './store/activityStore';
+import {useGlobalStore} from './store/activity_store';
 
 const App = () => {
 	const initialLoad = false;
 	const store = useGlobalStore();
 
 	useEffect(() => {
-		getStatisticsPublic().then(response => store.updateActivities(response));
+		store.populateStore();
 	}, [initialLoad]);
 
 	return (

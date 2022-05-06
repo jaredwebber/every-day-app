@@ -6,12 +6,12 @@
 import {Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import Styles from '../style_sheet';
-import {addNewActivity, getStatisticsPublic} from '../../data/local_async.js';
+import {addNewActivity, getStatisticsPublic} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
 import {LargeSpacer, MedSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {Picker} from '@react-native-picker/picker';
-import {useGlobalStore} from '../../store/activityStore';
+import {useGlobalStore} from '../../store/activity_store';
 
 function getFrequency(string) {
 	if (string === 'daily') {
