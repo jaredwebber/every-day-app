@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import {useGlobalStore} from '../../store/activity_store';
 import SelectActivity from '../tools/select_activity';
 import Styles from '../style_sheet';
-import {LargeSpacer} from '../tools/spacers';
+import {LargeSpacer, SmallSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import ProgressBar from 'react-native-progress/Bar';
 
@@ -36,7 +36,7 @@ const ViewStats = () => {
 
 			<Text style={[Styles.subTitleText]}>view your stats</Text>
 
-			<LargeSpacer />
+			<SmallSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
 				<SelectActivity />
@@ -44,37 +44,48 @@ const ViewStats = () => {
 
 			<LargeSpacer />
 			{activity.ActivityID !== -1 ? (
-				<View style={Styles.containerCenter}>
-					<Text zIndex={-1} style={Styles.subTitleText}>
-						{(activity.GoalFrequency === 'W' ? 'weekly' : 'daily') + ' stats: '}
-					</Text>
+				<View>
+					<View style={Styles.bottomRule}>
+						<Text zIndex={-1} style={Styles.subTitleText}>
+							{activity.GoalFrequency === 'W' ? 'this week' : 'today'}
+						</Text>
+					</View>
 
-					<Text zIndex={-1} style={Styles.subTitleText}>
+					<Text zIndex={-1} style={Styles.subSubTitleText}>
 						{activity.TodayCount +
 							' of ' +
 							activity.GoalAmount +
 							' ' +
 							activity.Unit +
-							's completed\n' +
-							'current streak: ' +
-							activity.CurrentStreak}
+							's'}
 					</Text>
 
-					<Text>{parseFloat(activity.TodayCount/activity.GoalAmount)*100+'%'}</Text>
-					<ProgressBar
-						progress={
-							activity.TodayCount > activity.GoalAmount
-								? 1
-								: activity.TodayCount / activity.GoalAmount
-						}
-						borderRadius={10}
-						width={200}
-						height={15}
-					/>
+					<View style={Styles.containerCenter}>
+						<Text style={Styles.bodyText}>
+							{(
+								parseFloat(activity.TodayCount / activity.GoalAmount) * 100
+							).toFixed(0) + '%'}
+						</Text>
+						<ProgressBar
+							color={
+								activity.TodayCount >= activity.GoalAmount ? 'green' : 'blue'
+							}
+							progress={
+								activity.TodayCount > activity.GoalAmount
+									? 1
+									: activity.TodayCount / activity.GoalAmount
+							}
+							borderRadius={90}
+							width={250}
+							height={25}
+						/>
+					</View>
 
-					<Text zIndex={-1} style={Styles.subTitleText}>
-						{'\n\nall time stats:'}
-					</Text>
+					<View style={Styles.bottomRule}>
+						<Text zIndex={-1} style={Styles.subTitleText}>
+							{'\n\nall time'}
+						</Text>
+					</View>
 
 					<Text style={Styles.subSubTitleText} zIndex={-1}>
 						{'total of ' +
@@ -92,6 +103,8 @@ const ViewStats = () => {
 							's achieved ' +
 							activity.TotalGoalsMet +
 							' times' +
+							'\ncurrent streak: ' +
+							activity.CurrentStreak +
 							'\nlongest ' +
 							(activity.GoalFrequency === 'W' ? 'weekly' : 'daily') +
 							' streak ' +

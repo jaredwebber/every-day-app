@@ -14,7 +14,7 @@ const Styles = StyleSheet.create({
 	containerCenter: {
 		paddingBottom: 4,
 		paddingTop: 4,
-		paddingHorizontal: 2,
+		paddingHorizontal: 20,
 		alignItems: 'center',
 	},
 
@@ -54,6 +54,13 @@ const Styles = StyleSheet.create({
 		paddingHorizontal: 4,
 		borderStyle: 'solid',
 	},
+
+	bottomRule: {
+		borderBottomColor: 'black',
+		borderBottomWidth:1,
+		paddingTop: 2,
+		marginBottom: 5
+	},	
 
 	//Titles
 	titleText: {
