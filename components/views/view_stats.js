@@ -18,11 +18,10 @@ const ViewStats = () => {
 
 	useEffect(() => {
 		console.log('select_activity.js');
-		console.log(activity);
 		setActivity(store.getSelectedActivity());
 	}, [
 		store.getSelectedActivity().TodayCount,
-		store.getSelectedActivity.ActivityID,
+		store.getSelectedActivity().ActivityID,
 	]);
 
 	return (

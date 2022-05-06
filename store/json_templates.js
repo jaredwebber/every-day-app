@@ -1,4 +1,4 @@
-export const activityJSON = (name, goal, frequency, unit) => {
+export function activityJSON(name, goal, frequency, unit) {
 	var date = new Date();
 	this.ActivityID = date.getTime().toString();
 	this.ActivityName = name;
@@ -14,9 +14,9 @@ export const activityJSON = (name, goal, frequency, unit) => {
 	this.LongestStreak = 0;
 	this.GoalFrequency = frequency;
 	this.Unit = unit;
-};
+}
 
-export const logJSON = (count) => {
+export function logJSON(count) {
 	this.utc = new Date().getTime().toString();
 	this.count = count;
-};
+}

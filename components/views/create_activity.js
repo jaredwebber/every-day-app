@@ -6,9 +6,8 @@
 import {Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import Styles from '../style_sheet';
-import {addNewActivity, getStatisticsPublic} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
-import {LargeSpacer, MedSpacer} from '../tools/spacers';
+import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {Picker} from '@react-native-picker/picker';
 import {useGlobalStore} from '../../store/activity_store';
@@ -53,17 +52,24 @@ const CreateActivity = () => {
 
 			<Header />
 
-			<Picker
-				selectedValue={frequencyString}
-				onValueChange={itemValue => {
-					updateFrequencyString(itemValue);
-					updateFrequency(getFrequency(itemValue));
-				}}
-				style={{height: 30, width: 200}}
-				prompt="pick a frequency">
-				<Picker.Item label={'Daily'} value={'daily'} key={'D'} />
-				<Picker.Item label={'Weekly'} value={'weekly'} key={'W'} />
-			</Picker>
+			<LargeSpacer />
+			<LargeSpacer />
+			<LargeSpacer />
+
+			<View style={Styles.pickerContainer}>
+
+				<Picker
+					selectedValue={frequencyString}
+					onValueChange={itemValue => {
+						updateFrequencyString(itemValue);
+						updateFrequency(getFrequency(itemValue));
+					}}
+					style={{height: 10, width: 200}}
+					prompt="pick a frequency">
+					<Picker.Item label={'Daily'} value={'daily'} key={'D'} />
+					<Picker.Item label={'Weekly'} value={'weekly'} key={'W'} />
+				</Picker>
+			</View>
 
 			<Text style={Styles.subTitleText}>add new activity</Text>
 
@@ -72,7 +78,8 @@ const CreateActivity = () => {
 			<LargeSpacer />
 			<LargeSpacer />
 			<LargeSpacer />
-			<MedSpacer />
+			<LargeSpacer />
+			<LargeSpacer />
 
 			<TextInput
 				style={[Styles.textInput]}
@@ -118,12 +125,7 @@ const CreateActivity = () => {
 				text="create activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
-						// TODO: Clean up - move getStatisticsPublic to activityStore
-						addNewActivity(activityName, goalAmount, frequency, unit).then(() =>
-							getStatisticsPublic().then(response => {
-								store.updateActivities(response);
-							}),
-						);
+						store.newActivity(activityName, goalAmount, frequency, unit);
 						this.goalInput.clear();
 						this.unitInput.clear();
 						this.nameInput.clear();

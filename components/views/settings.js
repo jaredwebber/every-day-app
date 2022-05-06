@@ -6,11 +6,13 @@
 import {Text, TextInput, View, ScrollView, Linking} from 'react-native';
 import React from 'react';
 import Styles from '../style_sheet';
-import {CLEAR_DATA_DEBUG, DUMP_DATA_DEBUG} from '../../store/async_storage.js';
 import {Button} from '../tools/button';
 import {LargeSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {useGlobalStore} from '../../store/activity_store';
+
+//For Debugging Only
+import { asyncGetAllData } from '../../store/async_storage';
 
 const debugUpdateSteps =
 	'go to log activity tab & select activity to update\n' +
@@ -23,7 +25,7 @@ const debugUpdateSteps =
 var curr = null;
 
 const refresh = async () => {
-	curr = await DUMP_DATA_DEBUG();
+	curr = (JSON.stringify(await asyncGetAllData())).replaceAll('\\', '');
 	this.DebugDisplay.setNativeProps({text: curr});
 	return curr;
 };
@@ -59,7 +61,7 @@ const Settings = () => {
 
 			<Button
 				onPress={() => {
-					CLEAR_DATA_DEBUG();
+					store.deleteStorage();
 					store.selectActivity(-1);
 					refresh();
 				}}

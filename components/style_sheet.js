@@ -24,6 +24,10 @@ const Styles = StyleSheet.create({
 		paddingHorizontal: 2,
 	},
 
+	pickerContainer:{
+		paddingTop: -100
+	},
+
 	padItem: {
 		paddingBottom: 2,
 		paddingTop: 2,

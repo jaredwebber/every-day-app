@@ -13,15 +13,14 @@ const SelectActivity = () => {
 	const store = useGlobalStore();
 
 	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(
-		store.getSelectedActivity().ActivityID,
-	);
+	const [value, setValue] = useState(store.getSelectedActivity().ActivityID);
 	const [items, setItems] = useState(store.getActivities());
 
 	useEffect(() => {
 		console.log('select_activity.js');
 		setValue(store.getSelectedActivity().ActivityID);
-	}, [store.getSelectedActivity().ActivityID]);
+		setItems(store.getActivities());
+	}, [store.getSelectedActivity().ActivityID, store.getActivities().length]);
 
 	return (
 		<View style={Styles.containerCenter}>
@@ -29,7 +28,7 @@ const SelectActivity = () => {
 				schema={{label: 'ActivityName', value: 'ActivityID'}}
 				open={open}
 				value={value}
-				items={items !== undefined ? items : []}
+				items={(items !== undefined && items !== null) ? items : []}
 				setOpen={setOpen}
 				setValue={setValue}
 				setItems={setItems}

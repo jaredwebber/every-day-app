@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { asyncLogActivity } from './async_storage';
-import { activityJSON, logJSON } from './json_templates';
+import AndroidHorizontalScrollViewNativeComponent from 'react-native/Libraries/Components/ScrollView/AndroidHorizontalScrollViewNativeComponent';
+import {asyncLogActivity} from './async_storage';
+import {logJSON} from './json_templates';
 
 function daysInMonth(month, year) {
 	return new Date(year, month, 0).getDate();
@@ -27,16 +28,38 @@ function areDifferentWeeks(dateStringOne, dateStringTwo) {
 	return result;
 }
 
+export const processValidateCurrent = activity => {
+	const currDateString = new Date().toLocaleDateString().trim();
+	if (
+		(activity.Frequency === 'D' &&
+			activity.LastGoalInit.trim() !== currDateString) ||
+		(activity.Frequency === 'W' &&
+			areDifferentWeeks(activity.LastGoalInit, currDateString))
+	) {
+		activity.LastGoalInit = currDateString;
+		activity.TodayLogs = 0;
+
+		if (activity.TodayCount >= activity.GoalAmount) {
+			activity.CurrentStreak = activity.CurrentStreak + 1;
+			activity.TotalGoalsMet++;
+			if (activity.CurrentStreak > activity.LongestStreak) {
+				activity.LongestStreak = activity.CurrentStreak;
+			}
+		} else {
+			activity.CurrentStreak = 0;
+		}
+		activity.TodayCount = 0;
+	}
+
+	return activity;
+};
+
 export const processLogActivity = (activityID, count) => {
 	asyncLogActivity(activityID, new logJSON(count));
 };
 
-export const processAddNewActivity = (name, amount, frequency, unit) => {
-
-};
-
 // TODO - Rework for stores
-export const processDEBUG_UPDATE = (arr) => {
+export const processDEBUG_UPDATE = arr => {
 	/*
 	if (update.length === 10) {
 		for (var i in metadataCodeCopy) {
