@@ -13,7 +13,7 @@ const Header = () => {
 	return (
 		<View style={Styles.headerContainer}>
 			<View style={Styles.borderHeader}>
-				<Text style={Styles.titleText}>every day</Text>
+				<Text style={Styles.titleText}>Every Day</Text>
 			</View>
 		</View>
 	);

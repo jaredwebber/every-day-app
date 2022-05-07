@@ -45,6 +45,11 @@ const Styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 
+	//DataTable
+	firstColumn: {
+		flex:3,
+	},	
+
 	//Design
 	borderHeader: {
 		borderWidth: 3,
@@ -57,10 +62,10 @@ const Styles = StyleSheet.create({
 
 	bottomRule: {
 		borderBottomColor: 'black',
-		borderBottomWidth:1,
+		borderBottomWidth: 1,
 		paddingTop: 2,
-		marginBottom: 5
-	},	
+		marginBottom: 5,
+	},
 
 	//Titles
 	titleText: {
@@ -81,6 +86,12 @@ const Styles = StyleSheet.create({
 	bodyText: {
 		fontWeight: '400',
 		fontSize: 16,
+	},
+
+	floatDown: {
+		marginBottom: -25,
+		fontWeight: '600',
+		fontSize: 20,
 	},
 
 	//Interaction
@@ -161,6 +172,12 @@ const Styles = StyleSheet.create({
 		height: windowHeight + 60, //Account for top notch adjustment
 		width: windowWidth,
 		opacity: 0.3,
+	},
+
+	progressBar: {
+		width: (2 * windowWidth) / 3,
+		height: 25,
+		borderRadius: 90,
 	},
 
 	//Spacers

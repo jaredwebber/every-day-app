@@ -7,19 +7,21 @@ function daysInMonth(month, year) {
 
 function areDifferentWeeks(dateStringOne, dateStringTwo) {
 	var result = true;
-	var stringOne = dateStringOne.split('-');
-	var stringTwo = dateStringTwo.split('-');
+	var stringOne = dateStringOne.split('/');
+	var stringTwo = dateStringTwo.split('/');
 
-	if (parseInt(stringOne[1]) === parseInt(stringTwo[1])) {
+	//console.log(stringOne);
+
+	if (parseInt(stringOne[0]) === parseInt(stringTwo[0])) {
 		//if same month
-		if (parseInt(stringTwo[2]) - parseInt(stringOne[2]) < 7) {
+		if (parseInt(stringTwo[1]) - parseInt(stringOne[1]) < 7) {
 			result = false;
 		}
 	} else {
 		var daysInFirstMonth =
-			daysInMonth(parseInt(stringOne[1]), new Date().getFullYear()) -
-			parseInt(stringOne[2]);
-		if (parseInt(daysInFirstMonth) + parseInt(stringTwo[2]) < 7) {
+			daysInMonth(parseInt(stringOne[0]), new Date().getFullYear()) -
+			parseInt(stringOne[1]);
+		if (parseInt(daysInFirstMonth) + parseInt(stringTwo[1]) < 7) {
 			result = false;
 		}
 	}
@@ -28,25 +30,29 @@ function areDifferentWeeks(dateStringOne, dateStringTwo) {
 
 export const processValidateCurrent = activity => {
 	const currDateString = new Date().toLocaleDateString().trim();
+
 	if (
-		(activity.Frequency === 'D' &&
+		(activity.GoalFrequency === 'D' &&
 			activity.LastGoalInit.trim() !== currDateString) ||
-		(activity.Frequency === 'W' &&
+		(activity.GoalFrequency === 'W' &&
 			areDifferentWeeks(activity.LastGoalInit, currDateString))
 	) {
-		activity.LastGoalInit = currDateString;
-		activity.TodayLogs = 0;
+		var updatedActivity = JSON.parse(JSON.stringify(activity));
+		//console.log('what');
+		updatedActivity.LastGoalInit = currDateString;
+		updatedActivity.TodayLogs = 0;
 
-		if (activity.TodayCount >= activity.GoalAmount) {
-			activity.CurrentStreak = activity.CurrentStreak + 1;
-			activity.TotalGoalsMet++;
-			if (activity.CurrentStreak > activity.LongestStreak) {
-				activity.LongestStreak = activity.CurrentStreak;
+		if (updatedActivity.TodayCount >= updatedActivity.GoalAmount) {
+			updatedActivity.CurrentStreak = updatedActivity.CurrentStreak + 1;
+			updatedActivity.TotalGoalsMet++;
+			if (updatedActivity.CurrentStreak > updatedActivity.LongestStreak) {
+				updatedActivity.LongestStreak = updatedActivity.CurrentStreak;
 			}
 		} else {
-			activity.CurrentStreak = 0;
+			updatedActivity.CurrentStreak = 0;
 		}
-		activity.TodayCount = 0;
+		updatedActivity.TodayCount = 0;
+		return updatedActivity;
 	}
 
 	return activity;

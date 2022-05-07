@@ -7,7 +7,7 @@ import {Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import Styles from '../style_sheet';
 import {Button} from '../tools/button';
-import {LargeSpacer} from '../tools/spacers';
+import {LargeSpacer, SmallSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {useGlobalStore} from '../../store/activity_store';
 import SelectActivity from '../tools/select_activity';
@@ -104,8 +104,8 @@ const NumericInput = () => {
 			<Header />
 
 			<LargeSpacer />
-			<LargeSpacer />
-			<LargeSpacer />
+			<Text style={[Styles.subTitleText]}> </Text>
+			<SmallSpacer />
 
 			<View zIndex={999} style={Styles.dropdownContainer}>
 				<SelectActivity />
@@ -122,7 +122,7 @@ const NumericInput = () => {
 					alignItems: 'flex-start',
 				}}>
 				<Text style={[Styles.padItem, Styles.subTitleText]}>
-					log{' '}
+					Log{' '}
 					{selectedActivity.ActivityID !== -1
 						? selectedActivity.ActivityName
 						: 'activity'}{' '}
@@ -139,10 +139,10 @@ const NumericInput = () => {
 				//keyboardType='numeric'
 				keyboardType="default" //to be switched to numeric once debug update is changed
 				placeholder={
-					'number of ' +
+					'Number of ' +
 					(selectedActivity.ActivityID !== -1
 						? selectedActivity.Unit + 's'
-						: 'activity')
+						: 'Activity')
 				}
 				autoCorrect={false}
 				autoCapitalize="none"
@@ -157,10 +157,10 @@ const NumericInput = () => {
 
 			<Button
 				text={
-					'log ' +
+					'Log ' +
 					(selectedActivity.ActivityID !== -1
 						? selectedActivity.ActivityName
-						: 'activity')
+						: 'Activity')
 				}
 				onPress={() => {
 					if (!debugUpdate(selectedActivity.ActivityID, inputValue)) {
@@ -169,11 +169,11 @@ const NumericInput = () => {
 							this.logInput.clear();
 							updateInputValue('');
 							displayAddedMsg(
-								'logged ' + inputValue + ' ' + selectedActivity.Unit,
+								'Logged ' + inputValue + ' ' + selectedActivity.Unit,
 							);
 						} else {
 							displayAddedMsg(
-								'make sure all fields are filled & number is entered',
+								'Make Sure All Fields Are Filled & Number Is Entered',
 							);
 						}
 					} else {

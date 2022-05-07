@@ -65,12 +65,12 @@ const CreateActivity = () => {
 					}}
 					style={{height: 10, width: 200}}
 					prompt="pick a frequency">
-					<Picker.Item label={'Daily'} value={'daily'} key={'D'} />
-					<Picker.Item label={'Weekly'} value={'weekly'} key={'W'} />
+					<Picker.Item label={'Daily'} value={'Daily'} key={'D'} />
+					<Picker.Item label={'Weekly'} value={'Weekly'} key={'W'} />
 				</Picker>
 			</View>
 
-			<Text style={Styles.subTitleText}>add new activity</Text>
+			<Text style={Styles.subTitleText}>Add New Activity</Text>
 
 			<LargeSpacer />
 			<LargeSpacer />
@@ -84,7 +84,7 @@ const CreateActivity = () => {
 				style={[Styles.textInput]}
 				placeholderTextColor={'#404040'}
 				keyboardType="ascii-capable"
-				placeholder="enter activity name"
+				placeholder="Enter Activity Name"
 				autoCapitalize="none"
 				returnKeyType="done"
 				onChangeText={activityName => updateName(activityName.trim())}
@@ -97,7 +97,7 @@ const CreateActivity = () => {
 				style={[Styles.textInput]}
 				placeholderTextColor={'#404040'}
 				keyboardType="ascii-capable"
-				placeholder="enter measurement unit" // (minutes, reps, ml, etc) - add in 'i' popup?
+				placeholder="Enter Measurement Unit" // (minutes, reps, ml, etc) - add in 'i' popup?
 				autoCapitalize="none"
 				returnKeyType="done"
 				onChangeText={unit => updateUnit(unit)}
@@ -110,7 +110,7 @@ const CreateActivity = () => {
 				style={[Styles.textInput]}
 				placeholderTextColor={'#404040'}
 				keyboardType="numeric"
-				placeholder={'enter ' + frequencyString + ' goal amount'}
+				placeholder={'Enter ' + frequencyString + ' Goal Amount'}
 				returnKeyType="done"
 				onChangeText={goalAmount => updateGoal(goalAmount)}
 				ref={input => {
@@ -121,7 +121,7 @@ const CreateActivity = () => {
 			<LargeSpacer />
 
 			<Button
-				text="create activity"
+				text="Create Activity"
 				onPress={() => {
 					if (validate(activityName, unit, goalAmount)) {
 						store.newActivity(activityName, goalAmount, frequency, unit);
@@ -133,7 +133,7 @@ const CreateActivity = () => {
 						updateUnit(null);
 						displayAddedMsg('added ' + activityName);
 					} else {
-						displayAddedMsg('make sure all fields are filled');
+						displayAddedMsg('Make Sure All Fields Are Filled');
 					}
 				}}
 			/>

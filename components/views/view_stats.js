@@ -11,6 +11,7 @@ import Styles from '../style_sheet';
 import {LargeSpacer, SmallSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import ProgressBar from 'react-native-progress/Bar';
+import {DataTable} from 'react-native-paper';
 
 const ViewStats = () => {
 	const store = useGlobalStore();
@@ -34,7 +35,7 @@ const ViewStats = () => {
 
 			<LargeSpacer />
 
-			<Text style={[Styles.subTitleText]}>view your stats</Text>
+			<Text style={[Styles.subTitleText]}>View Your Stats</Text>
 
 			<SmallSpacer />
 
@@ -47,71 +48,89 @@ const ViewStats = () => {
 				<View>
 					<View style={Styles.bottomRule}>
 						<Text zIndex={-1} style={Styles.subTitleText}>
-							{activity.GoalFrequency === 'W' ? 'this week' : 'today'}
+							{activity.GoalFrequency === 'W' ? 'This Week' : 'Today'}
 						</Text>
 					</View>
-
-					<Text zIndex={-1} style={Styles.subSubTitleText}>
-						{activity.TodayCount +
-							' of ' +
-							activity.GoalAmount +
-							' ' +
-							activity.Unit +
-							's'}
-					</Text>
-
+					<LargeSpacer />
+					<SmallSpacer />
 					<View style={Styles.containerCenter}>
-						<Text style={Styles.bodyText}>
+						<Text style={Styles.floatDown} zIndex={999}>
 							{(
 								parseFloat(activity.TodayCount / activity.GoalAmount) * 100
 							).toFixed(0) + '%'}
 						</Text>
 						<ProgressBar
 							color={
-								activity.TodayCount >= activity.GoalAmount ? 'green' : 'blue'
+								activity.TodayCount >= activity.GoalAmount
+									? '#00C764'
+									: '#1273DE'
 							}
 							progress={
 								activity.TodayCount > activity.GoalAmount
 									? 1
 									: activity.TodayCount / activity.GoalAmount
 							}
-							borderRadius={90}
-							width={250}
-							height={25}
+							height={Styles.progressBar.height}
+							width={Styles.progressBar.width}
+							borderRadius={Styles.progressBar.borderRadius}
+							zIndex={-1}
 						/>
+						<Text zIndex={-1} style={Styles.bodyText}>
+							{activity.TodayCount +
+								' of ' +
+								activity.GoalAmount +
+								' ' +
+								activity.Unit +
+								's in ' +
+								activity.TodayLogs +
+								' log' + (activity.TodayLogs == 1 ? '' : 's')}
+						</Text>
 					</View>
 
 					<View style={Styles.bottomRule}>
 						<Text zIndex={-1} style={Styles.subTitleText}>
-							{'\n\nall time'}
+							{'\n\nAll Time'}
 						</Text>
 					</View>
 
-					<Text style={Styles.subSubTitleText} zIndex={-1}>
-						{'total of ' +
-							activity.GrandTotal +
-							' ' +
-							activity.Unit +
-							's in ' +
-							activity.TotalLogCount +
-							' logs\n' +
-							(activity.GoalFrequency == 'W' ? 'weekly' : 'daily') +
-							' goal of ' +
-							activity.GoalAmount +
-							' ' +
-							activity.Unit +
-							's achieved ' +
-							activity.TotalGoalsMet +
-							' times' +
-							'\ncurrent streak: ' +
-							activity.CurrentStreak +
-							'\nlongest ' +
-							(activity.GoalFrequency === 'W' ? 'weekly' : 'daily') +
-							' streak ' +
-							activity.LongestStreak +
-							'\nhighest goal period ' +
-							activity.HighestPeriod}
-					</Text>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Total {activity.Unit}s
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.GrandTotal}</DataTable.Cell>
+					</DataTable.Row>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Total Logs
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.TotalLogCount}</DataTable.Cell>
+					</DataTable.Row>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Total Goals Met
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.TotalGoalsMet}</DataTable.Cell>
+					</DataTable.Row>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Current {activity.GoalFrequency == 'W' ? 'Weekly' : 'Daily'}{' '}
+							Streak
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.CurrentStreak}</DataTable.Cell>
+					</DataTable.Row>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Longest {activity.GoalFrequency == 'W' ? 'Weekly' : 'Daily'}{' '}
+							Streak
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.LongestStreak}</DataTable.Cell>
+					</DataTable.Row>
+					<DataTable.Row>
+						<DataTable.Cell style={Styles.firstColumn}>
+							Highest Single {activity.GoalFrequency == 'W' ? 'Week' : 'Day'}
+						</DataTable.Cell>
+						<DataTable.Cell numeric>{activity.HighestPeriod}</DataTable.Cell>
+					</DataTable.Row>
 				</View>
 			) : null}
 		</View>

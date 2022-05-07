@@ -12,7 +12,7 @@ import Header from '../tools/header';
 import {useGlobalStore} from '../../store/activity_store';
 
 //For Debugging Only
-import { asyncGetAllData } from '../../store/async_storage';
+import {asyncGetAllData} from '../../store/async_storage';
 
 const debugUpdateSteps =
 	'go to log activity tab & select activity to update\n' +
@@ -25,7 +25,7 @@ const debugUpdateSteps =
 var curr = null;
 
 const refresh = async () => {
-	curr = (JSON.stringify(await asyncGetAllData())).replaceAll('\\', '');
+	curr = JSON.stringify(await asyncGetAllData()).replaceAll('\\', '');
 	this.DebugDisplay.setNativeProps({text: curr});
 	return curr;
 };
@@ -45,11 +45,7 @@ const Settings = () => {
 			<Header />
 
 			<Text style={[Styles.padItem, Styles.subSubTitleText]}>
-				User Settings[tbd]
-			</Text>
-
-			<Text style={[Styles.padItem, Styles.subSubTitleText]}>
-				(Debug) Settings
+				User Settings [tbd]
 			</Text>
 
 			<Button
@@ -57,15 +53,6 @@ const Settings = () => {
 					refresh();
 				}}
 				text={'data dump'}
-			/>
-
-			<Button
-				onPress={() => {
-					store.deleteStorage();
-					store.selectActivity(-1);
-					refresh();
-				}}
-				text={'clear all data'}
 			/>
 
 			<Button
@@ -83,8 +70,19 @@ const Settings = () => {
 				onPress={() => {
 					showDebugEditSteps();
 				}}
-				text={'update activity log/history'}
+				text={'update activity history'}
 			/>
+
+			<Button
+				onPress={() => {
+					store.deleteStorage();
+					store.selectActivity(-1);
+					refresh();
+				}}
+				text={'clear all data'}
+			/>
+
+			<LargeSpacer />
 
 			<ScrollView>
 				<TextInput

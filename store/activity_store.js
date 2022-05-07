@@ -72,9 +72,11 @@ const wrapState = currStore => ({
 		asyncGetActivityMetadata()
 			.then(response => {
 				metadata = [];
+				//console.log(response);
 				for (var i in response) {
 					metadata[i] = processValidateCurrent(response[i]);
 				}
+				//console.log(metadata);
 				currStore.activities.set(metadata);
 				saveAsync();
 			})

@@ -14,13 +14,13 @@ const Tab = createBottomTabNavigator();
 
 const screenOptions = (route, color) => {
 	switch (route.name) {
-	case 'view stats':
+	case 'View Stats':
 		return <Ionicons name={'stats-chart-outline'} color={color} size={24} />;
-	case 'log activity':
+	case 'Log Activity':
 		return <MaterialIcons name={'track-changes'} color={color} size={24} />;
-	case 'new activity':
+	case 'New Activity':
 		return <Ionicons name={'add'} color={color} size={24} />;
-	case 'settings':
+	case 'Settings':
 		return <Ionicons name={'settings-outline'} color={color} size={24} />;
 	default:
 		break;
@@ -43,10 +43,10 @@ const RootNavigator = () => {
 						backgroundColor: '#1E1B26',
 					},
 				})}>
-				<Tab.Screen name="new activity" component={CreateActivity} />
-				<Tab.Screen name="view stats" component={ViewStats} />
-				<Tab.Screen name="log activity" component={NumericInput} />
-				<Tab.Screen name="settings" component={Settings} />
+				<Tab.Screen name='New Activity' component={CreateActivity} />
+				<Tab.Screen name='View Stats' component={ViewStats} />
+				<Tab.Screen name='Log Activity' component={NumericInput} />
+				<Tab.Screen name='Settings' component={Settings} />
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
