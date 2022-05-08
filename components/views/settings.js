@@ -59,7 +59,7 @@ const Settings = () => {
 				onPress={() => {
 					Linking.openURL(
 						'mailto:jaredwebberdev@gmail.com?body=' +
-							JSON.stringify(store.getActivities()) +
+							JSON.stringify(store.getAllData()) +
 							'&subject=DataDump',
 					);
 				}}

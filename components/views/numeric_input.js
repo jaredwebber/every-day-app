@@ -86,7 +86,7 @@ const NumericInput = () => {
 
 			updateArr.push(id);
 			//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
-			//debug,Pushups,120,200,200,200,200,200,200,newUnit
+			//debug,NewName,120,200,200,200,200,200,200,newUnit
 			var items = val.split(',');
 			for (var i = 1; i < items.length; i++) {
 				updateArr.push(items[i].trim());

@@ -103,6 +103,7 @@ const wrapState = currStore => ({
 				array,
 			),
 		);
+		saveAsync();
 	},
 });
 
