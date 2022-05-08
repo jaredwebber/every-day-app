@@ -5,9 +5,6 @@ Currently tested only on iOS.
 
 Built Using [React Native](https://reactnative.dev) 
 
-<img src="./github/add-activity.png" height="250">
-<img src="./github/view-stats-weekly.png" height="250">
-<img src="./github/view-stats-daily.png" height="250">
-<img src="./github/log-activity.png" height="250">
+<img alt="Create Activity" src="./github/add-activity.png" height="250"> <img alt="View Weekly Stats" src="./github/view-stats-weekly.png" height="250"> <img alt="View Daily Stats" src="./github/view-stats-daily.png" height="250"> <img alt="Log Activity" src="./github/log-activity.png" height="250">
 
 Startup (iOS): `npm install && npx pod-install && npx run-ios`
