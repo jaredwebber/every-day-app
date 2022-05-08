@@ -1,7 +1,7 @@
 # Every Day
 
 Daily or weekly habit tracking mobile app which takes numeric input.  
-Currently tested only on iOS.
+Currently tested on iOS only.
 
 Built Using [React Native](https://reactnative.dev) 
 
