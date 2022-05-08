@@ -1,8 +1,10 @@
-# every-day-app
+# Every Day
 
-Habit tracker mobile app which takes numeric input, not solely a checkmark for the day.  
-Though likely could accomodate Android as react-native is designed to be multi-platform, the current build is only tested on ios. 
+Daily or weekly habit tracking mobile app which takes numeric input.  
+Currently tested on iOS only.
 
 Built Using [React Native](https://reactnative.dev) 
 
-Startup (ios):  `npx run-ios`
+<img alt="Create Activity" src="./github/add-activity.png" height="250"> <img alt="View Weekly Stats" src="./github/view-stats-weekly.png" height="250"> <img alt="View Daily Stats" src="./github/view-stats-daily.png" height="250"> <img alt="Log Activity" src="./github/log-activity.png" height="250">
+
+Startup (iOS): `npm install && npx pod-install && npx run-ios`

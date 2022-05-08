@@ -3,59 +3,40 @@
  * @format
  */
 
- import {Text, View} from 'react-native';
- import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {useGlobalStore} from '../../store/activity_store';
+import Styles from '../style_sheet';
 
- import {Picker} from '@react-native-picker/picker';
+const SelectActivity = () => {
+	const store = useGlobalStore();
 
- import DropDownPicker from 'react-native-dropdown-picker';
+	const [open, setOpen] = useState(false);
+	const [value, setValue] = useState(store.getSelectedActivity().ActivityID);
+	const [items, setItems] = useState(store.getActivities());
 
+	useEffect(() => {
+		setValue(store.getSelectedActivity().ActivityID);
+		setItems(store.getActivities());
+	}, [store.getSelectedActivity().ActivityID, store.getActivities().length]);
 
+	return (
+		<View style={Styles.containerCenter}>
+			<DropDownPicker
+				schema={{label: 'ActivityName', value: 'ActivityID'}}
+				open={open}
+				value={value}
+				items={items !== undefined && items !== null ? items : []}
+				setOpen={setOpen}
+				setValue={setValue}
+				setItems={setItems}
+				onChangeValue={() => {
+					store.selectActivity(value);
+				}}
+			/>
+		</View>
+	);
+};
 
- //Import Custom Styles
- import Styles from '../style_sheet';
-
- //Import Custom Components
- import {Button, SplitButton} from './button'
- import {SmallSpacer, MedSpacer, LargeSpacer} from './spacers';
-
- import dbAccess from '../../data/local_async'
-
- import GLOBAL from '../../index'
-
- const SelectActivity = () => {
-    const [selectedActivity, setSelected] = useState();
-
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState(global.selectionOptions);
-
-  useEffect(() => {
-    GLOBAL.refreshMetadata();
-    setItems(global.selectionOptions);
-}, [global.selectionOptions])
-
-   return (
-    <View 
-        style = {
-            Styles.containerCenter
-        }>
-       
-    <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      onChangeValue={()=>{global.currentSelection=value;}}
-    />
-
-    </View>
-   );
- }
- 
- export default SelectActivity;
-
-
- 
+export default SelectActivity;

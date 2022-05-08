@@ -3,35 +3,18 @@
  * @format
  */
 
- import {Text, View} from 'react-native';
- import React from 'react';
+import {Text, View} from 'react-native';
+import React from 'react';
+import Styles from '../style_sheet';
 
- //Import Custom Styles
- import Styles from '../style_sheet';
- 
- const Header = () => {
-   return (
-    <View 
-        style = {
-            Styles.headerContainer
-        }>
-        
-        <View 
-            style= {
-                Styles.borderHeader
-            }>
+const Header = () => {
+	return (
+		<View style={Styles.headerContainer}>
+			<View style={Styles.borderHeader}>
+				<Text style={Styles.titleText}>Every Day</Text>
+			</View>
+		</View>
+	);
+};
 
-            <Text 
-                style = {
-                    Styles.titleText
-                }>  
-                every day
-            </Text>
-
-        </View>
-    </View>
-   );
- };
- 
- export default Header;
- 
+export default Header;
