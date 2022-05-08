@@ -1,10 +1,13 @@
+/**
+ * @flow strict-local
+ * @format
+ */
+
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-//View Components
 import NumericInput from '../views/numeric_input';
 import ViewStats from '../views/view_stats';
 import CreateActivity from '../views/create_activity';

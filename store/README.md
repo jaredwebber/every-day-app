@@ -1,48 +1,37 @@
-### Goals for storage:
-- get app working on local storage with plan below
-- once working reliably, can add cloud (firebase?) db support & OAuth signin?
-
-https://react-native-async-storage.github.io/async-storage/docs/usage
-
 ### Storage Organization:
-- [HARDCODED] Storage key for metadata json object (need enclosing around objects?)
+
+- Storage key for metadata json object
+```
     {
-        "ActivityID - One":{
-            "ActivityName": "One",
-            "GoalAmount": -1,
-            "CurrentStreak": -1,
-            "GrandTotal": -1,
-            "LogCount": -1,
-            "TodayDate": "DAY-MONTH-YEAR",
-            "TodayCount": -1,
-            "TodayLogs": -1
-        },
-        "ActivityID - Two":{
-            "ActivityName": "Two",
-            "GoalAmount": -1,
-            "CurrentStreak": -1,
-            "GrandTotal": -1,
-            "LogCount": -1,
-            "TodayDate": "DAY-MONTH-YEAR",
-            "TodayCount": -1,
-            "TodayLogs": -1
-        },
+        ActivityID: {
+            ActivityID = UNIQUE_UTC_TIME;
+            ActivityName = NAME STRING;
+            GoalAmount = INTEGER;
+            CurrentStreak = INTEGER;
+            HighestPeriod = INTEGER;
+            TotalGoalsMet = INTEGER;
+            GrandTotal = INTEGER;
+            TotalLogCount = INTEGER;
+            TodayCount = INTEGER;
+            LastGoalInit = MONTH-DAY-YEAR;
+            TodayLogs = INTEGER;
+            LongestStreak = INTEGER;
+            GoalFrequency = W or D;
+            Unit = UNIT STRING;
+        }
     }
-- Storage key for activity logs: divided by activity - key is activityID?
-    - Make activityIDs some sort of hash(?) or at least like 3 characters
+```
+
+- Storage key for activity logs: divided by ActivityID key
+```
     {
-        {
-            "UTC": utcOne,
-            "Count": numOne
-        },
-        {
-            "UTC": utcTwo,
-            "Count": numTwo
-        },
+        ActivityID: {
+            UTC: utcOne,
+            Count: numOne
+        }
     }
+```
 
+**Constructors in `json_templates.js`**
 
-### Add Export Data option to email(?) yourself a csv(?) with all your user data
-
-### DECIDE WHAT FUNCTIONS MUST BE ASYNC & FIGURE OUT THE DELAY ON SOME REPEATED CALLS
-- Start using the promise returns from async functions to determine when to continue
+[AsyncStorage Package](https://react-native-async-storage.github.io/async-storage/docs/usage)

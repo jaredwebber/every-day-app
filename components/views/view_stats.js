@@ -19,7 +19,6 @@ const ViewStats = () => {
 	const [activity, setActivity] = useState(store.getSelectedActivity());
 
 	useEffect(() => {
-		console.log('select_activity.js');
 		setActivity(store.getSelectedActivity());
 	}, [
 		store.getSelectedActivity().TodayCount,
@@ -42,7 +41,6 @@ const ViewStats = () => {
 			<View zIndex={999} style={Styles.dropdownContainer}>
 				<SelectActivity />
 			</View>
-
 			<LargeSpacer />
 			{activity.ActivityID !== -1 ? (
 				<View>
@@ -83,16 +81,15 @@ const ViewStats = () => {
 								activity.Unit +
 								's in ' +
 								activity.TodayLogs +
-								' log' + (activity.TodayLogs == 1 ? '' : 's')}
+								' log' +
+								(activity.TodayLogs == 1 ? '' : 's')}
 						</Text>
 					</View>
-
 					<View style={Styles.bottomRule}>
 						<Text zIndex={-1} style={Styles.subTitleText}>
 							{'\n\nAll Time'}
 						</Text>
 					</View>
-
 					<DataTable.Row>
 						<DataTable.Cell style={Styles.firstColumn}>
 							Total {activity.Unit}s

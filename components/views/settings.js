@@ -52,7 +52,7 @@ const Settings = () => {
 				onPress={() => {
 					refresh();
 				}}
-				text={'data dump'}
+				text={'Data Dump'}
 			/>
 
 			<Button
@@ -63,14 +63,14 @@ const Settings = () => {
 							'&subject=DataDump',
 					);
 				}}
-				text={'export metadata'}
+				text={'Export Metadata'}
 			/>
 
 			<Button
 				onPress={() => {
 					showDebugEditSteps();
 				}}
-				text={'update activity history'}
+				text={'Update Activity History'}
 			/>
 
 			<Button
@@ -79,7 +79,7 @@ const Settings = () => {
 					store.selectActivity(-1);
 					refresh();
 				}}
-				text={'clear all data'}
+				text={'Clear All Data'}
 			/>
 
 			<LargeSpacer />

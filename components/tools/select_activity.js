@@ -17,7 +17,6 @@ const SelectActivity = () => {
 	const [items, setItems] = useState(store.getActivities());
 
 	useEffect(() => {
-		console.log('select_activity.js');
 		setValue(store.getSelectedActivity().ActivityID);
 		setItems(store.getActivities());
 	}, [store.getSelectedActivity().ActivityID, store.getActivities().length]);

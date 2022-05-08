@@ -5,8 +5,6 @@
 
 import {Text, View} from 'react-native';
 import React from 'react';
-
-//Import Custom Styles
 import Styles from '../style_sheet';
 
 const Header = () => {

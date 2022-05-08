@@ -10,8 +10,6 @@ function areDifferentWeeks(dateStringOne, dateStringTwo) {
 	var stringOne = dateStringOne.split('/');
 	var stringTwo = dateStringTwo.split('/');
 
-	//console.log(stringOne);
-
 	if (parseInt(stringOne[0]) === parseInt(stringTwo[0])) {
 		//if same month
 		if (parseInt(stringTwo[1]) - parseInt(stringOne[1]) < 7) {
@@ -38,7 +36,6 @@ export const processValidateCurrent = activity => {
 			areDifferentWeeks(activity.LastGoalInit, currDateString))
 	) {
 		var updatedActivity = JSON.parse(JSON.stringify(activity));
-		//console.log('what');
 		updatedActivity.LastGoalInit = currDateString;
 		updatedActivity.TodayLogs = 0;
 

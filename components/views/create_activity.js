@@ -13,7 +13,7 @@ import {Picker} from '@react-native-picker/picker';
 import {useGlobalStore} from '../../store/activity_store';
 
 function getFrequency(string) {
-	if (string === 'daily') {
+	if (string === 'Daily') {
 		return 'D';
 	}
 	return 'W';
@@ -41,7 +41,7 @@ const CreateActivity = () => {
 	const [goalAmount, updateGoal] = useState(-1);
 	const [unit, updateUnit] = useState('');
 	const [frequency, updateFrequency] = useState('D');
-	const [frequencyString, updateFrequencyString] = useState('daily');
+	const [frequencyString, updateFrequencyString] = useState('Daily');
 
 	const store = useGlobalStore();
 
@@ -131,10 +131,11 @@ const CreateActivity = () => {
 						updateGoal(null);
 						updateName(null);
 						updateUnit(null);
-						displayAddedMsg('added ' + activityName);
+						displayAddedMsg('Added ' + activityName);
 					} else {
 						displayAddedMsg('Make Sure All Fields Are Filled');
 					}
+					setTimeout(() => displayAddedMsg(''), 3000);
 				}}
 			/>
 

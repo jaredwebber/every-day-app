@@ -86,6 +86,7 @@ const NumericInput = () => {
 
 			updateArr.push(id);
 			//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
+			//debug,Pushups,120,200,200,200,200,200,200,newUnit
 			var items = val.split(',');
 			for (var i = 1; i < items.length; i++) {
 				updateArr.push(items[i].trim());
@@ -169,7 +170,11 @@ const NumericInput = () => {
 							this.logInput.clear();
 							updateInputValue('');
 							displayAddedMsg(
-								'Logged ' + inputValue + ' ' + selectedActivity.Unit,
+								'Logged ' +
+									inputValue +
+									' ' +
+									selectedActivity.Unit +
+									(inputValue > 1 ? 's' : ''),
 							);
 						} else {
 							displayAddedMsg(
@@ -180,6 +185,7 @@ const NumericInput = () => {
 						this.logInput.clear();
 						displayAddedMsg('debug: attempted to update activity');
 					}
+					setTimeout(() => displayAddedMsg(''), 3000);
 				}}
 			/>
 
