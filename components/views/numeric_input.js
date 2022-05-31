@@ -36,7 +36,7 @@ function getMonth() {
 function getDay() {
 	var curr = new Date();
 	CurrentDate[0] = curr.getDate();
-	if (CurrentDate[0] === 1 || CurrentDate[0] === 21) {
+	if (CurrentDate[0] === 1 || CurrentDate[0] === 21 || CurrentDate[0] == 31) {
 		CurrentDate[1] = 'st';
 	} else if (CurrentDate[0] === 2 || CurrentDate[0] === 22) {
 		CurrentDate[1] = 'nd';
