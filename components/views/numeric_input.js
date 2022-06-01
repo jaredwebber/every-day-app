@@ -17,18 +17,18 @@ var CurrentDate = []; //updated by getDate() function
 function getMonth() {
 	var curr = new Date();
 	const MONTHS = [
-		'january',
-		'february',
-		'march',
-		'april',
-		'may',
-		'june',
-		'july',
-		'august',
-		'september',
-		'october',
-		'november',
-		'december',
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
 	];
 	return MONTHS[curr.getMonth()];
 }
