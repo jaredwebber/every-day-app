@@ -126,7 +126,7 @@ const NumericInput = () => {
 					Log{' '}
 					{selectedActivity.ActivityID !== -1
 						? selectedActivity.ActivityName
-						: 'activity'}{' '}
+						: 'Activity'}{' '}
 					for {getMonth()} {CurrentDate[0]}
 				</Text>
 				<Text style={{lineHeight: 40, fontWeight: '600'}}>
@@ -183,7 +183,7 @@ const NumericInput = () => {
 						}
 					} else {
 						this.logInput.clear();
-						displayAddedMsg('debug: attempted to update activity');
+						displayAddedMsg('Debug: Attempted to Update Activity');
 					}
 					setTimeout(() => displayAddedMsg(''), 3000);
 				}}
