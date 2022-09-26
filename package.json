@@ -34,7 +34,8 @@
     "react-native-svg": "^13.2.0",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.0.4",
-    "redux": "^4.2.0"
+    "redux": "^4.2.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
