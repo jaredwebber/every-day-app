@@ -44,7 +44,7 @@
     "@types/react-redux": "^7.1.24",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^29.1.2",
-    "eslint": "^8.24.0",
+    "eslint": "^8.25.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.31.8",
     "eslint-plugin-react-hooks": "^4.5.0",
