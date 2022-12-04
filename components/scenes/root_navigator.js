@@ -46,10 +46,10 @@ const RootNavigator = () => {
 						backgroundColor: '#1E1B26',
 					},
 				})}>
-				<Tab.Screen name='New Activity' component={CreateActivity} />
-				<Tab.Screen name='View Stats' component={ViewStats} />
-				<Tab.Screen name='Log Activity' component={NumericInput} />
-				<Tab.Screen name='Settings' component={Settings} />
+				<Tab.Screen name="New Activity" component={CreateActivity} />
+				<Tab.Screen name="View Stats" component={ViewStats} />
+				<Tab.Screen name="Log Activity" component={NumericInput} />
+				<Tab.Screen name="Settings" component={Settings} />
 			</Tab.Navigator>
 		</NavigationContainer>
 	);
