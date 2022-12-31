@@ -97,6 +97,15 @@ const NumericInput = () => {
 		}
 	};
 
+	function debugDelete(inputValue) {
+		if (inputValue == 'DELETE_ALL_DATA') {
+			store.deleteStorage();
+			store.selectActivity(-1);
+			return true;
+		}
+		return false;
+	}
+
 	return (
 		<View style={Styles.containerCenter}>
 			<LargeSpacer />
@@ -164,7 +173,13 @@ const NumericInput = () => {
 						: 'Activity')
 				}
 				onPress={() => {
-					if (!debugUpdate(selectedActivity.ActivityID, inputValue)) {
+					if (debugUpdate(selectedActivity.ActivityID, inputValue)) {
+						this.logInput.clear();
+						displayAddedMsg('Debug: Attempted to Update Activity');
+					} else if (debugDelete(inputValue)) {
+						this.logInput.clear();
+						displayAddedMsg('Debug: Deleted All Data');
+					} else {
 						if (validate(inputValue)) {
 							store.logActivity(inputValue);
 							this.logInput.clear();
@@ -181,9 +196,6 @@ const NumericInput = () => {
 								'Make Sure All Fields Are Filled & Number Is Entered',
 							);
 						}
-					} else {
-						this.logInput.clear();
-						displayAddedMsg('Debug: Attempted to Update Activity');
 					}
 					setTimeout(() => displayAddedMsg(''), 3000);
 				}}

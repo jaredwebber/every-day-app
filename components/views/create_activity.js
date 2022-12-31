@@ -23,12 +23,25 @@ function displayAddedMsg(msg) {
 	this.ConfirmMessageCreate.setNativeProps({placeholder: msg});
 }
 
-function validate(name, unit, goal) {
+function isNameUnique(name, existingActivities) {
+	var nameIsUnique = true;
+	existingActivities.forEach(activity => {
+		if (name.trim() === activity.ActivityName) nameIsUnique = false;
+	});
+	return nameIsUnique;
+}
+
+function validate(name, unit, goal, existingActivities) {
 	var valid = true;
 	try {
 		if (name.trim().length === 0) valid = false;
 		if (unit.trim().length === 0) valid = false;
-		if (isNaN(goal) || goal.trim().length === 0 || parseInt(goal) <= 0)
+		if (
+			isNaN(goal) ||
+			goal.trim().length === 0 ||
+			parseInt(goal) <= 0 ||
+			!isNameUnique(name, existingActivities)
+		)
 			valid = false;
 	} catch {
 		return false;
@@ -123,7 +136,7 @@ const CreateActivity = () => {
 			<Button
 				text="Create Activity"
 				onPress={() => {
-					if (validate(activityName, unit, goalAmount)) {
+					if (validate(activityName, unit, goalAmount, store.getActivities())) {
 						store.newActivity(activityName, goalAmount, frequency, unit);
 						this.goalInput.clear();
 						this.unitInput.clear();
@@ -133,7 +146,9 @@ const CreateActivity = () => {
 						updateUnit(null);
 						displayAddedMsg('Added ' + activityName);
 					} else {
-						displayAddedMsg('Make Sure All Fields Are Filled');
+						displayAddedMsg(
+							'Make Sure All Fields Are Filled\n  And Activity Name Is Unique',
+						);
 					}
 					setTimeout(() => displayAddedMsg(''), 3000);
 				}}

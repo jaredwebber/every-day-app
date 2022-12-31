@@ -34,6 +34,12 @@ const showDebugEditSteps = async () => {
 	this.DebugDisplay.setNativeProps({text: debugUpdateSteps});
 };
 
+const showDebugDeleteDataSteps = async () => {
+	this.DebugDisplay.setNativeProps({
+		text: 'Enter \'DELETE_ALL_DATA\' in log activity tab',
+	});
+};
+
 const Settings = () => {
 	const store = useGlobalStore();
 
@@ -75,9 +81,7 @@ const Settings = () => {
 
 			<Button
 				onPress={() => {
-					store.deleteStorage();
-					store.selectActivity(-1);
-					refresh();
+					showDebugDeleteDataSteps();
 				}}
 				text={'Clear All Data'}
 			/>
