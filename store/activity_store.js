@@ -14,6 +14,7 @@ import {activityJSON} from './json_templates';
 
 var store = createState({
 	activities: [],
+	appInstanceDateString: 'default',
 	selectedActivity: {
 		ActivityID: -1,
 		ActivityName: 'Activity',
@@ -84,6 +85,7 @@ const wrapState = currStore => ({
 	},
 	populateStore: () => {
 		var metadata = [];
+		currStore.appInstanceDateString.set(new Date().toLocaleDateString().trim());
 		asyncGetActivityMetadata()
 			.then(response => {
 				metadata = [];
@@ -98,7 +100,6 @@ const wrapState = currStore => ({
 			);
 	},
 	deleteStorage: () => {
-		currStore.selectedActivity.set({ActivityID: -1});
 		var arr = new Array();
 		currStore.activities.set(arr);
 		currStore.selectedActivity.set({
@@ -107,6 +108,29 @@ const wrapState = currStore => ({
 			TodayCount: -1,
 		});
 		asyncDeleteAllStorage();
+	},
+	tryUpdatePeriod: () => {
+		var pollDateString = new Date().toLocaleDateString().trim();
+
+		if (currStore.value.appInstanceDateString != pollDateString) {
+			currStore.appInstanceDateString.set(pollDateString);
+			var currActivities = [...currStore.value.activities];
+			var updatedActivities = [];
+			for (var i in currActivities) {
+				var updatedActivity = processValidateCurrent(
+					JSON.parse(JSON.stringify(currActivities[i])),
+				);
+				updatedActivities.push(updatedActivity);
+				if (
+					updatedActivity.ActivityID ==
+					currStore.value.selectedActivity.ActivityID
+				) {
+					currStore.selectedActivity.set(updatedActivity);
+				}
+			}
+			currStore.activities.set(updatedActivities);
+			saveAsync();
+		}
 	},
 	getAllData: () => {
 		return asyncGetAllData();
