@@ -60,24 +60,49 @@ export const processLogActivity = (activityID, count) => {
 };
 
 export const processDEBUG_UPDATE = (activities, update) => {
-	if (update.length === 10) {
+	if (update.length === 14) {
 		for (var i in activities) {
 			if (parseInt(activities[i].ActivityID) === parseInt(update[0])) {
 				try {
-					if (update[1] !== '-') activities[i].ActivityName = update[1];
-					if (update[2] !== '-') activities[i].GoalAmount = parseInt(update[2]);
-					if (update[3] !== '-')
+					if (update[1] !== '-') {
+						activities[i].ActivityName = update[1];
+					}
+					if (update[2] !== '-') {
+						activities[i].GoalAmount = parseInt(update[2]);
+					}
+					if (update[3] !== '-') {
 						activities[i].CurrentStreak = parseInt(update[3]);
-					if (update[4] !== '-')
+					}
+					if (update[4] !== '-') {
 						activities[i].HighestPeriod = parseInt(update[4]);
-					if (update[5] !== '-')
+					}
+					if (update[5] !== '-') {
 						activities[i].TotalGoalsMet = parseInt(update[5]);
-					if (update[6] !== '-') activities[i].GrandTotal = parseInt(update[6]);
-					if (update[7] !== '-')
+					}
+					if (update[6] !== '-') {
+						activities[i].GrandTotal = parseInt(update[6]);
+					}
+					if (update[7] !== '-') {
 						activities[i].TotalLogCount = parseInt(update[7]);
-					if (update[8] !== '-')
-						activities[i].LongestStreak = parseInt(update[8]);
-					if (update[9] !== '-') activities[i].Unit = update[9];
+					}
+					if (update[8] !== '-') {
+						activities[i].TodayCount = parseInt(update[8]);
+					}
+					if (update[9] !== '-') {
+						activities[i].LastGoalInit = update[9];
+					}
+					if (update[10] !== '-') {
+						activities[i].TodayLogs = parseInt(update[10]);
+					}
+					if (update[11] !== '-') {
+						activities[i].LongestStreak = parseInt(update[11]);
+					}
+					if (update[12] !== '-') {
+						activities[i].GoalFrequency = update[12];
+					}
+					if (update[13] !== '-') {
+						activities[i].Unit = update[13];
+					}
 				} catch (e) {
 					console.warn('Unable to update with values:');
 				}

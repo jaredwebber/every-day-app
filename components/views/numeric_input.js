@@ -72,6 +72,7 @@ const NumericInput = () => {
 		}
 	}
 
+	// debug,-,-,-,2,-,-,-,5,1/1/2023,-,-,-,-
 	function debugUpdate(id, val) {
 		if (val && val.substring(0, 5) === 'debug') {
 			debugUpdateActivity(id, val);
@@ -85,8 +86,6 @@ const NumericInput = () => {
 			var updateArr = new Array();
 
 			updateArr.push(id);
-			//debug,name,goal,currStreak,highestPeriod,totalGoalsMet,Total,TotalLogs,longestStreak, unit
-			//debug,NewName,120,200,200,200,200,200,200,newUnit
 			var items = val.split(',');
 			for (var i = 1; i < items.length; i++) {
 				updateArr.push(items[i].trim());
