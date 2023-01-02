@@ -7,8 +7,9 @@ function daysInMonth(month, year) {
 
 function areDifferentWeeks(dateStringOne, dateStringTwo) {
 	var result = true;
-	var stringOne = dateStringOne.split('/');
-	var stringTwo = dateStringTwo.split('/');
+	// simulator dates separated by /, while ios devices use -
+	var stringOne = dateStringOne.split(/|-/);
+	var stringTwo = dateStringTwo.split(/|-/);
 
 	if (parseInt(stringOne[0]) === parseInt(stringTwo[0])) {
 		//if same month
