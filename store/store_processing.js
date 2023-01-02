@@ -7,20 +7,35 @@ function daysInMonth(month, year) {
 
 function areDifferentWeeks(dateStringOne, dateStringTwo) {
 	var result = true;
-	// simulator dates separated by /, while ios devices use -
+	// simulator dates formatted MM/DD/YYYY, while ios devices use YYYY-MM-DD
 	var stringOne = dateStringOne.split(/|-/);
 	var stringTwo = dateStringTwo.split(/|-/);
 
-	if (parseInt(stringOne[0]) === parseInt(stringTwo[0])) {
-		//if same month
-		if (parseInt(stringTwo[1]) - parseInt(stringOne[1]) < 7) {
+	var monthOne = -1;
+	var monthTwo = -1;
+	var dayOne = -1;
+	var dayTwo = -1;
+
+	if (stringOne[0].length == 4) {
+		monthOne = parseInt(stringOne[1]);
+		monthTwo = parseInt(stringTwo[1]);
+		dayOne = parseInt(stringOne[2]);
+		dayTwo = parseInt(stringTwo[2]);
+	} else {
+		monthOne = parseInt(stringOne[0]);
+		monthTwo = parseInt(stringTwo[0]);
+		dayOne = parseInt(stringOne[1]);
+		dayTwo = parseInt(stringTwo[1]);
+	}
+
+	if (monthOne == monthTwo) {
+		if (dayTwo - dayOne < 7) {
 			result = false;
 		}
 	} else {
 		var daysInFirstMonth =
-			daysInMonth(parseInt(stringOne[0]), new Date().getFullYear()) -
-			parseInt(stringOne[1]);
-		if (parseInt(daysInFirstMonth) + parseInt(stringTwo[1]) < 7) {
+			daysInMonth(monthOne, new Date().getFullYear()) - dayOne;
+		if (parseInt(daysInFirstMonth) + dayTwo < 7) {
 			result = false;
 		}
 	}
