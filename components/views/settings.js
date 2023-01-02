@@ -7,7 +7,7 @@ import {Text, TextInput, View, ScrollView, Linking} from 'react-native';
 import React from 'react';
 import Styles from '../style_sheet';
 import {Button} from '../tools/button';
-import {LargeSpacer} from '../tools/spacers';
+import {LargeSpacer, MedSpacer} from '../tools/spacers';
 import Header from '../tools/header';
 import {useGlobalStore} from '../../store/activity_store';
 
@@ -37,6 +37,12 @@ const showDebugEditSteps = async () => {
 const showDebugDeleteDataSteps = async () => {
 	this.DebugDisplay.setNativeProps({
 		text: 'Enter \'DELETE_ALL_DATA\' in log activity tab',
+	});
+};
+
+const showDebugDeleteActivitySteps = async () => {
+	this.DebugDisplay.setNativeProps({
+		text: 'Select activity to delete and enter \'DELETE_SELECTED\' in log activity tab',
 	});
 };
 
@@ -72,6 +78,9 @@ const Settings = () => {
 				text={'Export Metadata'}
 			/>
 
+			<MedSpacer />
+			<Text style={[Styles.subSubTitleText]}>View Instructions To:</Text>
+
 			<Button
 				onPress={() => {
 					showDebugEditSteps();
@@ -83,7 +92,14 @@ const Settings = () => {
 				onPress={() => {
 					showDebugDeleteDataSteps();
 				}}
-				text={'Clear All Data'}
+				text={'Delete All Data'}
+			/>
+
+			<Button
+				onPress={() => {
+					showDebugDeleteActivitySteps();
+				}}
+				text={'Delete Selected Activity'}
 			/>
 
 			<LargeSpacer />

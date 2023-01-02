@@ -40,6 +40,21 @@ const wrapState = currStore => ({
 		}
 		saveAsync();
 	},
+	deleteSelectedActivity: () => {
+		if (currStore.value.selectedActivity.ActivityID == -1) return;
+
+		var currActivities = [...currStore.value.activities];
+		var updatedActivities = currActivities.filter(x => {
+			x.ActivityID != currStore.value.selectedActivity.ActivityID;
+		});
+		currStore.activities.set(updatedActivities);
+		currStore.selectedActivity.set({
+			ActivityID: -1,
+			ActivityName: 'Activity',
+			TodayCount: -1,
+		});
+		saveAsync();
+	},
 	logActivity: count => {
 		var current = JSON.parse(
 			JSON.stringify(processValidateCurrent(currStore.value.selectedActivity)),

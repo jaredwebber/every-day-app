@@ -105,6 +105,14 @@ const NumericInput = () => {
 		return false;
 	}
 
+	function debugDeleteSelectedActivity(inputValue) {
+		if (inputValue == 'DELETE_SELECTED') {
+			store.deleteSelectedActivity();
+			return true;
+		}
+		return false;
+	}
+
 	return (
 		<View style={Styles.containerCenter}>
 			<LargeSpacer />
@@ -178,6 +186,9 @@ const NumericInput = () => {
 					} else if (debugDelete(inputValue)) {
 						this.logInput.clear();
 						displayAddedMsg('Debug: Deleted All Data');
+					} else if (debugDeleteSelectedActivity(inputValue)) {
+						this.logInput.clear();
+						displayAddedMsg('Debug: Deleted Selected Activity');
 					} else {
 						if (validate(inputValue)) {
 							store.logActivity(inputValue);
