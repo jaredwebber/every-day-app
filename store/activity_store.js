@@ -150,6 +150,11 @@ const wrapState = currStore => ({
 				array,
 			),
 		);
+		currStore.selectedActivity.set({
+			ActivityID: -1,
+			ActivityName: 'Activity',
+			TodayCount: -1,
+		});
 		saveAsync();
 	},
 });
