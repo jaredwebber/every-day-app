@@ -6,10 +6,11 @@ function daysInMonth(month, year) {
 }
 
 function areDifferentWeeks(dateStringOne, dateStringTwo) {
-	var result = true;
 	// simulator dates formatted MM/DD/YYYY, while ios devices use YYYY-MM-DD
-	var stringOne = dateStringOne.split(/|-/);
-	var stringTwo = dateStringTwo.split(/|-/);
+
+	var result = true;
+	var stringOne = dateStringOne.split(/\/|-/);
+	var stringTwo = dateStringTwo.split(/\/|-/);
 
 	var monthOne = -1;
 	var monthTwo = -1;
