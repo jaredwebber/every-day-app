@@ -16,11 +16,9 @@ import {asyncGetAllData} from '../../store/async_storage';
 
 const debugUpdateSteps =
 	'go to log activity tab & select activity to update\n' +
-	'use the format:\n\ndebug,Name,Goal,currentStreak,highestPeriod,totalGoalsMet,Total,totalLogs,longestStreak, unit\n\n' +
-	'to insert the updated values you wish to store in that activity, any fields you dont want to change use a -' +
-	'\nExample: once ive gone to the log tab, and selected the activity I want to update: id could type:\n' +
-	'\ndebug,newName,-,30,180,30,3200,150,-,-' +
-	'\n\nwhich would change the name of the activity to newName, the currStreak to 30, etc';
+	'use the format:\n\ndebug,ActivityName,GoalAmount,CurrentStreak,HighestPeriod,TotalGoalsMet,GrandTotal,TotalLogCount,' +
+	'TodayCount,LastGoalInit,TodayLogs,LongestStreak,GoalFrequency,Unit\n\n' +
+	'to insert the updated values you wish to store in that activity, any fields you dont want to change use a -';
 
 var curr = null;
 
