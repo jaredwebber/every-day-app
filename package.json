@@ -15,7 +15,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-picker/picker": "^2.4.6",
     "@react-navigation/bottom-tabs": "^6.4.0",
-    "@react-navigation/native": "^6.0.13",
+    "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.0",
     "@reduxjs/toolkit": "^1.9.0",
     "ansi-regex": "^6.0.1",
