@@ -55,7 +55,7 @@ const Settings = () => {
 			<Header />
 
 			<Text style={[Styles.padItem, Styles.subSubTitleText]}>
-				User Settings [tbd]
+				User Settings
 			</Text>
 
 			<Button
