@@ -16,6 +16,7 @@
 		"@react-native-picker/picker": "^2.4.6",
 		"@react-navigation/bottom-tabs": "^6.4.0",
 		"@react-navigation/native": "^6.0.13",
+		"metro-react-native-babel-preset": "^0.74.1",
 		"prop-types": "^15.8.1",
 		"react": "18.2.0",
 		"react-native": "0.70.1",
