@@ -15,10 +15,10 @@ import {useGlobalStore} from '../../store/activity_store';
 import {asyncGetAllData} from '../../store/async_storage';
 
 const debugUpdateSteps =
-	'go to log activity tab & select activity to update\n' +
-	'use the format:\n\ndebug,ActivityName,GoalAmount,CurrentStreak,HighestPeriod,TotalGoalsMet,GrandTotal,TotalLogCount,' +
-	'TodayCount,LastGoalInit,TodayLogs,LongestStreak,GoalFrequency,Unit\n\n' +
-	'to insert the updated values you wish to store in that activity, any fields you dont want to change use a -';
+  'go to log activity tab & select activity to update\n' +
+  'use the format:\n\ndebug,ActivityName,GoalAmount,CurrentStreak,HighestPeriod,TotalGoalsMet,GrandTotal,TotalLogCount,' +
+  'TodayCount,LastGoalInit,TodayLogs,LongestStreak,GoalFrequency,Unit\n\n' +
+  'to insert the updated values you wish to store in that activity, any fields you dont want to change use a -';
 
 var curr = null;
 
@@ -68,9 +68,9 @@ const Settings = () => {
 			<Button
 				onPress={() => {
 					Linking.openURL(
-						'mailto:jaredwebberdev@gmail.com?body=' +
-							JSON.stringify(store.getActivities()) +
-							'&subject=DataDump',
+						'mailto:?body=' +
+						JSON.stringify(store.getActivities()) +
+						'&subject=DataDump',
 					);
 				}}
 				text={'Export Metadata'}
@@ -109,6 +109,13 @@ const Settings = () => {
 					multiline={true}
 				/>
 			</ScrollView>
+			<Text 
+				onPress={() => {
+					Linking.openURL(
+						'https://www.flaticon.com/free-icons/cartoon',
+					);
+				}} 
+				style={{color: '#0000EE'}}>App icon created by Freepik - Flaticon</Text>
 		</View>
 	);
 };
