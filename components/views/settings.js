@@ -66,11 +66,11 @@ const Settings = () => {
 			/>
 
 			<Button
-				onPress={() => {
-					Linking.openURL(
-						'mailto:?body=' +
-						JSON.stringify(store.getActivities()) +
-						'&subject=DataDump',
+				onPress={async () => {
+					const subject = 'Every Day Data Export';
+					const body  = JSON.stringify(store.getActivities());
+					await Linking.openURL(
+						encodeURI(`mailto:?subject=${subject}&body=${body}`),
 					);
 				}}
 				text={'Export Metadata'}
