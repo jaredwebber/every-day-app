@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"eslint": "^8.50.0",
 		"eslint-plugin-react": "^7.33.1",
-		"jest": "^29.6.1"
+		"jest": "^29.7.0"
 	},
 	"jest": {
 		"preset": "react-native"
