@@ -13,7 +13,7 @@
 		"@hookstate/core": "^3.0.13",
 		"@react-native-async-storage/async-storage": "^1.17.10",
 		"@react-native-community/cli-platform-ios": "^10.1.1",
-		"@react-native-picker/picker": "^2.4.6",
+		"@react-native-picker/picker": "^2.7.7",
 		"@react-navigation/bottom-tabs": "^6.4.0",
 		"@react-navigation/native": "^6.0.13",
 		"metro-react-native-babel-preset": "^0.74.1",
